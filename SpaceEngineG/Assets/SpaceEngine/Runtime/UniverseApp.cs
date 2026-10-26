@@ -182,7 +182,7 @@ namespace SpaceEngine.Runtime
             Observer=PlanetPosition(SelectedPlanet).Add(direction*(Planet.Radius+Math.Max(altitude,Settings.MinimumClearance+SurfaceHeight(direction))));
             orientation=Quaternion.LookRotation((-direction).ToVector3(),Vector3.up);
             ViewCamera.transform.rotation=orientation;
-            radialNavigation=false;Navigation="FREE FLIGHT";
+            radialNavigation=false;Speed=0;Navigation="FREE FLIGHT";
             UpdateTelemetry();
         }
 

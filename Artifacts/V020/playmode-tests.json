@@ -3,19 +3,19 @@
   "message": "Test job status retrieved.",
   "error": null,
   "data": {
-    "job_id": "8d5fe0c6cc954c698fee028a2723d75d",
+    "job_id": "a6d6c3a153a74612baecb16b4f6e064e",
     "status": "succeeded",
     "mode": "PlayMode",
-    "started_unix_ms": 1793017421115,
-    "finished_unix_ms": 1793017423271,
-    "last_update_unix_ms": 1793017423271,
+    "started_unix_ms": 1793018969434,
+    "finished_unix_ms": 1793018972080,
+    "last_update_unix_ms": 1793018972080,
     "progress": {
       "completed": 14,
       "total": 14,
       "current_test_full_name": null,
       "current_test_started_unix_ms": null,
       "last_finished_test_full_name": "SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.VersionTwoSavePreservesLegacyBytesAndRestoresGalaxyConfiguration",
-      "last_finished_unix_ms": 1793017423267,
+      "last_finished_unix_ms": 1793018972058,
       "stuck_suspected": false,
       "editor_is_focused": true,
       "run_in_background": true,
@@ -34,7 +34,7 @@
         "passed": 14,
         "failed": 0,
         "skipped": 0,
-        "durationSeconds": 1.3901702,
+        "durationSeconds": 1.642989,
         "resultState": "Passed"
       },
       "results": []
