@@ -23,8 +23,15 @@ namespace SpaceEngine.Terrain
         [Range(.2f, 30)] public float BuildBudgetMilliseconds = 6;
         [Tooltip("Refine when patch width divided by closest surface distance exceeds this value.")]
         [Range(.5f, 12)] public float RefinementThreshold = 2.5f;
-        [Range(.005f, .15f)] public float SkirtDepthFactor = .035f;
+        [Range(.005f, .2f)] public float SkirtDepthFactor = .08f;
+        [Range(.25f, 100)] public float MinimumSkirtDepth = 4f;
+        [Tooltip("Normal finite-difference probe distance in physical metres, independent of LOD and planet radius.")]
+        [Range(.01f, 2)] public float NormalSampleDistance = .25f;
         public bool HorizonCulling = true;
+        [Header("Visible orbital detail")]
+        [Range(0, 5)] public int OrbitalMinimumLevel = 3;
+        [Tooltip("Apply orbital minimum LOD when the planet's angular diameter exceeds this many degrees.")]
+        [Range(1, 45)] public float OrbitalDetailMinimumDegrees = 5;
 
         public int ActivePatchCount { get; private set; }
         public int TriangleCount { get; private set; }
@@ -64,6 +71,7 @@ namespace SpaceEngine.Terrain
         bool configured;
         int tick;
         Double3 cameraPosition;
+        bool orbitalDetail;
 
         public void Configure(PlanetDefinition planetDefinition, Material terrainMaterial)
         {
@@ -104,6 +112,9 @@ namespace SpaceEngine.Terrain
 
         void SelectDesired()
         {
+            double cameraDistance = cameraPosition.Length;
+            orbitalDetail = cameraDistance > definition.Radius * 1.1 &&
+                2 * Math.Asin(Math.Min(1, definition.Radius / cameraDistance)) >= OrbitalDetailMinimumDegrees * Math.PI / 180;
             frontier.Clear();
             for (int face = 0; face < 6; face++)
             {
@@ -163,6 +174,12 @@ namespace SpaceEngine.Terrain
             Double3 surface = TerrainPatchMesh.SurfacePoint(nearestDirection, definition);
             double distance = Math.Max(.5, (cameraPosition - surface).Length);
             patch.Priority = definition.Radius * span / distance;
+            // A planet that fills a useful part of the view needs enough color
+            // and coastline samples even before proximity-driven terrain LOD.
+            // Breadth priority reaches the orbital floor across the visible disk;
+            // the same strict leaf budget still governs refinement.
+            if (orbitalDetail && patch.Key.Level < OrbitalMinimumLevel)
+                patch.Priority = 1000000.0 / (patch.Key.Level + 1) + Math.Min(10000, patch.Priority);
         }
 
         Patch GetPatch(TerrainPatchKey key)
@@ -200,7 +217,7 @@ namespace SpaceEngine.Terrain
             {
                 if (BuiltThisFrame > 0 && stopwatch.Elapsed.TotalMilliseconds >= BuildBudgetMilliseconds) break;
                 Patch patch = pending[i];
-                TerrainPatchMesh payload = TerrainPatchMesh.Build(patch.Key, definition, PatchResolution, SkirtDepthFactor);
+                TerrainPatchMesh payload = TerrainPatchMesh.Build(patch.Key, definition, PatchResolution, SkirtDepthFactor, NormalSampleDistance, MinimumSkirtDepth);
                 patch.Anchor = payload.Anchor;
                 patch.Mesh = new Mesh { name = $"{definition.Name} {patch.Key}", indexFormat = IndexFormat.UInt16 };
                 patch.Mesh.vertices = payload.Vertices;

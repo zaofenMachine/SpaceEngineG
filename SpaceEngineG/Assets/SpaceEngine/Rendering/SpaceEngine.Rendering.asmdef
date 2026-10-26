@@ -1,0 +1,6 @@
+{
+  "name": "SpaceEngine.Rendering",
+  "rootNamespace": "SpaceEngine.Rendering",
+  "references": ["Unity.RenderPipelines.Universal.Runtime"],
+  "autoReferenced": true
+}

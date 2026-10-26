@@ -1,0 +1,100 @@
+{
+    "utc": "2026-10-26T08:56:51.3659522Z",
+    "unity": "6000.5.7f1",
+    "gpu": "NVIDIA GeForce RTX 4070",
+    "graphicsApi": "Direct3D12",
+    "operatingSystem": "Windows 10  (10.0.19045) 64bit",
+    "passed": true,
+    "failure": "",
+    "width": 1920,
+    "height": 1080,
+    "routeSteps": 317,
+    "errors": 0,
+    "minClearance": 2.0071736403606339,
+    "maxFrameMs": 11.329500004649163,
+    "meanFrameMs": 8.342845430039457,
+    "p50FrameMs": 8.337102830410004,
+    "p95FrameMs": 10.15329547226429,
+    "performanceScope": "Actual Unity unscaled frame interval, includes Editor or player overhead; screenshot warmup excluded. No GPU timestamp query.",
+    "samples": [
+        {
+            "stage": "01-interstellar",
+            "clearance": 283821914177424.0,
+            "frameMs": 21.187863665427604,
+            "terrainBuildMs": 0.0001,
+            "lod": 0,
+            "patches": 35,
+            "triangles": 13440,
+            "allocatedBytes": 800964407,
+            "coordinate": "[17,14,-283] + (-368170229495.26563, 210262543737.79492, 81254879482.75) m"
+        },
+        {
+            "stage": "02-orbit",
+            "clearance": 12642578.823963546,
+            "frameMs": 8.315829134363052,
+            "terrainBuildMs": 0.0001,
+            "lod": 0,
+            "patches": 38,
+            "triangles": 14592,
+            "allocatedBytes": 804739880,
+            "coordinate": "[0,0,0] + (58309552139.57312, 2098468724.4820874, 62381974637.765961) m"
+        },
+        {
+            "stage": "03-atmosphere",
+            "clearance": 188439.22253103046,
+            "frameMs": 8.32311843909282,
+            "terrainBuildMs": 0.0002,
+            "lod": 5,
+            "patches": 61,
+            "triangles": 23424,
+            "allocatedBytes": 807416640,
+            "coordinate": "[0,0,0] + (58308824891.487724, 2097845268.5122933, 62394391884.082596) m"
+        },
+        {
+            "stage": "04-low-altitude",
+            "clearance": 1369.7377075615118,
+            "frameMs": 8.323389660314377,
+            "terrainBuildMs": 0.0002,
+            "lod": 12,
+            "patches": 111,
+            "triangles": 42624,
+            "allocatedBytes": 811159430,
+            "coordinate": "[0,0,0] + (58308813967.736336, 2097835903.7877288, 62394578399.40567) m"
+        },
+        {
+            "stage": "05-surface",
+            "clearance": 2.0071736403606339,
+            "frameMs": 8.341458420018908,
+            "terrainBuildMs": 0.0001,
+            "lod": 20,
+            "patches": 189,
+            "triangles": 72576,
+            "allocatedBytes": 815725141,
+            "coordinate": "[0,0,0] + (58308813887.868965, 2097835835.3189485, 62394579763.084534) m"
+        },
+        {
+            "stage": "06-second-system",
+            "clearance": 11998231.964196863,
+            "frameMs": 8.335592727768283,
+            "terrainBuildMs": 0.0001,
+            "lod": 0,
+            "patches": 26,
+            "triangles": 9984,
+            "allocatedBytes": 797665505,
+            "coordinate": "[41089,-1635,-6143] + (296113853832.13275, 481820850590.50677, -168441457031.85632) m"
+        }
+    ],
+    "assertions": [
+        "PASS Continuous route reaches terrain clearance without penetration",
+        "PASS All interstellar / orbit / atmosphere / low-altitude milestones were crossed",
+        "PASS Surface terrain refines to LOD >=17 on an Earth-size planet",
+        "PASS Procedural terrain geometry is rendered",
+        "PASS Terrain active patches stay within aggregate streaming budgets",
+        "PASS One-centimetre observer movement remains measurable at the current astronomical coordinate",
+        "PASS Flight save / restore retains astronomical position",
+        "PASS Nearest-system streaming changes system and retains observer coordinates",
+        "PASS Second system matches deterministic generator",
+        "PASS No error / exception log during rendered acceptance route"
+    ],
+    "runtimeErrors": []
+}

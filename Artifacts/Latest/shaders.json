@@ -1,0 +1,99 @@
+{
+    "utcTimestamp": "2026-10-26T09:48:10.2636046Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "graphicsShaderLevel": 50,
+    "graphicsAvailable": true,
+    "renderPipeline": "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset",
+    "scope": "Active graphics API support, synchronous compilation of all material passes, and ShaderUtil diagnostics. Does not verify rendered pixel appearance.",
+    "passed": true,
+    "shaders": [
+        {
+            "name": "SpaceEngine/Terrain",
+            "assetPath": "Assets/SpaceEngine/Rendering/Terrain.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "TerrainLighting",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthOnly",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/Atmosphere",
+            "assetPath": "Assets/SpaceEngine/Rendering/Atmosphere.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "PhysicalAtmosphere",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 0,
+                    "name": "PhysicalAtmosphere",
+                    "variant": "_ATMOSPHERE_EXTINCTION",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/StarBillboard",
+            "assetPath": "Assets/SpaceEngine/Rendering/StarBillboard.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/Star",
+            "assetPath": "Assets/SpaceEngine/Rendering/Star.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthOnly",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        }
+    ]
+}

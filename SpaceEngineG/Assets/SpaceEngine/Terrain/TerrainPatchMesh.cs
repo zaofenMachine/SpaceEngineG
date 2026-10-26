@@ -23,9 +23,12 @@ namespace SpaceEngine.Terrain
         public static Double3 SurfacePoint(Double3 direction, PlanetDefinition definition) => direction * (definition.Radius + SurfaceHeight(direction, definition));
 
         /// <summary>Fixed physical sample interval keeps normals equal across LOD boundaries.</summary>
-        public static Double3 SurfaceNormal(Double3 direction, PlanetDefinition definition)
+        public static Double3 SurfaceNormal(Double3 direction, PlanetDefinition definition, double physicalSampleDistance = .25)
         {
-            double angle = Math.Max(.5, definition.Radius * 2e-7) / definition.Radius;
+            // A physical interval is essential once the height field includes
+            // metre-scale geology. Tying this interval to planet radius erases
+            // fine normals on larger planets even when mesh LOD is sufficient.
+            double angle = Math.Max(.01, physicalSampleDistance) / definition.Radius;
             Double3 reference = Math.Abs(direction.y) < .95 ? new Double3(0, 1, 0) : new Double3(1, 0, 0);
             Double3 tangent = CubeSphere.Cross(reference, direction).Normalized;
             Double3 bitangent = CubeSphere.Cross(direction, tangent).Normalized;
@@ -34,7 +37,7 @@ namespace SpaceEngine.Terrain
             return CubeSphere.Cross(dx, dy).Normalized;
         }
 
-        public static TerrainPatchMesh Build(TerrainPatchKey key, PlanetDefinition definition, int resolution, double skirtDepthFactor = .035)
+        public static TerrainPatchMesh Build(TerrainPatchKey key, PlanetDefinition definition, int resolution, double skirtDepthFactor = .08, double normalSampleDistance = .25, double minimumSkirtDepth = 4)
         {
             resolution = Math.Max(4, Math.Min(32, resolution));
             CubeSphere.Bounds(key, out double u0, out double v0, out double span);
@@ -47,7 +50,7 @@ namespace SpaceEngine.Terrain
                 Anchor = SurfacePoint(CubeSphere.CenterDirection(key), definition),
                 Vertices = new Vector3[vertexCount], Normals = new Vector3[vertexCount],
                 Colors = new Color[vertexCount], UV = new Vector2[vertexCount],
-                Triangles = new int[resolution * resolution * 6 + boundaryCount * 6]
+                Triangles = new int[resolution * resolution * 6 + boundaryCount * 12]
             };
             for (int y = 0; y < row; y++)
             for (int x = 0; x < row; x++)
@@ -56,7 +59,7 @@ namespace SpaceEngine.Terrain
                 Double3 direction = CubeSphere.Direction(key.Face, u0 + span * x / resolution, v0 + span * y / resolution);
                 double rawHeight = TerrainNoise.Height(direction, definition);
                 double height = definition.HasOcean ? Math.Max(0, rawHeight) : rawHeight;
-                Double3 normal = SurfaceNormal(direction, definition);
+                Double3 normal = SurfaceNormal(direction, definition, normalSampleDistance);
                 // Do the cancellation in DOUBLE, then submit a small local float to Unity.
                 data.Vertices[i] = (direction * (definition.Radius + height) - data.Anchor).ToVector3();
                 data.Normals[i] = normal.ToVector3();
@@ -80,7 +83,7 @@ namespace SpaceEngine.Terrain
             for (int x = resolution; x > 0; x--) boundary[k++] = resolution * row + x;
             for (int y = resolution; y > 0; y--) boundary[k++] = y * row;
             double tileWidth = definition.Radius * span;
-            double skirtDepth = Math.Max(.25, Math.Min(tileWidth * skirtDepthFactor, definition.Radius * .12));
+            double skirtDepth = Math.Max(minimumSkirtDepth, Math.Min(tileWidth * skirtDepthFactor, definition.Radius * .12));
             for (int edge = 0; edge < boundaryCount; edge++)
             {
                 int source = boundary[edge];
@@ -91,6 +94,11 @@ namespace SpaceEngine.Terrain
                 int next = (edge + 1) % boundaryCount;
                 AddTriangle(data, ref triangle, source, surfaceVertexCount + next, skirt);
                 AddTriangle(data, ref triangle, source, boundary[next], surfaceVertexCount + next);
+                // A taller neighbor is viewed from outside its tile; a lower
+                // neighbor is viewed from inside. Both sides must write depth,
+                // otherwise single-sided terrain materials reveal black cracks.
+                AddTriangle(data, ref triangle, skirt, surfaceVertexCount + next, source);
+                AddTriangle(data, ref triangle, surfaceVertexCount + next, boundary[next], source);
             }
             return data;
         }
@@ -118,7 +126,13 @@ namespace SpaceEngine.Terrain
                 color = Color.Lerp(color, new Color(.88f, .92f, .96f), snow);
             }
             else color = Color.Lerp(planet.SurfaceTint * .65f, planet.SurfaceTint * 1.3f, Mathf.Clamp01(normalizedHeight * .6f + .5f));
-            return color;
+            // Seeded physical material variation follows the same 3D charts as
+            // the geometric relief. It adds a sense of scale without a texture
+            // or UV seam, while the actual shape remains defined by Height().
+            Double3 metres = direction * planet.Radius;
+            float stone = (float)TerrainNoise.Noise(metres / 9.0, unchecked(planet.Seed + 32452843));
+            float soil = (float)TerrainNoise.Noise(metres / 120.0, unchecked(planet.Seed + 49979687));
+            return color * Mathf.Clamp(.96f + stone * .28f + soil * .15f, .7f, 1.2f);
         }
     }
 }

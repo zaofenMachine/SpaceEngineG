@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SpaceEngine.Core
 {
-    /// <summary>Direction-sampled 3D gradient noise: no latitude seam, pole singularity, or cube-face dependency.</summary>
+    /// <summary>Direction-sampled continental noise plus metre-scaled relief; no latitude seam or cube-face dependency.</summary>
     public static class TerrainNoise
     {
         public static double Height(Double3 unitDirection, PlanetDefinition planet)
@@ -18,6 +18,17 @@ namespace SpaceEngine.Core
             double mountainMask = SmoothStep(-0.06, 0.30, continents);
             double fine = Fractal(p * 151.0, unchecked(planet.Seed + 15485863), 3, 0.5);
             double relief = continents * 1.20 + hills * 0.16 + ridge * mountainMask * 0.55 + fine * 0.045;
+            // Continental direction-space noise alone becomes almost a plane at human scale.
+            // These five physical bands keep hills, gullies and rocks in the actual geometry:
+            // their spacing stays in metres when planet radius or mesh LOD changes.
+            Double3 metres = p * planet.Radius;
+            double smallRelief = Noise(metres / 10000.0, unchecked(planet.Seed + 32452843)) * 350.0
+                + Noise(metres / 1600.0, unchecked(planet.Seed + 49979687)) * 220.0
+                + Noise(metres / 200.0, unchecked(planet.Seed + 67867967)) * 40.0
+                + Noise(metres / 25.0, unchecked(planet.Seed + 86028121)) * 5.0
+                + Noise(metres / 6.0, unchecked(planet.Seed + 104395301)) * 0.75;
+            double detailStrength = Math.Min(1, Math.Max(0, planet.TerrainHeight) / 8000.0);
+            relief += smallRelief * detailStrength / Math.Max(1, planet.TerrainHeight);
             // The ocean is a separate datum at radius, while this function includes the underlying seabed.
             // Smooth bounding gives culling/LOD a strict +/-TerrainHeight envelope without clipped plateaus.
             return planet.TerrainHeight * Math.Tanh(relief + (planet.HasOcean ? -0.08 : 0.2));

@@ -23,3 +23,12 @@ Coverage:
 
 Final run after worst-case local offset regression: see appended line below.
 RESULT passed=29 failed=0 suiteMs=34.29 terrain100kMs=195.66 checksum=62736902.612532
+
+Ground-scale relief refinement, 2026-10-26:
+Five deterministic physical noise bands added at 10000/1600/200/25/6 metre lattice spacing.
+Full unchanged NUnit sources independently executed under .NET 8 Release:
+RESULT passed=32 failed=0 suiteMs=41.81 terrain100kMs=267.26 checksum=62698099.096411
+Additional tests reject an almost-planar surface via second differences at 1/10/100m.
+The existing seam/pole continuity, bounds and deterministic-seed tests remain passing.
+Total gradient-noise evaluations per height: 18 (13 existing + 5 physical detail).
+This remains a CPU microbenchmark; Unity rendering/performance acceptance must be rerun.

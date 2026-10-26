@@ -6,7 +6,7 @@ namespace SpaceEngine.Tests
 {
     public class TerrainNoiseTests
     {
-        private static PlanetDefinition Planet(int seed) => new PlanetDefinition { Seed = seed, TerrainHeight = 12000, HasOcean = true };
+        private static PlanetDefinition Planet(int seed) => new PlanetDefinition { Seed = seed, Radius = PhysicalConstants.EarthRadius, TerrainHeight = 12000, HasOcean = true };
 
         [Test]
         public void SurfaceIsDeterministicAndDependsOnSeed()
@@ -45,6 +45,32 @@ namespace SpaceEngine.Tests
             }
             Assert.That(min, Is.LessThan(-100)); Assert.That(max, Is.GreaterThan(100));
             Assert.That(Math.Sqrt(sumSquares / count - (sum / count) * (sum / count)), Is.GreaterThan(500));
+        }
+
+        [TestCase(1.0, 0.003)]
+        [TestCase(10.0, 0.1)]
+        [TestCase(100.0, 1.0)]
+        public void PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(double spacing, double minimumRms)
+        {
+            PlanetDefinition planet = UniverseGenerator.GenerateSystem(20261026, 0, 0, 0).Planets[0];
+            double squaredCurvature = 0;
+            const int count = 128;
+            for (int i = 0; i < count; i++)
+            {
+                double y = 1 - 2 * (i + .5) / count;
+                double azimuth = i * Math.PI * (3 - Math.Sqrt(5));
+                double radius = Math.Sqrt(1 - y * y);
+                Double3 direction = new Double3(radius * Math.Cos(azimuth), y, radius * Math.Sin(azimuth));
+                Double3 tangent = Double3.Cross(direction, new Double3(.371, .823, .439)).Normalized;
+                double centre = TerrainNoise.Height(direction, planet);
+                double left = TerrainNoise.Height(direction - tangent * (spacing / planet.Radius), planet);
+                double right = TerrainNoise.Height(direction + tangent * (spacing / planet.Radius), planet);
+                // A second difference removes a broad slope: this requires real local
+                // relief rather than merely detecting the continental height gradient.
+                double curvature = left + right - 2 * centre;
+                squaredCurvature += curvature * curvature;
+            }
+            Assert.That(Math.Sqrt(squaredCurvature / count), Is.GreaterThan(minimumRms));
         }
     }
 }

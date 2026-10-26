@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64285e461ec879549b8425a011395ff5, type: 3}
+  m_Name: UniverseSettings
+  m_EditorClassIdentifier: SpaceEngine.Runtime::SpaceEngine.Runtime.UniverseSettings
+  UniverseSeed: 20261026
+  StarCellRadius: 5
+  TerrainResolution: 12
+  TerrainMaxLevel: 20
+  TerrainPatchBudget: 256
+  MeshBuildsPerFrame: 6
+  MeshBuildBudgetMs: 5
+  TerrainRefinement: 2.5
+  OrbitalMinimumLod: 3
+  OrbitalDetailMinimumDegrees: 5
+  SkirtDepthFactor: 0.08
+  MinimumSkirtDepth: 4
+  NormalSampleDistance: 0.25
+  AmbientLight: 0.035
+  AtmosphereExposure: 1.6
+  Atmosphere:
+    Rayleigh: {x: 37, y: 86, z: 211}
+    Mie: {x: 25.5, y: 25.5, z: 25.5}
+    MieG: 0.76
+    DensityFalloff: 12.5
+    MieDensityFalloff: 80
+    SunIntensity: 2
+    ViewSamples: 16
+    LightSamples: 6
+  StarBrightness: 1.2
+  StarMinimumAngularRadius: 0.00065
+  StarCoreRadius: 0.3
+  FieldOfView: 60
+  InitialAltitude: 12000000
+  MinimumClearance: 2
+  TerrainMaterial: {fileID: 2100000, guid: 252f029212f0490438d850afbf6fd2ac, type: 2}
+  AtmosphereMaterial: {fileID: 2100000, guid: 93c0eb0124893a84c9ddf82155ccdaf4, type: 2}
+  StarMaterial: {fileID: 2100000, guid: 20812295fbc6ffe4d8900b341a9d3ccb, type: 2}
+  StarBillboardMaterial: {fileID: 2100000, guid: 82b506eb18431ac4a96de809a7dcc46a, type: 2}

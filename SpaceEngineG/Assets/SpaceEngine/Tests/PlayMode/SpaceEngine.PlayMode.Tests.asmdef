@@ -1,0 +1,13 @@
+{
+  "name": "SpaceEngine.PlayMode.Tests",
+  "rootNamespace": "SpaceEngine.Tests.PlayMode",
+  "references": ["SpaceEngine.Core", "SpaceEngine.Runtime", "SpaceEngine.Terrain", "SpaceEngine.Rendering", "Unity.InputSystem"],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "noEngineReferences": false
+}

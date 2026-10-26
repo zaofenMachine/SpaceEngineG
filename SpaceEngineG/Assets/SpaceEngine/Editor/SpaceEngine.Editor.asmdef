@@ -1,0 +1,6 @@
+{
+  "name": "SpaceEngine.Editor",
+  "references": ["SpaceEngine.Core", "SpaceEngine.Runtime", "SpaceEngine.Rendering", "SpaceEngine.Terrain", "Unity.RenderPipelines.Universal.Runtime"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

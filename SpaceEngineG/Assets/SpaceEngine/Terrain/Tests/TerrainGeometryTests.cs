@@ -33,7 +33,7 @@ namespace SpaceEngine.Terrain.Tests
             {
                 var data = TerrainPatchMesh.Build(new TerrainPatchKey(face, 0, 0, 0), Earth, resolution);
                 Assert.That(data.Vertices.Length, Is.EqualTo(81 + 32));
-                Assert.That(data.Triangles.Length, Is.EqualTo(8 * 8 * 6 + 32 * 6));
+                Assert.That(data.Triangles.Length, Is.EqualTo(8 * 8 * 6 + 32 * 12));
                 for (int i = 0; i < resolution * resolution * 6; i += 3)
                 {
                     Vector3 a = data.Vertices[data.Triangles[i]];
@@ -46,6 +46,60 @@ namespace SpaceEngine.Terrain.Tests
                 foreach (Vector3 normal in data.Normals) Assert.That(Math.Abs(normal.magnitude - 1), Is.LessThan(1e-5));
             }
         }
+
+        [Test]
+        public void EverySkirtQuadWritesDepthFromBothSidesAndReachesBelowFineRelief()
+        {
+            const int resolution = 12;
+            var data = TerrainPatchMesh.Build(new TerrainPatchKey(0, 20, 524288, 524288), Earth, resolution);
+            int surfaceIndexCount = resolution * resolution * 6;
+            for (int i = surfaceIndexCount; i < data.Triangles.Length; i += 12)
+            {
+                for (int triangle = 0; triangle < 2; triangle++)
+                for (int vertex = 0; vertex < 3; vertex++)
+                    Assert.That(data.Triangles[i + triangle * 3 + vertex], Is.EqualTo(data.Triangles[i + 6 + triangle * 3 + 2 - vertex]));
+                int topIndex = data.Triangles[i];
+                int bottomIndex = data.Triangles[i + 2];
+                double topRadius = (data.Anchor + Double3.FromVector3(data.Vertices[topIndex])).Length;
+                double bottomRadius = (data.Anchor + Double3.FromVector3(data.Vertices[bottomIndex])).Length;
+                Assert.That(topRadius - bottomRadius, Is.GreaterThanOrEqualTo(3.999), "Skirt must cover metre-scale coarse/fine edge mismatch.");
+            }
+        }
+
+        [Test]
+        public void FineAndCoarseSkirtsOverlapAcrossActualSeededEdgeProfiles()
+        {
+            const int resolution = 12;
+            int row = resolution + 1;
+            int surfaceCount = row * row;
+            foreach (int level in new[] { 12, 16, 18, 20 })
+            for (int face = 0; face < 6; face++)
+            {
+                var definition = Earth;
+                definition.HasOcean = false;
+                definition.Seed += face * 1009;
+                int middle = 1 << (level - 1);
+                int fineY = middle + face * 3;
+                var fine = TerrainPatchMesh.Build(new TerrainPatchKey(face, level, middle, fineY), definition, resolution);
+                var coarse = TerrainPatchMesh.Build(new TerrainPatchKey(face, level - 1, middle / 2 - 1, fineY / 2), definition, resolution);
+                int halfOffset = (fineY & 1) * (resolution / 2);
+                for (int y = 0; y <= resolution; y++)
+                {
+                    double coarseY = halfOffset + y * .5;
+                    int lower = (int)coarseY;
+                    int upper = Math.Min(resolution, lower + 1);
+                    double fraction = coarseY - lower;
+                    Double3 fineTop = Absolute(fine, y * row);
+                    Double3 fineBottom = Absolute(fine, surfaceCount + (y == 0 ? 0 : 4 * resolution - y));
+                    Double3 coarseTop = Absolute(coarse, lower * row + resolution) * (1 - fraction) + Absolute(coarse, upper * row + resolution) * fraction;
+                    Double3 coarseBottom = Absolute(coarse, surfaceCount + resolution + lower) * (1 - fraction) + Absolute(coarse, surfaceCount + resolution + upper) * fraction;
+                    Assert.That(fineBottom.Length, Is.LessThan(coarseTop.Length + .001), $"Fine skirt misses coarse edge F{face} L{level} y{y}");
+                    Assert.That(coarseBottom.Length, Is.LessThan(fineTop.Length + .001), $"Coarse skirt misses fine edge F{face} L{level} y{y}");
+                }
+            }
+        }
+
+        static Double3 Absolute(TerrainPatchMesh data, int index) => data.Anchor + Double3.FromVector3(data.Vertices[index]);
 
         [Test]
         public void SameSeedAndAddressBuildBitwiseIdenticalGeometry()
@@ -81,6 +135,31 @@ namespace SpaceEngine.Terrain.Tests
         }
 
         [Test]
+        public void GroundMeshContainsMeterScaleGeometricRelief()
+        {
+            var definition = Earth;
+            definition.HasOcean = false;
+            var data = TerrainPatchMesh.Build(new TerrainPatchKey(0, 20, 524288, 524288), definition, 12);
+            double maximumCurvature = 0;
+            double maximumNormalChange = 0;
+            // Radial second differences remove the local slope. A smooth
+            // planet with only continent-sized noise fails this check even
+            // though it contains many small LOD triangles.
+            for (int y = 0; y < 13; y++)
+            for (int x = 1; x < 12; x++)
+            {
+                int i = y * 13 + x;
+                double a = (data.Anchor + Double3.FromVector3(data.Vertices[i - 1])).Length;
+                double b = (data.Anchor + Double3.FromVector3(data.Vertices[i])).Length;
+                double c = (data.Anchor + Double3.FromVector3(data.Vertices[i + 1])).Length;
+                maximumCurvature = Math.Max(maximumCurvature, Math.Abs(a + c - 2 * b));
+                maximumNormalChange = Math.Max(maximumNormalChange, (data.Normals[i] - data.Normals[i - 1]).magnitude);
+            }
+            Assert.That(maximumCurvature, Is.GreaterThan(.005), "One-metre mesh samples must contain actual relief beyond a tilted plane.");
+            Assert.That(maximumNormalChange, Is.GreaterThan(.005), "Geometric normals must resolve the physical terrain bands.");
+        }
+
+        [Test]
         public void NearSurfaceLodConvergesWithinBoundedResidentAndLeafBudgets()
         {
             var gameObject = new GameObject("Terrain LOD test");
@@ -107,6 +186,35 @@ namespace SpaceEngine.Terrain.Tests
                 Assert.That(terrain.TriangleCount, Is.GreaterThan(0));
                 terrain.Tick(direction * definition.Radius * 1000, .000001, Vector3.zero, Vector3.up);
                 Assert.That(terrain.ActivePatchCount, Is.LessThan(16));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(gameObject);
+                UnityEngine.Object.DestroyImmediate(material);
+            }
+        }
+
+        [Test]
+        public void LargeVisibleOrbitalPlanetReceivesCoastlineDetailBeforeProximityLod()
+        {
+            var gameObject = new GameObject("Orbital detail test");
+            var material = new Material(Shader.Find("Hidden/InternalErrorShader"));
+            try
+            {
+                var terrain = gameObject.AddComponent<PlanetTerrain>();
+                terrain.PatchResolution = 4;
+                terrain.BuildsPerFrame = 32;
+                terrain.BuildBudgetMilliseconds = 1000;
+                terrain.MaximumVisiblePatches = 256;
+                terrain.MaximumResidentPatches = 512;
+                terrain.Configure(Earth, material);
+                Double3 camera = new Double3(1, .123, .456).Normalized * Earth.Radius * 3;
+                for (int i = 0; i < 16 && (i == 0 || terrain.PendingBuildCount > 0); i++)
+                    terrain.Tick(camera, .0001, Vector3.zero, Vector3.one.normalized);
+                Assert.That(terrain.PendingBuildCount, Is.EqualTo(0));
+                Assert.That(terrain.MaxActiveLevel, Is.EqualTo(3));
+                Assert.That(terrain.ActivePatchCount, Is.InRange(100, 256));
+                Assert.That(terrain.ResidentPatchCount, Is.LessThanOrEqualTo(512));
             }
             finally
             {

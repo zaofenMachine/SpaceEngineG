@@ -1,0 +1,7 @@
+{
+  "name": "SpaceEngine.Rendering.Editor",
+  "rootNamespace": "SpaceEngine.Rendering.Editor",
+  "references": ["SpaceEngine.Rendering"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}
