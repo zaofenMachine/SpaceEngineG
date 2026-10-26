@@ -1,0 +1,13 @@
+{
+  "name": "SpaceEngine.Core.Tests",
+  "rootNamespace": "SpaceEngine.Tests",
+  "references": ["SpaceEngine.Core"],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": false,
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "noEngineReferences": false
+}

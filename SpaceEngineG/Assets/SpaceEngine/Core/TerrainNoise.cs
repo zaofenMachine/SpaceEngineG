@@ -19,7 +19,8 @@ namespace SpaceEngine.Core
             double fine = Fractal(p * 151.0, unchecked(planet.Seed + 15485863), 3, 0.5);
             double relief = continents * 1.20 + hills * 0.16 + ridge * mountainMask * 0.55 + fine * 0.045;
             // The ocean is a separate datum at radius, while this function includes the underlying seabed.
-            return planet.TerrainHeight * (relief + (planet.HasOcean ? -0.08 : 0.2));
+            // Smooth bounding gives culling/LOD a strict +/-TerrainHeight envelope without clipped plateaus.
+            return planet.TerrainHeight * Math.Tanh(relief + (planet.HasOcean ? -0.08 : 0.2));
         }
 
         public static Color SurfaceColor(Double3 unitDirection, double height, PlanetDefinition planet)

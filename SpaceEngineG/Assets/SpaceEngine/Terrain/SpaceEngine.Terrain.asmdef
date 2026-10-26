@@ -1,0 +1,6 @@
+{
+    "name": "SpaceEngine.Terrain",
+    "rootNamespace": "SpaceEngine.Terrain",
+    "references": ["SpaceEngine.Core"],
+    "autoReferenced": true
+}

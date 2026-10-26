@@ -1,0 +1,25 @@
+Independent core verification, 2026-10-26 (Asia/Singapore)
+
+Method: compile unchanged Core/*.cs and EditMode test sources with .NET 8 Release,
+referencing Unity 6000.5.7f1 UnityEngine.CoreModule and its installed NUnit framework.
+Invoke NUnit [Test]/[TestCase] methods; all assertions are actual NUnit assertions.
+This checks numerical behavior independently of the Unity Editor process. The
+integration report must also retain Unity EditMode results and graphical evidence.
+
+Initial run: 28 passed, 0 failed, suite wall time 61.23 ms.
+100000 seeded spherical terrain height samples: 184.97 ms, checksum 62736902.612532.
+This is a warmed .NET CPU microbenchmark, not a Unity frame-time or GPU result.
+Hardware and Unity runtime timing are reported by the runtime acceptance harness.
+
+Coverage:
+- Coordinate millimetre precision at galactic and signed Int64 sector positions;
+  positive/negative sector boundaries, normalization, invalid input/overflow.
+- Published SplitMix reference vectors; all system/planet fields deterministic;
+  cell high-bit sensitivity; real-distance neighbours; 32 seeds with separate orbits.
+- Kepler residuals e=0 through e=0.999999; ellipse radii, year period, period closure,
+  negative time, Unity Y-up orientation, invalid two-body parameters.
+- Seeded terrain, scale-invariant direction, longitude seam and pole continuity;
+  1024 globe samples assert bounded height, real variation, land and seabed.
+
+Final run after worst-case local offset regression: see appended line below.
+RESULT passed=29 failed=0 suiteMs=34.29 terrain100kMs=195.66 checksum=62736902.612532

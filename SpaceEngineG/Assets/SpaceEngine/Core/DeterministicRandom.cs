@@ -13,7 +13,7 @@ namespace SpaceEngine.Core
         public int Range(int min, int exclusiveMax)
         {
             if (exclusiveMax <= min) throw new ArgumentOutOfRangeException(nameof(exclusiveMax));
-            return min + (int)(NextDouble() * ((long)exclusiveMax - min));
+            return (int)(min + (long)(NextDouble() * ((long)exclusiveMax - min)));
         }
         public static ulong Mix(ulong value)
         {

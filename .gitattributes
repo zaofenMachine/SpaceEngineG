@@ -1,0 +1,7 @@
+* text=auto
+*.cs text eol=lf
+*.shader text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.asmdef text eol=lf
