@@ -22,13 +22,16 @@ namespace SpaceEngine.Editor
             settings.StarMaterial=CreateMaterial("Star","SpaceEngine/Star");
             settings.StarBillboardMaterial=CreateMaterial("StarBillboard","SpaceEngine/StarBillboard");
             settings.AtmosphereMaterial=CreateMaterial("Atmosphere","SpaceEngine/Atmosphere");
+            settings.GalaxyMaterial=CreateMaterial("GalaxyField","SpaceEngine/GalaxyField");
+            settings.GasGiantMaterial=CreateMaterial("GasGiant","SpaceEngine/GasGiant");
+            settings.RingMaterial=CreateMaterial("PlanetRing","SpaceEngine/PlanetRing");
             EditorUtility.SetDirty(settings);
             var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             new GameObject("Universe simulation").AddComponent<UniverseApp>().Settings=settings;
             EditorSceneManager.SaveScene(scene,ScenePath);
             EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(ScenePath,true)};
             PlayerSettings.companyName="SpaceEngineG";PlayerSettings.productName="SpaceEngineG Explorer";
-            PlayerSettings.bundleVersion="0.1.0";
+            PlayerSettings.bundleVersion="0.2.0";
             PlayerSettings.defaultScreenWidth=1600;PlayerSettings.defaultScreenHeight=900;
             PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.runInBackground=true;
             AssetDatabase.SaveAssets();
@@ -56,14 +59,21 @@ namespace SpaceEngine.Editor
             EditorSettings.enterPlayModeOptionsEnabled=false;
             EditorSettings.enterPlayModeOptions=EnterPlayModeOptions.None;
         }
+        [MenuItem("Space Engine/Run Galaxy And Body Acceptance")]
+        public static void VerifyGalaxy()
+        {
+            if(EditorApplication.isPlaying){EditorApplication.isPlaying=false;return;}
+            EditorSceneManager.OpenScene(ScenePath);EditorApplication.ExecuteMenuItem("Window/General/Game");
+            SessionState.SetBool("SpaceEngine.VerifyGalaxy",true);EditorApplication.isPlaying=true;
+        }
         [MenuItem("Space Engine/Build Windows Explorer")]
         public static void BuildWindows()
         {
             string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../.."));
-            string output=Path.Combine(root,"Builds/Windows/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
+            string output=Path.Combine(root,"Builds/Windows-v0.2.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
             var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
-            Directory.CreateDirectory(Path.Combine(root,"Artifacts/Latest"));
-            File.WriteAllText(Path.Combine(root,"Artifacts/Latest/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows/SpaceEngineG.exe\n");
+            Directory.CreateDirectory(Path.Combine(root,"Artifacts/V020"));
+            File.WriteAllText(Path.Combine(root,"Artifacts/V020/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.2.0/SpaceEngineG.exe\n");
             if(result.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Player build failed");
         }
     }

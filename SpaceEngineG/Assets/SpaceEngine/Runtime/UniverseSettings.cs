@@ -1,5 +1,6 @@
 using UnityEngine;
 using SpaceEngine.Rendering;
+using SpaceEngine.Core;
 
 namespace SpaceEngine.Runtime
 {
@@ -7,6 +8,22 @@ namespace SpaceEngine.Runtime
     public sealed class UniverseSettings : ScriptableObject
     {
         public int UniverseSeed = 20261026;
+        public GalaxyDefinition Galaxy = new GalaxyDefinition();
+        [Range(10000,150000)] public int GalaxyParticleCount = 60000;
+        [Range(.1f,8)] public float GalaxyExposure = 2.5f;
+        [Range(.2f,5)] public float GalaxyKernelScale = 3.5f;
+        [Range(0,5)] public float GalaxyDustStrength = 1;
+        [Range(20,2000)] public float GalaxyDustScaleHeightLy = 220;
+        [Range(100,10000)] public float GalaxyDustAttenuationLengthLy = 1200;
+        [Range(20,500)] public float GalaxyLocalFadeLy = 100;
+        public double MaximumFlightSpeedLyPerSecond = 50000;
+        [Range(.1f,2)] public float GasBandContrast = .72f;
+        [Range(0,1)] public float GasStormStrength = .85f;
+        [Range(24,768)] public int GasLongitudeSegments = 384;
+        [Range(12,384)] public int GasLatitudeSegments = 192;
+        [Range(32,1024)] public int RingAngularSegments = 512;
+        [Range(0,3)] public float RingOpticalDepth = .8f;
+        public double GasCloudSafetyClearance = 10000;
         [Range(2, 9)] public int StarCellRadius = 5;
         [Range(4, 24)] public int TerrainResolution = 12;
         [Range(8, 23)] public int TerrainMaxLevel = 20;
@@ -20,6 +37,7 @@ namespace SpaceEngine.Runtime
         [Range(.25f,100)] public float MinimumSkirtDepth = 4;
         [Range(.01f,2)] public float NormalSampleDistance = .25f;
         [Range(.01f, 1)] public float AmbientLight = .035f;
+        [Range(0,8)] public float SunLightingExposure = 1.5f;
         [Range(.1f, 8)] public float AtmosphereExposure = 1.6f;
         public AtmosphereSettings Atmosphere = new AtmosphereSettings();
         [Range(.25f, 3)] public float StarBrightness = 1.2f;
@@ -29,5 +47,6 @@ namespace SpaceEngine.Runtime
         public double InitialAltitude = 12000000;
         public double MinimumClearance = 2;
         public Material TerrainMaterial, AtmosphereMaterial, StarMaterial, StarBillboardMaterial;
+        public Material GalaxyMaterial,GasGiantMaterial,RingMaterial;
     }
 }

@@ -33,7 +33,7 @@ namespace SpaceEngine.Runtime
             app=GetComponent<UniverseApp>();
             var args=Environment.GetCommandLineArgs();requested=Array.IndexOf(args,"--verify-flight")>=0;quit=Array.IndexOf(args,"--quit-after-verification")>=0;
             int index=Array.IndexOf(args,"--evidence-path");
-            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/Latest"));
+            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V020/Flight"));
 #if UNITY_EDITOR
             if(UnityEditor.SessionState.GetBool("SpaceEngine.VerifyFlight",false))
             {requested=true;UnityEditor.SessionState.SetBool("SpaceEngine.VerifyFlight",false);}
@@ -82,10 +82,11 @@ namespace SpaceEngine.Runtime
             double cmError=Math.Abs(app.Observer.RelativeTo(basePosition).x-.01);
             Check(cmError<.0001,"One-centimetre observer movement remains measurable at the current astronomical coordinate");
             // Cross a stellar cell boundary through streaming, retaining observer coordinate exactly.
-            var neighbour=UniverseGenerator.GenerateSystem(app.Settings.UniverseSeed,1,0,0);
+            var neighbourEntry=app.NearestCatalogueSystem();
+            var neighbour=neighbourEntry.System;
             app.SetObserver(neighbour.Position.Add(new Double3(0,0,PhysicalConstants.AstronomicalUnit*2)),app.ViewCamera.transform.rotation);
             var streamPosition=app.Observer;app.StreamNearestSystem();
-            Check(app.CellX==1&&app.Observer.Equals(streamPosition),"Nearest-system streaming changes system and retains observer coordinates");
+            Check(app.CellX==neighbourEntry.X&&app.CellY==neighbourEntry.Y&&app.CellZ==neighbourEntry.Z&&app.Observer.Equals(streamPosition),"Nearest occupied-system streaming changes system and retains observer coordinates");
             app.FramePlanet(0,app.Settings.InitialAltitude);yield return Settle(120);yield return Capture("06-second-system");
             Check(app.System.Seed==neighbour.Seed,"Second system matches deterministic generator");
             Check(report.errors==0,"No error / exception log during rendered acceptance route");

@@ -13,6 +13,37 @@ MonoBehaviour:
   m_Name: UniverseSettings
   m_EditorClassIdentifier: SpaceEngine.Runtime::SpaceEngine.Runtime.UniverseSettings
   UniverseSeed: 20261026
+  Galaxy:
+    Seed: 0
+    RadiusLy: 52000
+    DiskScaleLengthLy: 8500
+    ThinDiskHeightLy: 900
+    ThickDiskHeightLy: 3000
+    BulgeRadiusLy: 6500
+    BarLengthLy: 12000
+    BarAngleRadians: 0.47
+    ArmCount: 4
+    ArmPitchRadians: 0.22
+    ArmWidthLy: 1100
+    StellarHaloRadiusLy: 160000
+    SolarRadiusLy: 26700
+    LocalNumberDensityPerCubicParsec: 0.1
+    CentralMassSolarMasses: 4100000
+  GalaxyParticleCount: 60000
+  GalaxyExposure: 2.5
+  GalaxyKernelScale: 3.5
+  GalaxyDustStrength: 1
+  GalaxyDustScaleHeightLy: 220
+  GalaxyDustAttenuationLengthLy: 1200
+  GalaxyLocalFadeLy: 100
+  MaximumFlightSpeedLyPerSecond: 50000
+  GasBandContrast: 0.72
+  GasStormStrength: 0.85
+  GasLongitudeSegments: 384
+  GasLatitudeSegments: 192
+  RingAngularSegments: 512
+  RingOpticalDepth: 0.8
+  GasCloudSafetyClearance: 10000
   StarCellRadius: 5
   TerrainResolution: 12
   TerrainMaxLevel: 20
@@ -26,6 +57,7 @@ MonoBehaviour:
   MinimumSkirtDepth: 4
   NormalSampleDistance: 0.25
   AmbientLight: 0.035
+  SunLightingExposure: 1.5
   AtmosphereExposure: 1.6
   Atmosphere:
     Rayleigh: {x: 37, y: 86, z: 211}
@@ -46,3 +78,6 @@ MonoBehaviour:
   AtmosphereMaterial: {fileID: 2100000, guid: 93c0eb0124893a84c9ddf82155ccdaf4, type: 2}
   StarMaterial: {fileID: 2100000, guid: 20812295fbc6ffe4d8900b341a9d3ccb, type: 2}
   StarBillboardMaterial: {fileID: 2100000, guid: 82b506eb18431ac4a96de809a7dcc46a, type: 2}
+  GalaxyMaterial: {fileID: 2100000, guid: 7f547008c45e30940923626fc9eea623, type: 2}
+  GasGiantMaterial: {fileID: 2100000, guid: 5c13256c8ca441043ada3d552f0455b9, type: 2}
+  RingMaterial: {fileID: 2100000, guid: 3d27f9b038501c24d9576ae31106f3fe, type: 2}

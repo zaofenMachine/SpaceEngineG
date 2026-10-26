@@ -18,14 +18,18 @@ namespace SpaceEngine.Runtime
         Vector2[] uv;
         int[] triangles;
         public int Count => Entries.Count;
+        public long CenterX {get;private set;}public long CenterY {get;private set;}public long CenterZ {get;private set;}
 
-        public void Generate(int seed, long cx, long cy, long cz, int radius, Material material)
+        public void Generate(int seed, long cx, long cy, long cz, int radius, Material material,GalaxyDefinition galaxy=null)
         {
+            CenterX=cx;CenterY=cy;CenterZ=cz;
+            galaxy=galaxy??GalaxyModel.Default(seed);
             Entries.Clear();
             for (int x=-radius; x<=radius; x++)
             for (int y=-radius; y<=radius; y++)
             for (int z=-radius; z<=radius; z++)
-                Entries.Add(new Entry { X=cx+x, Y=cy+y, Z=cz+z, System=UniverseGenerator.GenerateSystem(seed,cx+x,cy+y,cz+z) });
+                if(UniverseGenerator.IsCellOccupied(seed,cx+x,cy+y,cz+z,galaxy))
+                    Entries.Add(new Entry { X=cx+x, Y=cy+y, Z=cz+z, System=UniverseGenerator.GenerateSystem(seed,cx+x,cy+y,cz+z,galaxy) });
             if (mesh != null) Destroy(mesh);
             mesh = new Mesh { name="Seeded spatial star catalogue", indexFormat=IndexFormat.UInt32 };
             mesh.MarkDynamic();
@@ -61,6 +65,7 @@ namespace SpaceEngine.Runtime
                 float angularRadius=(float)Math.Clamp(star.StarRadius/Math.Max(1,distance),minimumAngularRadius,.06);
                 float size=shell*angularRadius*1.8f;
                 Color color=TemperatureColor(star.StarTemperature)*intensity;
+                if(star.Kind==StellarKind.BlackHole)color=Color.black;
                 color.a=distance<star.StarRadius*3 ? 0:1;
                 int v=i*4;
                 vertices[v]=center-right*size-up*size; vertices[v+1]=center+right*size-up*size;

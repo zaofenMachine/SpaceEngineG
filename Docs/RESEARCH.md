@@ -12,3 +12,18 @@
 | [Ken Perlin: Improved Noise](https://cs.nyu.edu/~perlin/noise/) | 连续梯度噪声与分形叠加 | Seed 驱动的三维连续高度域，球面不使用经纬贴图接缝 |
 
 需要分别验证模型误差、视觉表现和运行性能；物理尺寸真实不等于所有天体统计和光度都达到科研精度。
+
+## 0.2 银河与天体扩展
+
+本轮另外查阅了以下原始资料。采用模型思想，自行实现代码，没有导入外部资产或代码。
+
+| 原始资料 | 实现取舍 |
+| --- | --- |
+| [Galaxia 作者项目](https://galaxia.sourceforge.net/) 与 [Sharma et al. (2011)](https://arxiv.org/abs/1101.3561) | 按空间密度生成合成星表；本项目采用简单 Poisson 格准入及有界人口光核，未移植其恒星族合成、年龄/金属丰度及等时线。 |
+| [Bland-Hawthorn & Gerhard (2016)](https://www.physics.usyd.edu.au/~jbh/share/Papers/ARAA_Galaxy_2016.pdf) | 分开建模盘、核球/棒和恒星晕。当前参数是可配置合成值，未对银河观测拟合，也未建立引力势。 |
+| [McMillan (2011)](https://arxiv.org/abs/1102.4340) 与 [Bissantz & Gerhard (2002)](https://arxiv.org/abs/astro-ph/0110368) | 指数薄/厚盘及棒和旋臂结构；只采用解析分量家族。 |
+| [NASA 恒星分类](https://science.nasa.gov/universe/stars/types/) 与 [Fortney & Nettelmann (2010)](https://arxiv.org/abs/0912.0533) | 分开设置恒星残骸、气态巨行星和冰巨星的参数范围；不模拟演化或内部结构方程。 |
+| [NASA 土星资料](https://science.nasa.gov/saturn/facts/) | 气态天体无固体降落面，环、卫星和云层分别表示。 |
+| [ESO 黑洞研究](https://elt.eso.org/science/blackholes/) | 中央质量取约四百万太阳质量量级，计算几何 Schwarzschild 半径；不将黑色球面当作相对论黑洞渲染完成。 |
+
+GPU 实现额外使用解析频段的像素导数过滤，解决实际截图中的细环摩尔纹；尘埃积分先裁剪至薄层，避免在长达十万光年的视线中完全漏采。它们属于本项目本轮定位后的修复，不是对上述论文精度的声称。

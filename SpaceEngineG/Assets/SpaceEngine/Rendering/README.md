@@ -104,9 +104,9 @@ these reference parameters; missing nearby relief must also be checked in the
 terrain/landing position rather than attributed to an atmosphere shader alone.
 
 The Editor menu `Space Engine/Validate Shaders` synchronously compiles all passes
-for all four shaders, including both atmosphere material variants, and records
+for all configured shaders, including both atmosphere material variants, and records
 active graphics API support plus all shader compiler messages in
-`Artifacts/Latest/shaders.json` at the repository root. The optional batch entry
+`Artifacts/V020/shaders.json` at the repository root. The optional batch entry
 point is `SpaceEngine.Rendering.Editor.ShaderValidation.RunBatch`. Run it with a
 real graphics API; `-nographics` cannot establish GPU support. This report is
 explicitly separate from rendered-frame inspection.
@@ -134,3 +134,77 @@ play-mode-only MonoBehaviour in the Editor does not invoke its `OnDisable`, so
 its generated renderers can stay visible. The vacuum control is configured with
 real atmosphere parameters first, and the disable control follows a proven sky
 render, so default sphere geometry cannot produce a misleading black control.
+
+## Additional celestial rendering
+
+`CelestialBodyRenderer` supplements the existing adaptive terrain renderer. Call
+`Configure(PlanetDefinition, gasTemplate, ringTemplate)` once, then call
+`Tick(cameraFromPlanetMeters, renderUnitsPerMetre, directionTowardSun, simulationTimeSeconds)`.
+The coordinate convention matches `PlanetTerrain`: subtract the observer in SI double precision,
+then multiply both center and radius by the same render scale. Distant depth proxies retain angular size.
+
+### Implemented representation
+
+- Gas and ice giants use a generated closed cloud-reference mesh, with no Unity primitive or imported
+  static sphere prefab. Their seeded shader evaluates latitude belts, continuous 3D turbulent noise,
+  two angular vortex storms, differential advection and rotation from simulation time. Close approaches
+  reveal additional seeded cloud cells at configurable frequencies; pixel-footprint filtering removes
+  unresolved detail continuously in orbital views rather than introducing fine raster.
+- Ice giant coloring and lower belt contrast are distinct from warm gas giants. These clouds are a
+  visible reference radius, not terrain or a physically solid surface. `PlanetDefinition.IsLandable`
+  must remain false for both giant categories; flight safety/navigation enforces that separately.
+- Rings are generated equatorial annuli with absolute SI inner/outer radii. The shader computes seeded
+  radial optical-depth bands, gaps, view-dependent sheet opacity, two-sided lighting, directional
+  forward scattering and the planet's analytic shadow. Giants also receive analytic shadows from
+  their ring plane. Sinusoidal optical-depth bands use derivative-based analytic pixel-box integration
+  and a Nyquist taper, shared with ring shadows, to prevent moire when bands become smaller than pixels.
+  The plane follows axial tilt and does not rotate its radial pattern unnecessarily.
+- Opaque clouds supply a URP `DepthOnly` pass so the existing atmosphere can terminate on real camera
+  depth. Particle rings deliberately remain transparent with `ZWrite Off`; they do not become opaque
+  terrain in the camera depth texture. Rings render at queue 3010, after galaxy/stars but before the
+  atmosphere, so their optical opacity attenuates background light instead of stars being added over them.
+- Existing landable-body adaptive terrain supplies rocky, oceanic, desert, ice and lava geometry.
+  This component creates no replacement solid sphere for those bodies. A landable body's optional
+  ring can still use the annulus.
+- The terrain shader evaluates seeded lava fissures per fragment from the normalized patch anchor,
+  avoiding triangle-shaped interpolation of a vertex mask. `_IsLava` gates the effect and
+  `_EmissionStrength` controls orange/red radiance independently of sunlight. Vertex alpha retains
+  the CPU fissure field for geometry verification; it does not determine pixel emission. No point
+  light or heat simulation is added.
+
+Cloud/ring geometry resolution, band frequency/contrast, cloud turbulence, vortex size/strength,
+differential wind, ring optical depth, irradiance and ambient light are configurable on the component.
+Material templates additionally expose cloud roughness, particle albedo, forward scattering,
+shadow softness and analytic shadow strength. Body seed, class, tint, tilt, radius and rotation period
+remain explicit generator outputs. Mesh and material instances are owned and released on reconfigure/destroy.
+
+### Additional celestial verification
+
+`Rendering/Tests` adds ten EditMode tests for closed outward sphere topology, ring boundaries,
+repeatable geometry, invalid geometry, landable/non-landable representation, angular scale invariance,
+large-time phase precision, material ownership/seed changes and cloud/galaxy visibility. Shader validation includes
+both added shaders and all their material passes.
+
+`SpaceEngine.Rendering.Editor.CelestialPixelValidation.ValidatePixels()` performs eleven actual GPU
+pixel checks using isolated 512×512 floating-point URP renders. It saves gas seeds, rotation, ice giant,
+ringed giant, analytic-shadow/control, close cloud-cell detail/control and nightside lava emission/control PNGs under
+`Artifacts/V020/CelestialPixels`, plus a JSON report.
+The helper does not substitute compilation success for pixel evidence. Its timing samples include
+synchronous GPU readback and are not gameplay frame performance. A null graphics device fails validation.
+
+### Additional celestial research and limitations
+
+- [NASA: Jupiter facts](https://science.nasa.gov/jupiter/jupiter-facts/) motivates a non-landable cloud
+  reference with belts and vortices: Jupiter has no true solid surface. The renderer does not model
+  fluid dynamics, pressure, chemistry, self-consistent weather evolution or volumetric entry.
+- [NASA: Saturn facts](https://science.nasa.gov/saturn/facts/) identifies the tilted ring system as ice/rock
+  particles. The current annulus is an optical-sheet approximation; it does not simulate each particle.
+- [NASA Cassini ring science](https://science.nasa.gov/mission/cassini/science/rings/) motivates explicit
+  shadow geometry. The directional spherical shadow and adjustable penumbra are approximations;
+  finite stellar disc integration, multiple scattering, ring vertical thickness, self-gravity,
+  resonant moon dynamics and physically calibrated phase functions remain outside this renderer.
+- [Salo & French, 2010, The opposition and tilt effects of Saturn's rings from HST observations](https://arxiv.org/abs/1007.0349)
+  separates particle backscattering from interparticle shadowing. This implementation is intentionally
+  a first appearance model and does not claim that level of photometric fidelity.
+
+All added geometry and shader code is written for this project. No third-party textures or meshes are bundled.

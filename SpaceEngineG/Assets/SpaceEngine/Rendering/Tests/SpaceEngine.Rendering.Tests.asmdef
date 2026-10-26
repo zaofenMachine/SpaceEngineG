@@ -1,0 +1,9 @@
+{
+    "name": "SpaceEngine.Rendering.Tests",
+    "rootNamespace": "SpaceEngine.Rendering.Tests",
+    "references": ["SpaceEngine.Core", "SpaceEngine.Rendering"],
+    "includePlatforms": ["Editor"],
+    "optionalUnityReferences": ["TestAssemblies"],
+    "autoReferenced": false,
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"]
+}

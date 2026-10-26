@@ -12,6 +12,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 
 namespace SpaceEngine.Tests.PlayMode
@@ -30,9 +31,17 @@ namespace SpaceEngine.Tests.PlayMode
         Color previousAmbient;
         Material previousSkybox;
         string savePath;
+        string legacySavePath;
         readonly Dictionary<string, byte[]> previousSaveFiles = new Dictionary<string, byte[]>();
         readonly List<UniverseApp> suspendedApps = new List<UniverseApp>();
         readonly List<Camera> suspendedCameras = new List<Camera>();
+
+        [Serializable]
+        sealed class SaveHeader
+        {
+            public int Version, GenerationVersion, ViewMode;
+            public GalaxyDefinition Galaxy;
+        }
 
         [UnitySetUp]
         public IEnumerator SetUp()
@@ -40,8 +49,9 @@ namespace SpaceEngine.Tests.PlayMode
             previousScene = SceneManager.GetActiveScene();
             previousVsync = QualitySettings.vSyncCount; previousTargetFrameRate = Application.targetFrameRate;
             previousFog = RenderSettings.fog; previousAmbient = RenderSettings.ambientLight; previousSkybox = RenderSettings.skybox;
-            savePath = Path.Combine(Application.persistentDataPath, "flight.json");
-            foreach (string path in new[] { savePath, savePath + ".bak", savePath + ".tmp" })
+            savePath = Path.Combine(Application.persistentDataPath, "flight-v2.json");
+            legacySavePath = Path.Combine(Application.persistentDataPath, "flight.json");
+            foreach (string path in new[] { savePath, savePath + ".bak", savePath + ".tmp", legacySavePath, legacySavePath + ".bak", legacySavePath + ".tmp" })
                 previousSaveFiles[path] = File.Exists(path) ? File.ReadAllBytes(path) : null;
 
             // Unity Test Runner normally supplies an empty scene. If an explorer
@@ -59,6 +69,9 @@ namespace SpaceEngine.Tests.PlayMode
             settings = Object.Instantiate(resource);
             settings.name = "PlayMode temporary settings";
             settings.StarCellRadius = 2;
+            settings.GalaxyParticleCount = 1000;
+            if (settings.Galaxy == null) settings.Galaxy = GalaxyModel.Default(settings.UniverseSeed);
+            settings.Galaxy.Seed = settings.UniverseSeed;
             settings.TerrainResolution = 6;
             settings.TerrainPatchBudget = 48;
             settings.TerrainMaxLevel = 18;
@@ -109,7 +122,12 @@ namespace SpaceEngine.Tests.PlayMode
             Assert.That(app.System.Seed, Is.EqualTo(expected.Seed));
             Assert.That(app.System.Planets[0].Seed, Is.EqualTo(expected.Planets[0].Seed));
             Assert.That(app.Terrains.Length, Is.EqualTo(expected.Planets.Length));
-            Assert.That(app.Stars.Count, Is.EqualTo(125));
+            int occupiedCells = 0;
+            for (int x = -2; x <= 2; x++) for (int y = -2; y <= 2; y++) for (int z = -2; z <= 2; z++)
+                if (UniverseGenerator.IsCellOccupied(settings.UniverseSeed, x, y, z, settings.Galaxy)) occupiedCells++;
+            Assert.That(app.Stars.Count, Is.EqualTo(occupiedCells));
+            Assert.That(app.Stars.Count, Is.InRange(2, 124), "The local catalogue must resolve occupied cells rather than filling every cell.");
+            Assert.That(app.SavePath, Is.EqualTo(savePath));
             Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero));
             Assert.That(RenderSettings.skybox, Is.Null);
             for (int i = 0; i < 60 && app.Terrains[0].ActivePatchCount == 0; i++) yield return null;
@@ -165,12 +183,15 @@ namespace SpaceEngine.Tests.PlayMode
         [UnityTest]
         public IEnumerator StreamingNeighbourRetainsObserverAndReleasesPreviousPlanetObjects()
         {
-            var neighbour = UniverseGenerator.GenerateSystem(settings.UniverseSeed, 1, 0, 0);
+            var entry = app.NearestCatalogueSystem();
+            Assert.That(entry.System, Is.Not.Null, "The starting volume must contain an occupied neighbour.");
+            var neighbour = entry.System;
+            Assert.That(UniverseGenerator.IsCellOccupied(settings.UniverseSeed, entry.X, entry.Y, entry.Z, app.Settings.Galaxy), Is.True);
             var position = neighbour.Position.Add(new Double3(0, 0, PhysicalConstants.AstronomicalUnit * 2));
             var previousTerrains = (PlanetTerrain[])app.Terrains.Clone();
             app.SetObserver(position, app.ViewCamera.transform.rotation);
             app.StreamNearestSystem();
-            Assert.That(app.CellX, Is.EqualTo(1)); Assert.That(app.CellY, Is.EqualTo(0)); Assert.That(app.CellZ, Is.EqualTo(0));
+            Assert.That(app.CellX, Is.EqualTo(entry.X)); Assert.That(app.CellY, Is.EqualTo(entry.Y)); Assert.That(app.CellZ, Is.EqualTo(entry.Z));
             Assert.That(app.Observer.Equals(position), Is.True, "Streaming must preserve sector and local values exactly.");
             Assert.That(app.System.Seed, Is.EqualTo(neighbour.Seed));
             yield return null;
@@ -217,7 +238,7 @@ namespace SpaceEngine.Tests.PlayMode
             UniversalPosition before = app.Observer;
             int beforeSeed = app.System.Seed, beforeUniverseSeed = app.Settings.UniverseSeed;
             double beforeTime = app.SimulationTime;
-            File.WriteAllText(savePath, "{\"Version\":1,\"Seed\":1234,\"Time\":123,\"Rotation\":{\"x\":0,\"y\":0,\"z\":0,\"w\":0}}");
+            File.WriteAllText(savePath, "{\"Version\":2,\"GenerationVersion\":2,\"Seed\":1234,\"Time\":123,\"Rotation\":{\"x\":0,\"y\":0,\"z\":0,\"w\":0}}");
             LogAssert.Expect(LogType.Exception, new Regex("Invalid orientation"));
             app.LoadFlight();
             Assert.That(app.Observer.Equals(before), Is.True);
@@ -226,6 +247,224 @@ namespace SpaceEngine.Tests.PlayMode
             Assert.That(app.SimulationTime, Is.EqualTo(beforeTime));
             Assert.That(app.Notice, Does.StartWith("Restore failed:"));
             yield return null;
+        }
+
+        [UnityTest]
+        public IEnumerator GasGiantApproachStopsAboveCloudsWithoutClaimingALanding()
+        {
+            const int gasIndex = 3;
+            Assert.That(app.System.Planets[gasIndex].Kind, Is.EqualTo(PlanetKind.GasGiant));
+            app.FramePlanet(gasIndex, 5000);
+            var direction = app.CameraFromPlanet.Normalized;
+            app.SetObserver(app.PlanetPosition(gasIndex).Add(direction * (app.Planet.Radius + app.Settings.GasCloudSafetyClearance + 5000)),
+                app.ViewCamera.transform.rotation);
+            app.BeginDescent();
+            Assert.That(app.Navigation, Does.Contain("NO SOLID SURFACE"));
+            for (int i = 0; i < 100 && !app.Navigation.StartsWith("HOLDING ABOVE CLOUDS"); i++) app.AdvanceRadialFlight(.25);
+            yield return null;
+            Assert.That(app.Planet.IsLandable, Is.False);
+            Assert.That(app.Navigation, Does.StartWith("HOLDING ABOVE CLOUDS"));
+            Assert.That(app.Navigation, Does.Not.Contain("LANDED"));
+            Assert.That(app.Altitude, Is.EqualTo(app.Settings.GasCloudSafetyClearance).Within(.001));
+            Assert.That(app.Terrains[gasIndex].gameObject.activeSelf, Is.False);
+            Assert.That(app.Terrains[gasIndex].ActivePatchCount, Is.Zero);
+            Assert.That(app.Celestials[gasIndex].IsGasBody, Is.True);
+            Assert.That(app.Celestials[gasIndex].HasRings, Is.True);
+            app.SetObserver(app.PlanetPosition(gasIndex).Add(direction * (app.Planet.Radius - 100)), app.ViewCamera.transform.rotation);
+            app.ConstrainGround();
+            double clearance = app.Observer.RelativeTo(app.PlanetPosition(gasIndex)).Length - app.Planet.Radius;
+            Assert.That(clearance, Is.EqualTo(app.Settings.GasCloudSafetyClearance).Within(.001));
+        }
+
+        [UnityTest]
+        public IEnumerator MoonWorldPositionIncludesItsMovingParentAndParentMassOrbit()
+        {
+            const int moonIndex = 5;
+            var moon = app.System.Planets[moonIndex];
+            Assert.That(moon.IsMoon, Is.True);
+            var parent = app.System.Planets[moon.ParentIndex];
+            double moonPeriod = Orbit.Period(moon, parent.Mass);
+            foreach (double time in new[] { 0, moonPeriod * .25, moonPeriod * .75 })
+            {
+                app.SimulationTime = time;
+                Double3 expected = Orbit.Evaluate(moon, parent.Mass, time);
+                Double3 relativeOffset = app.BodyOffset(moonIndex) - app.BodyOffset(moon.ParentIndex);
+                Double3 relativePosition = app.PlanetPosition(moonIndex).RelativeTo(app.PlanetPosition(moon.ParentIndex));
+                Assert.That((relativeOffset - expected).Length, Is.LessThan(.003));
+                Assert.That((relativePosition - expected).Length, Is.LessThan(.003));
+            }
+            app.FramePlanet(moonIndex, 5000);
+            Assert.That(app.SelectedPlanet, Is.EqualTo(moonIndex));
+            Assert.That(app.Planet.Seed, Is.EqualTo(moon.Seed));
+            yield return null;
+            Assert.That(app.CameraFromPlanet.Length, Is.LessThan(moon.Radius + moon.TerrainHeight + 6000));
+        }
+
+        [UnityTest]
+        public IEnumerator GalaxyOverviewAndStreamingRetainTheActualAstronomicalObserver()
+        {
+            app.FrameGalaxy();
+            Assert.That(app.GalaxyOverview, Is.True);
+            UniversalPosition overview = app.Observer;
+            Double3 galactic = GalaxyModel.ToGalacticLy(overview, app.Settings.Galaxy);
+            Assert.That(galactic.y, Is.GreaterThan(100000));
+            Assert.That(galactic.z, Is.GreaterThan(120000));
+            Assert.That(app.Observer.RelativeTo(UniversalPosition.Origin).Length, Is.GreaterThan(100000 * PhysicalConstants.LightYear));
+            app.StreamNearestSystem();
+            Assert.That(app.Observer.Equals(overview), Is.True);
+            yield return null;
+            Assert.That(app.Observer.Equals(overview), Is.True);
+            Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero));
+            Assert.That(app.Stars.Count, Is.Zero, "An exterior viewpoint must not fill empty intergalactic cells with local stars.");
+            var renderer = app.Galaxy.GetComponent<MeshRenderer>();
+            Vector4 uniform = renderer.sharedMaterial.GetVector("_ObserverLy");
+            Assert.That((new Double3(uniform.x, uniform.y, uniform.z) - galactic).Length, Is.LessThan(.1));
+            app.ReturnHome();
+            Assert.That(app.GalaxyOverview, Is.False);
+            Assert.That(app.CellX, Is.Zero); Assert.That(app.CellY, Is.Zero); Assert.That(app.CellZ, Is.Zero);
+            Assert.That(app.Observer.RelativeTo(UniversalPosition.Origin).Length, Is.LessThan(PhysicalConstants.LightYear * .01));
+        }
+
+        [UnityTest]
+        public IEnumerator GalaxyGpuVerticesContainTheSeededThreeDimensionalPopulation()
+        {
+            if (!SystemInfo.supportsAsyncGPUReadback) Assert.Ignore("This graphics backend cannot read back the uploaded galaxy vertex buffer.");
+            Assert.That(app.Galaxy.ParticleCount, Is.EqualTo(1000));
+            Mesh mesh = app.Galaxy.GetComponent<MeshFilter>().sharedMesh;
+            Assert.That(mesh.vertexCount, Is.EqualTo(app.Galaxy.ParticleCount * 4));
+            var expected = GalaxyModel.GenerateRepresentatives(app.Settings.Galaxy, app.Galaxy.ParticleCount);
+            var buffer = mesh.GetVertexBuffer(0);
+            try
+            {
+                var request = AsyncGPUReadback.Request(buffer);
+                for (int frame = 0; frame < 120 && !request.done; frame++) yield return null;
+                Assert.That(request.done, Is.True);
+                Assert.That(request.hasError, Is.False);
+                var values = request.GetData<float>();
+                int stride = mesh.GetVertexBufferStride(0) / sizeof(float);
+                int offset = mesh.GetVertexAttributeOffset(VertexAttribute.Position) / sizeof(float);
+                float minimumY = float.MaxValue, maximumY = float.MinValue;
+                for (int i = 0; i < app.Galaxy.ParticleCount; i++)
+                {
+                    int index = i * 4 * stride + offset;
+                    var position = new Vector3(values[index], values[index + 1], values[index + 2]);
+                    Assert.That(position, Is.EqualTo(expected[i].PositionLy.ToVector3()), "GPU source vertices must retain each seeded spatial position.");
+                    minimumY = Math.Min(minimumY, position.y); maximumY = Math.Max(maximumY, position.y);
+                }
+                Assert.That(maximumY - minimumY, Is.GreaterThan(1000), "The uploaded population must have actual galactic height, not a flat image plane.");
+            }
+            finally { buffer.Dispose(); }
+        }
+
+        [UnityTest]
+        public IEnumerator VersionTwoSavePreservesLegacyBytesAndRestoresGalaxyConfiguration()
+        {
+            byte[] legacy = System.Text.Encoding.UTF8.GetBytes("{\"Version\":1,\"Seed\":98765,\"retained\":\"legacy flight\"}");
+            File.WriteAllBytes(legacySavePath, legacy);
+            if (File.Exists(savePath)) File.Delete(savePath);
+            UniversalPosition before = app.Observer;
+            app.LoadFlight();
+            Assert.That(app.Notice, Does.Contain("v1 save retained"));
+            Assert.That(app.Observer.Equals(before), Is.True);
+            app.Settings.Galaxy.ArmPitchRadians = .29;
+            app.Settings.Galaxy.DiskScaleLengthLy = 9700;
+            app.SaveFlight();
+            Assert.That(app.SavePath, Is.EqualTo(savePath));
+            CollectionAssert.AreEqual(legacy, File.ReadAllBytes(legacySavePath));
+            var header = JsonUtility.FromJson<SaveHeader>(File.ReadAllText(savePath));
+            Assert.That(header.Version, Is.EqualTo(2));
+            Assert.That(header.GenerationVersion, Is.EqualTo(UniverseGenerator.GenerationVersion));
+            Assert.That(header.Galaxy, Is.Not.Null);
+            Assert.That(header.Galaxy.ArmPitchRadians, Is.EqualTo(.29));
+            app.Settings.Galaxy.ArmPitchRadians = .18;
+            app.Settings.Galaxy.DiskScaleLengthLy = 8100;
+            app.LoadFlight();
+            Assert.That(app.Notice, Is.EqualTo("Flight restored"));
+            Assert.That(app.Settings.Galaxy.ArmPitchRadians, Is.EqualTo(.29));
+            Assert.That(app.Settings.Galaxy.DiskScaleLengthLy, Is.EqualTo(9700));
+            Assert.That(app.Galaxy.Definition.ArmPitchRadians, Is.EqualTo(.29), "The rendered galaxy must adopt the restored configuration even when its seed did not change.");
+            Assert.That(app.Galaxy.Definition.DiskScaleLengthLy, Is.EqualTo(9700));
+            CollectionAssert.AreEqual(legacy, File.ReadAllBytes(legacySavePath));
+            yield return null;
+        }
+
+        StarCatalogueRenderer.Entry StellarFixture(StellarKind kind)
+        {
+            // Known generation-v2 fixtures keep the ordinary path constant-time. The seeded search
+            // also supports a different shipped universe seed; admission is separate from this scale check.
+            long knownX = kind == StellarKind.NeutronStar ? -128 : -96;
+            long knownZ = kind == StellarKind.NeutronStar ? 118 : 11;
+            var known = UniverseGenerator.GenerateSystem(app.Settings.UniverseSeed, knownX, 0, knownZ, app.Settings.Galaxy);
+            if (known.Kind == kind) return new StarCatalogueRenderer.Entry { X = knownX, Y = 0, Z = knownZ, System = known };
+            for (int i = 1; i <= 4096; i++)
+            {
+                long x = i, y = i % 19, z = -i % 29;
+                var candidate = UniverseGenerator.GenerateSystem(app.Settings.UniverseSeed, x, y, z, app.Settings.Galaxy);
+                if (candidate.Kind == kind) return new StarCatalogueRenderer.Entry { X = x, Y = y, Z = z, System = candidate };
+            }
+            Assert.Fail("No deterministic " + kind + " fixture was found within the bounded seed scan.");
+            return default;
+        }
+
+        [UnityTest]
+        public IEnumerator CompactStellarReferenceHasVisibleScaleAndSurvivesSaveRestore()
+        {
+            foreach (StellarKind kind in new[] { StellarKind.NeutronStar, StellarKind.BlackHole })
+            {
+                var fixture = StellarFixture(kind);
+                app.LoadSystem(fixture.X, fixture.Y, fixture.Z);
+                app.FrameStar();
+                Assert.That(app.System.Kind, Is.EqualTo(kind));
+                Assert.That(app.StellarView, Is.True);
+                Assert.That(app.GalaxyOverview || app.NucleusView, Is.False);
+                double clearance = app.Observer.RelativeTo(app.System.Position).Length - app.System.StarRadius;
+                Assert.That(app.Altitude, Is.EqualTo(clearance).Within(.001), "Stellar telemetry must use star clearance rather than a distant selected planet.");
+                Assert.That(clearance * app.RenderScale, Is.GreaterThanOrEqualTo(1000));
+                Assert.That(app.System.StarRadius * app.RenderScale, Is.GreaterThan(1000), "Compact objects must remain visible outside the camera near plane.");
+                UniversalPosition savedObserver = app.Observer;
+                double savedScale = app.RenderScale;
+                app.SaveFlight();
+                Assert.That(JsonUtility.FromJson<SaveHeader>(File.ReadAllText(savePath)).ViewMode, Is.EqualTo(3));
+                app.FramePlanet(0, settings.InitialAltitude);
+                Assert.That(app.StellarView, Is.False);
+                app.LoadFlight();
+                Assert.That(app.Notice, Is.EqualTo("Flight restored"));
+                Assert.That(app.StellarView, Is.True);
+                Assert.That(app.GalaxyOverview || app.NucleusView, Is.False);
+                Assert.That(app.Observer.Equals(savedObserver), Is.True, "Restoring a view must preserve the astronomical observer exactly.");
+                Assert.That(app.RenderScale, Is.EqualTo(savedScale));
+                yield return null;
+                Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero));
+                Assert.That(app.RenderScale, Is.EqualTo(savedScale));
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator BodyGalaxyAndNucleusReferenceModesRoundTripWithTheirObserverAndScale()
+        {
+            for (int mode = 0; mode <= 2; mode++)
+            {
+                if (mode == 0) app.FramePlanet(1, settings.InitialAltitude);
+                else if (mode == 1) app.FrameGalaxy();
+                else app.FrameNucleus();
+                UniversalPosition observer = app.Observer;
+                double scale = app.RenderScale;
+                int selected = app.SelectedPlanet;
+                app.SaveFlight();
+                Assert.That(JsonUtility.FromJson<SaveHeader>(File.ReadAllText(savePath)).ViewMode, Is.EqualTo(mode));
+                app.FramePlanet(0, settings.InitialAltitude);
+                app.LoadFlight();
+                Assert.That(app.Notice, Is.EqualTo("Flight restored"));
+                Assert.That(app.GalaxyOverview, Is.EqualTo(mode == 1));
+                Assert.That(app.NucleusView, Is.EqualTo(mode == 2));
+                Assert.That(app.StellarView, Is.False);
+                Assert.That(app.SelectedPlanet, Is.EqualTo(selected));
+                Assert.That(app.Observer.Equals(observer), Is.True);
+                Assert.That(app.RenderScale, Is.EqualTo(scale));
+                yield return null;
+                Assert.That(app.Observer.Equals(observer), Is.True);
+                Assert.That(app.RenderScale, Is.EqualTo(scale));
+            }
         }
 
         [UnityTest]

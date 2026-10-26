@@ -17,11 +17,12 @@ namespace SpaceEngine.Rendering.Editor
         private static readonly string[] ShaderNames =
         {
             "SpaceEngine/Terrain", "SpaceEngine/Atmosphere",
-            "SpaceEngine/StarBillboard", "SpaceEngine/Star"
+            "SpaceEngine/StarBillboard", "SpaceEngine/Star",
+            "SpaceEngine/GasGiant", "SpaceEngine/PlanetRing", "SpaceEngine/GalaxyField"
         };
 
         public static string ReportPath => Path.GetFullPath(Path.Combine(
-            Application.dataPath, "..", "..", "Artifacts", "Latest", "shaders.json"));
+            Application.dataPath, "..", "..", "Artifacts", "V020", "shaders.json"));
 
         [MenuItem("Space Engine/Validate Shaders")]
         public static void ValidateShaders()

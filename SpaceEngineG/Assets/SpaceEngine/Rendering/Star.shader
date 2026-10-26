@@ -70,6 +70,9 @@ Shader "SpaceEngine/Star"
                 float mu = saturate(dot(normalize(input.normalWS), GetWorldSpaceNormalizeViewDir(input.positionWS)));
                 float limb = 1.0 - _LimbDarkening * (1.0 - mu);
                 float3 color = _BaseColor.rgb * _Intensity * modulation * limb;
+                // Preserve chromaticity and photospheric detail in the display target.
+                // Physical luminosity remains in the SI model; output has a bounded display exposure.
+                color /= 1.0 + max(color.r, max(color.g, color.b));
                 return half4(color, 1.0);
             }
             ENDHLSL
