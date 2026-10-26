@@ -4,19 +4,21 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 这是可运行的早期探索版本；基础系统与图形验证证据随源码维护，尚未达到 SpaceEngine 的天体种类、画面质量和科学完整度。
 
-当前版本 **0.2.0**：新增六分量三维银河、七类恒星、七类行星、卫星、程序化云带、行星环和熔岩裂隙。**102 项 Unity 测试、17 项 GPU 像素检查**通过；独立 Windows 程序分别完成降落与银河巡检。详细结果、性能与限制见 [0.2 实测记录](Docs/VALIDATION-V020.md)。
+当前迭代 **0.3.0**：固体星球使用 **1024² × 6 面 GPU 高度材料图**及逐像素海岸/地质/米制细节，可配置到每面 2048²；银河改为观察者相关的三维发光与尘埃体积积分。另加入海洋星球薄云、改善气态湍流，并用解析球面重建气态近景轮廓。核心生成版本保持 2，原地形与存档兼容。此前的六分量银河、七类恒星/行星、卫星和连续降落仍作为回归门槛。
 
-![独立 Windows 程序实际银河总览](Artifacts/V020/PlayerGalaxy/01-galaxy-oblique.png)
+**107 项 EditMode、17 项 PlayMode 与全部 65 项 GPU 断言通过**，包含真实行星尺度的近地材料/大气组合检查；GPU 断言中有五项精度检查在两套组合场景中复用。实际截图和性能与自动断言分别验收，详见 [0.3 实测记录](Docs/VALIDATION-V030.md)。
 
-![程序化气态巨行星及环](Artifacts/V020/PlayerGalaxy/07-gasgiant.png)
+![独立 Windows 程序实际银河总览](Artifacts/V030/PlayerGalaxy/01-galaxy-oblique.png)
+
+![逐像素材料与轨道薄云](Artifacts/V030/PlayerGalaxy/04-oceanic.png)
 
 ## 启动
 
 使用 Unity Hub 打开仓库中的 **`SpaceEngineG/`** 子目录，版本 **6000.5.7f1**。载入 `Assets/Scenes/Universe.unity` 后按 Play。项目已包含入口场景、资源材质和默认配置，无需下载美术包。
 
-若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.2.0/SpaceEngineG.exe`。
+若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.3.0/SpaceEngineG.exe`。
 
-本地交付包为 `Builds/SpaceEngineG-0.2.0-windows-x64.zip`（40.15 MB），解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。[分发包清单与 SHA-256](Artifacts/V020/package-manifest.json) 记录实际验收版本。旧版 0.1.0 程序、ZIP 和证据均保留。
+本地交付包为 `Builds/SpaceEngineG-0.3.0-windows-x64.zip`（40.31 MB），解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。独立程序完成两条航线、零运行时错误，26 张截图已逐张复核。二进制不提交 Git；源码用户按上述菜单构建。[分发包清单与 SHA-256](Artifacts/V030/package-manifest.json) 记录实际验收版本。旧版 0.1.0、0.2.0 程序、ZIP 和证据均保留。
 
 ## 操作
 
@@ -37,9 +39,9 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 自由飞行和 G/R 导航连续更新同一观察者坐标；F、Tab、N、T、M、Home、B 是明确的定位/传送快捷方式。气态/冰巨星没有固体降落面，接近停在可配置的云顶安全净空。探索器允许超光速移动，未实现相对论飞行动力学。
 
-银河拥有薄盘、厚盘、旋臂、核球、棒和恒星晕；默认盘直径 104,000 光年。远景的 60,000 个三维光核代表未解析的恒星人口，局部目录按同一个密度模型准入。它们具有空间位置和视差，不是天空盒，也不是一千亿颗独立恒星实例。黑洞目前显示几何参考面，尚无透镜或吸积盘。
+银河拥有薄盘、厚盘、旋臂、核球、棒和恒星晕；默认盘直径 104,000 光年。主要画面在实际观察者位置积分空间发光及尘埃透射，默认半分辨率、96 步；60,000 个三维小光核补充未解析恒星人口细节，局部目录按同一个密度模型准入。它们具有空间位置和视差，不是天空盒，也不是一千亿颗独立恒星实例。黑洞目前显示几何参考面，尚无透镜或吸积盘。
 
-游戏内右上角 `SETTINGS` 支持调整曝光、视场、星星亮度、地形预算及宇宙 Seed。银河、云层细分、地形、大气和安全净空参数位于 `Assets/SpaceEngine/Resources/UniverseSettings.asset`；细环、裂隙和 Shader 细节参数位于同目录材质。参数在启动时复制，游戏内调整不会覆盖源配置。
+游戏内右上角 `SETTINGS` 支持调整曝光、视场、星星亮度、地形预算及宇宙 Seed。银河采样/分辨率/内外曝光、材料图分辨率/法线/海洋反射、云覆盖/厚度/风、大气及安全净空参数位于 `Assets/SpaceEngine/Resources/UniverseSettings.asset`；细环、裂隙和 Shader 细节参数位于同目录材质。银河总览有单独视场控制。参数在启动时复制，游戏内调整不会覆盖源配置；材料图分辨率在首次烘焙时应用。
 
 生成版本 2 使用 `flight-v2.json`，保存银河参数与当前参考视角。旧 `flight.json` 保留，使用 0.1.0 程序打开；不会把新世界地形套在旧存档上。
 
@@ -50,10 +52,14 @@ Unity Test Runner 包含 EditMode 数学/网格测试和 PlayMode 集成测试�
 - `Space Engine > Validate Shaders`：实际图形设备上的 Shader Pass 与变体编译检查。
 - `Space Engine > Validate Atmosphere Pixels`：HDR GPU 像素读回，分别验证真空、天空、尺度不变和近地深度终止。
 - `Space Engine > Validate Celestial Pixels`：验证云层 Seed、旋转、环影、云顶细节和熔岩网格密度不变性。
+- `Space Engine > Validate Terrain Pixels`：GPU/CPU Seed 高度材料、海岸、顶点网格密度不变性与米制细节；完整高度与哈希精度另由 EditMode 测试覆盖。
+- `Space Engine > Validate Ground Terrain Pixels` / `Validate Ground Atmosphere Pixels`：真实行星尺度、2 m 净空、2 mm 位移、渲染比例及 Forward+ 深度/大气组合；防止小型 fixture 漏掉近地精度和横带问题。
+- `Space Engine > Validate Planet Cloud Pixels` / `Validate Gas Horizon Pixels`：轨道云覆盖/光照、解析近景轮廓、DepthOnly 与实际 URP 深度/法线预通道。
+- `Space Engine > Validate Galaxy Pixels`：空间积分、Seed、位置、收敛、内外亮度、尘埃和真实深度合成。
 - `Space Engine > Run Rendered Flight Acceptance`：真实渲染从 0.03 光年连续下降至约 2 米地表，保存六个高度/星系截图、运行时断言和性能 JSON。
-- `Space Engine > Run Galaxy And Body Acceptance`：银河三个视角、全部行星/恒星类别、卫星、云顶接近和中央参考面，默认 Seed 共 19 张实际截图。
+- `Space Engine > Run Galaxy And Body Acceptance`：银河三个视角、全部行星/恒星类别、卫星、云顶接近、中央参考面及 120 帧持续转动性能，默认 Seed 共 20 张实际截图。
 
-0.2 证据输出到 `Artifacts/V020/`；独立程序证据位于其中的 `PlayerFlight/` 和 `PlayerGalaxy/`。`Iteration01/`、`Iteration02/` 保留了断言通过但视觉未通过的截图。截图审查不能由 Shader 编译或网格计数代替；旧版证据不覆盖。
+0.3 证据输出到 `Artifacts/V030/`；独立程序证据位于其中的 `PlayerFlight/` 和 `PlayerGalaxy/`。失败迭代及各 GPU fixture 的控制图保留，用于核对改动是否解决实际问题。截图审查不能由 Shader 编译或网格计数代替；旧版证据不覆盖。详细覆盖、性能和限制见 [0.3 实测记录](Docs/VALIDATION-V030.md)。
 
 如果已在 Unity 启动项目附带的 Unity MCP，可以通过 Python 标准库脚本复现测试：
 
@@ -65,8 +71,8 @@ python Scripts/validate.py --tests --graphics --flight --galaxy
 Windows 程序也能独立运行验证航线：
 
 ```powershell
-.\Builds\Windows-v0.2.0\SpaceEngineG.exe --verify-flight --quit-after-verification --evidence-path C:\Temp\SpaceEngineFlight
-.\Builds\Windows-v0.2.0\SpaceEngineG.exe --verify-galaxy --quit-after-verification --evidence-path C:\Temp\SpaceEngineGalaxy
+.\Builds\Windows-v0.3.0\SpaceEngineG.exe --verify-flight --quit-after-verification --evidence-path C:\Temp\SpaceEngineFlight
+.\Builds\Windows-v0.3.0\SpaceEngineG.exe --verify-galaxy --quit-after-verification --evidence-path C:\Temp\SpaceEngineGalaxy
 ```
 
 验证航线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。

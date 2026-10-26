@@ -1,0 +1,25 @@
+{
+  "version": "0.3.0",
+  "sourceRevision": "b97dc9819bac0b6fef2191b00edb4482b91561f8",
+  "buildGuid": "6cfd34d330ca4aa888ab769729cc2dee",
+  "verifiedGpu": "NVIDIA GeForce RTX 4070",
+  "graphicsApi": "Direct3D12",
+  "fileCount": 192,
+  "uncompressedBytes": 108004311,
+  "archive": "Builds/SpaceEngineG-0.3.0-windows-x64.zip",
+  "archiveBytes": 40311059,
+  "archiveSha256": "77758b5ec3dddafaecab93758e36e05bfd60599fc745b44f7b09daaf7487c071",
+  "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+  "unityPlayerSha256": "7f9c4c1b4a42d763422f1f792c0da193f0d6541048aaa84f0b3efd1e4ee90206",
+  "runtimeAssemblySha256": {
+    "SpaceEngine.Core": "5f71a86c5a5bea42fc983fe6aade336ed31af7287185f2c69888cbb31f9c4fbd",
+    "SpaceEngine.Terrain": "fb91aeb679e2ce04a56a71976666cda9b85446a128fabf2bf4870d88ab190072",
+    "SpaceEngine.Rendering": "1c67fc4b2219371cb56238c3a88e67c7503596629fcaf4fd600755be0d71b167",
+    "SpaceEngine.Runtime": "c2b5acbfc7c1b63773d88b736be9248f85eefb84dbc15e13e8ce56d3efb07171"
+  },
+  "evidence": [
+    "Artifacts/V030/PlayerFlight",
+    "Artifacts/V030/PlayerGalaxy"
+  ],
+  "notes": "Source revision recorded before build. Screenshot review is documented separately. Unity debug folders and PDBs remain locally but are excluded from this archive."
+}
