@@ -65,13 +65,20 @@ namespace SpaceEngine.Tests
             for (int seed = -16; seed < 16; seed++)
             {
                 var system = UniverseGenerator.GenerateSystem(seed, seed, -seed, 2);
-                Assert.That(system.Planets.Length, Is.InRange(4, 7));
+                Assert.That(system.Planets.Length, Is.InRange(6, 8));
                 Assert.That(system.Planets[0].HasOcean, Is.True);
                 Assert.That(system.Planets[0].AtmosphereHeight, Is.GreaterThan(0));
                 double previousApoapsis = system.StarRadius;
                 foreach (PlanetDefinition p in system.Planets)
                 {
                     Assert.That(p.Radius, Is.GreaterThan(1e6)); Assert.That(p.Mass, Is.GreaterThan(0));
+                    if (p.IsMoon)
+                    {
+                        PlanetDefinition parent = system.Planets[p.ParentIndex];
+                        Assert.That(p.SemiMajorAxis * (1 - p.Eccentricity), Is.GreaterThan(parent.Radius + p.Radius));
+                        Assert.That(Orbit.Evaluate(p, parent.Mass, 0).Length, Is.GreaterThan(parent.Radius));
+                        continue;
+                    }
                     Assert.That(p.SemiMajorAxis * (1 - p.Eccentricity), Is.GreaterThan(previousApoapsis));
                     Assert.That(p.TerrainHeight, Is.LessThan(p.Radius * 0.01));
                     Assert.That(Orbit.Evaluate(p, system.StarMass, 0).Length, Is.GreaterThan(system.StarRadius));

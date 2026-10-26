@@ -6,11 +6,20 @@ namespace SpaceEngine.Core
     /// <summary>Direction-sampled continental noise plus metre-scaled relief; no latitude seam or cube-face dependency.</summary>
     public static class TerrainNoise
     {
+        private struct Crater
+        {
+            public Double3 Centre;
+            public double InverseChordRadiusSquared, Strength;
+        }
+        [ThreadStatic] private static Crater[] cachedCraters;
+        [ThreadStatic] private static int cachedCraterSeed;
+
         public static double Height(Double3 unitDirection, PlanetDefinition planet)
         {
             if (planet == null) throw new ArgumentNullException(nameof(planet));
             Double3 p = unitDirection.Normalized;
             if (p.SqrLength == 0) throw new ArgumentOutOfRangeException(nameof(unitDirection));
+            if (!planet.IsLandable) return 0;
             double continents = Fractal(p * 2.2, planet.Seed, 5, 0.52);
             double hills = Fractal(p * 17.0, unchecked(planet.Seed + 7919), 4, 0.5);
             double ridge = 1 - Math.Abs(Noise(p * 37.0, unchecked(planet.Seed + 104729)));
@@ -29,6 +38,13 @@ namespace SpaceEngine.Core
                 + Noise(metres / 6.0, unchecked(planet.Seed + 104395301)) * 0.75;
             double detailStrength = Math.Min(1, Math.Max(0, planet.TerrainHeight) / 8000.0);
             relief += smallRelief * detailStrength / Math.Max(1, planet.TerrainHeight);
+            if (!planet.HasOcean)
+            {
+                if (planet.Kind == PlanetKind.Rocky || planet.Kind == PlanetKind.Ice)
+                    relief += CraterField(p, planet.Seed) * (planet.Kind == PlanetKind.Ice ? .7 : 1);
+                else if (planet.Kind == PlanetKind.Lava)
+                    relief -= LavaFissureMask(p, planet.Seed) * .16;
+            }
             // The ocean is a separate datum at radius, while this function includes the underlying seabed.
             // Smooth bounding gives culling/LOD a strict +/-TerrainHeight envelope without clipped plateaus.
             return planet.TerrainHeight * Math.Tanh(relief + (planet.HasOcean ? -0.08 : 0.2));
@@ -36,13 +52,97 @@ namespace SpaceEngine.Core
 
         public static Color SurfaceColor(Double3 unitDirection, double height, PlanetDefinition planet)
         {
+            if (planet == null) throw new ArgumentNullException(nameof(planet));
+            Double3 direction = unitDirection.Normalized;
             double normalizedHeight = height / Math.Max(1, planet.TerrainHeight);
-            float latitude = (float)Math.Abs(unitDirection.Normalized.y);
-            if (planet.HasOcean && height < 0) return Color.Lerp(new Color(0.015f, 0.06f, 0.12f), new Color(0.035f, 0.24f, 0.29f), (float)SmoothStep(-0.4, 0, normalizedHeight));
+            if (!planet.HasOcean)
+            {
+                Color typed;
+                switch (planet.Kind)
+                {
+                    case PlanetKind.Desert:
+                        double strata = .5 + .5 * Math.Sin(height / Math.Max(80, planet.TerrainHeight * .035)
+                            + Noise(direction * 11, unchecked(planet.Seed + 271828)) * 1.2);
+                        typed = Color.Lerp(new Color(.50f, .27f, .12f), new Color(.84f, .61f, .34f), (float)strata);
+                        break;
+                    case PlanetKind.Ice:
+                        typed = Color.Lerp(new Color(.38f, .63f, .79f), new Color(.91f, .97f, 1f),
+                            (float)SmoothStep(-.45, .35, normalizedHeight));
+                        break;
+                    case PlanetKind.Lava:
+                        float emission = (float)LavaFissureMask(direction, planet.Seed);
+                        typed = Color.Lerp(new Color(.055f, .035f, .030f), new Color(1f, .17f, .012f), emission);
+                        typed.a = emission;
+                        return typed;
+                    case PlanetKind.GasGiant:
+                    case PlanetKind.IceGiant:
+                        typed = planet.SurfaceTint;
+                        break;
+                    default:
+                        typed = Color.Lerp(planet.SurfaceTint * .62f, new Color(.53f, .50f, .47f),
+                            (float)SmoothStep(-.45, .5, normalizedHeight));
+                        break;
+                }
+                typed.a = 0;
+                return typed;
+            }
+            float latitude = (float)Math.Abs(direction.y);
+            if (height < 0)
+            {
+                Color sea = Color.Lerp(new Color(0.015f, 0.06f, 0.12f), new Color(0.035f, 0.24f, 0.29f), (float)SmoothStep(-0.4, 0, normalizedHeight));
+                sea.a = 0;
+                return sea;
+            }
             Color rock = Color.Lerp(planet.SurfaceTint, new Color(0.42f, 0.39f, 0.34f), (float)SmoothStep(0.14, 0.7, normalizedHeight));
             if (planet.HasOcean) rock = Color.Lerp(new Color(0.57f, 0.49f, 0.31f), rock, (float)SmoothStep(0, 0.035, normalizedHeight));
             float snow = (float)SmoothStep(0.63, 0.96, latitude + normalizedHeight * 0.3);
-            return Color.Lerp(rock, new Color(0.88f, 0.92f, 0.94f), snow);
+            Color result = Color.Lerp(rock, new Color(0.88f, 0.92f, 0.94f), snow);
+            result.a = 0;
+            return result;
+        }
+
+        /// <summary>Direction-space hot fissure mask, also written to vertex COLOR.a by the mesh builder.</summary>
+        public static double LavaFissureMask(Double3 direction, int seed)
+        {
+            Double3 p = direction.Normalized;
+            double field = Noise(p * 24, unchecked(seed + 1301081))
+                + .16 * Noise(p * 55, unchecked(seed + 15485863));
+            return 1 - SmoothStep(.018, .075, Math.Abs(field));
+        }
+
+        private static double CraterField(Double3 direction, int seed)
+        {
+            // Construct these ten analytic features once per seed/thread, never once per vertex.
+            // Sampling then uses ten dot products; expensive rim evaluation runs only inside a crater.
+            if (cachedCraters == null || cachedCraterSeed != seed)
+            {
+                cachedCraterSeed = seed;
+                cachedCraters = new Crater[10];
+                var random = new DeterministicRandom(DeterministicRandom.Hash(seed, 719, 3121, 9973));
+                for (int i = 0; i < cachedCraters.Length; i++)
+                {
+                    double y = random.Range(-1.0, 1.0), phase = random.Range(0, Math.PI * 2);
+                    double horizontal = Math.Sqrt(1 - y * y), angularRadius = random.Range(.045, .16);
+                    cachedCraters[i] = new Crater
+                    {
+                        Centre = new Double3(horizontal * Math.Cos(phase), y, horizontal * Math.Sin(phase)),
+                        InverseChordRadiusSquared = 1 / (2 * (1 - Math.Cos(angularRadius))),
+                        Strength = random.Range(.55, 1.0)
+                    };
+                }
+            }
+            double result = 0;
+            for (int i = 0; i < cachedCraters.Length; i++)
+            {
+                Crater crater = cachedCraters[i];
+                double q = Math.Max(0, 2 * (1 - Double3.Dot(direction, crater.Centre))) * crater.InverseChordRadiusSquared;
+                if (q >= 1.5) continue;
+                double bowl = q < 1 ? -.75 * (1 - q) * (1 - q) : 0;
+                double rimDistance = (q - .92) / .21;
+                double rim = .21 * Math.Exp(-rimDistance * rimDistance) * (1 - SmoothStep(1.2, 1.5, q));
+                result += (bowl + rim) * crater.Strength;
+            }
+            return result;
         }
 
         public static double Noise(Double3 p, int seed)

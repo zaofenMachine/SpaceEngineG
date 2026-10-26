@@ -111,7 +111,11 @@ namespace SpaceEngine.Terrain
         static Color Biome(Double3 direction, Double3 normal, double height, PlanetDefinition planet)
         {
             if (planet.HasOcean && height < 0)
-                return Color.Lerp(new Color(.012f, .045f, .13f), new Color(.018f, .18f, .30f), Mathf.Clamp01((float)(1 + height / Math.Max(1, planet.TerrainHeight * .22))));
+            {
+                Color sea = Color.Lerp(new Color(.012f, .045f, .13f), new Color(.018f, .18f, .30f), Mathf.Clamp01((float)(1 + height / Math.Max(1, planet.TerrainHeight * .22))));
+                sea.a = 0;
+                return sea;
+            }
             float normalizedHeight = (float)(height / Math.Max(1, planet.TerrainHeight));
             float slope = (float)Math.Max(0, 1 - CubeSphere.Dot(direction, normal));
             Color rock = Color.Lerp(new Color(.23f, .20f, .17f), planet.SurfaceTint, .45f);
@@ -125,14 +129,23 @@ namespace SpaceEngine.Terrain
                 float snow = Mathf.Clamp01((normalizedHeight - .55f) * 4 + (latitude - .72f) * 5);
                 color = Color.Lerp(color, new Color(.88f, .92f, .96f), snow);
             }
-            else color = Color.Lerp(planet.SurfaceTint * .65f, planet.SurfaceTint * 1.3f, Mathf.Clamp01(normalizedHeight * .6f + .5f));
+            else
+            {
+                color = TerrainNoise.SurfaceColor(direction, height, planet);
+                float emission = color.a;
+                color *= 1 - Mathf.Clamp01(slope * 2.5f) * .18f;
+                color.a = emission;
+            }
             // Seeded physical material variation follows the same 3D charts as
             // the geometric relief. It adds a sense of scale without a texture
             // or UV seam, while the actual shape remains defined by Height().
             Double3 metres = direction * planet.Radius;
             float stone = (float)TerrainNoise.Noise(metres / 9.0, unchecked(planet.Seed + 32452843));
             float soil = (float)TerrainNoise.Noise(metres / 120.0, unchecked(planet.Seed + 49979687));
-            return color * Mathf.Clamp(.96f + stone * .28f + soil * .15f, .7f, 1.2f);
+            float fissure = planet.Kind == PlanetKind.Lava && !planet.HasOcean ? color.a : 0;
+            color *= Mathf.Clamp(.96f + stone * .28f + soil * .15f, .7f, 1.2f);
+            color.a = fissure;
+            return color;
         }
     }
 }

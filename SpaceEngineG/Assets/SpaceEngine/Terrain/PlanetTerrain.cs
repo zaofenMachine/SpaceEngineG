@@ -28,6 +28,8 @@ namespace SpaceEngine.Terrain
         [Tooltip("Normal finite-difference probe distance in physical metres, independent of LOD and planet radius.")]
         [Range(.01f, 2)] public float NormalSampleDistance = .25f;
         public bool HorizonCulling = true;
+        public float SunIntensity = 1.5f;
+        public Color SunColor = new Color(1,.96f,.88f);
         [Header("Visible orbital detail")]
         [Range(0, 5)] public int OrbitalMinimumLevel = 3;
         [Tooltip("Apply orbital minimum LOD when the planet's angular diameter exceeds this many degrees.")]
@@ -81,6 +83,9 @@ namespace SpaceEngine.Terrain
             sunDirectionId = Shader.PropertyToID("_SunDirection");
             definition = planetDefinition;
             material = terrainMaterial;
+            properties.SetFloat("_IsLava", definition.Kind == PlanetKind.Lava && !definition.HasOcean ? 1 : 0);
+            uint lavaSeed = unchecked((uint)definition.Seed);
+            properties.SetVector("_LavaSeed", new Vector4(lavaSeed & 0xffffu, lavaSeed >> 16, 0, 0));
             configured = true;
             gameObject.name = $"Terrain - {definition.Name}";
         }
@@ -100,6 +105,8 @@ namespace SpaceEngine.Terrain
             LastSelectionMilliseconds = stopwatch.Elapsed.TotalMilliseconds;
             BuildPending();
             properties.SetVector(sunDirectionId, sunDirection.normalized);
+            properties.SetFloat("_SunIntensity",SunIntensity);
+            properties.SetColor("_SunColor",SunColor);
             ActivePatchCount = TriangleCount = MaxActiveLevel = 0;
             for (int face = 0; face < 6; face++)
             {
@@ -265,6 +272,8 @@ namespace SpaceEngine.Terrain
             patch.Object.transform.position = ((patch.Anchor - cameraPosition) * scale).ToVector3();
             patch.Object.transform.rotation = Quaternion.identity;
             patch.Object.transform.localScale = Vector3.one * (float)scale;
+            Double3 anchorUnits = patch.Anchor / definition.Radius;
+            properties.SetVector("_PatchAnchor", new Vector4((float)anchorUnits.x, (float)anchorUnits.y, (float)anchorUnits.z, (float)(1 / definition.Radius)));
             patch.Renderer.SetPropertyBlock(properties);
             patch.Renderer.enabled = true;
             ActivePatchCount++;
