@@ -1,0 +1,11 @@
+{
+  "name": "SpaceEngine.Core",
+  "rootNamespace": "SpaceEngine.Core",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "noEngineReferences": false
+}
