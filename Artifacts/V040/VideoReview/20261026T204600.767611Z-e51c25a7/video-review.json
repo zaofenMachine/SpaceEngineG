@@ -1,0 +1,3483 @@
+{
+  "utc": "2026-10-26T20:46:00.768725+00:00",
+  "scope": "Full-stream decode plus approximately one RGB sample per second and two same-run screenshot comparisons. Metrics and contact sheets are sampling aids; no human frame-by-frame review is claimed.",
+  "manualFrameByFrameReviewed": false,
+  "sampledVisualMetricsOnly": true,
+  "video": "Artifacts/V040/PlayerExplorer/descent.mp4",
+  "videoBytes": 11020271,
+  "videoSha256": "e51c25a77690c345acfc2ce58c85aa946c64bd2d7570acddbb9ac50d37cf6c34",
+  "sourceReport": "Artifacts/V040/PlayerExplorer/explorer-verification.json",
+  "sourceCaptureMetadata": "Artifacts/V040/PlayerExplorer/capture-metadata.json",
+  "reportVersion": "0.4.0",
+  "reportBuildGuid": "12402545998548b1a16b4a562a1d8459",
+  "captureBackend": "Unity framebuffer ReadPixels + rawvideo pipe",
+  "captureMetadataPassed": true,
+  "terrainCropNormalized": [
+    0.32,
+    0.56,
+    0.65,
+    0.86
+  ],
+  "cropScope": "Fixed rectangle excludes the default 16:9 HUD side panels, target ribbon, footer and crosshair. It is not a generic UI/overlay detector.",
+  "sampleDirectory": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7",
+  "reviewDirectory": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7",
+  "pipelineSucceeded": true,
+  "failures": [],
+  "warnings": [],
+  "ffmpegExecutable": "C:\\Environment\\python\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v7.1.exe",
+  "exitCode": 0,
+  "fullFrameCount": 1554,
+  "durationSeconds": 51.8,
+  "width": 1600,
+  "height": 900,
+  "nominalFramesPerSecond": 30.0,
+  "decodedFramesPerSecond": 30.0,
+  "streamDescription": "Stream #0:0[0x1](und): Video: h264 (Constrained Baseline) (avc1 / 0x31637661), yuv420p(progressive), 1600x900, 1700 kb/s, 30 fps, 30 tbr, 15360 tbn (default)",
+  "durationSource": "FFmpeg full-decode final output timestamp; not wall-clock run time",
+  "progressEnded": true,
+  "structurallyNonemptyVideo": true,
+  "clockMapping": {
+    "videoPtsZeroEpoch": 1793047260.155,
+    "reportElapsedZeroEpoch": 1793047259.646928,
+    "reportToVideoOffsetSeconds": -0.5080718994140625,
+    "anchorSource": "native.firstFrameEpoch",
+    "anchorIsFirstRecordedFrame": true,
+    "estimatedTimestampUncertaintySeconds": 0.1,
+    "formula": "videoSeconds = report.utc epoch + frames[].elapsed - videoPtsZeroEpoch",
+    "limitation": "Clock alignment is approximate; exact native screenshot videoFrameIndex takes priority."
+  },
+  "estimatedPhases": [
+    {
+      "phase": "settling",
+      "elapsedStart": 0.5878577999999997,
+      "elapsedEnd": 3.6893657,
+      "reportSamples": 25,
+      "settledSamples": 1,
+      "switches": 6,
+      "videoStartSeconds": 0.07978590058593715,
+      "videoEndSeconds": 3.1812938005859377
+    },
+    {
+      "phase": "first-descent",
+      "elapsedStart": 4.067495000000001,
+      "elapsedEnd": 23.1722838,
+      "reportSamples": 175,
+      "settledSamples": 66,
+      "switches": 11,
+      "videoStartSeconds": 3.5594231005859385,
+      "videoEndSeconds": 22.664211900585936
+    },
+    {
+      "phase": "first-hold",
+      "elapsedStart": 23.273675899999997,
+      "elapsedEnd": 27.1164797,
+      "reportSamples": 39,
+      "settledSamples": 39,
+      "switches": 0,
+      "videoStartSeconds": 22.765604000585935,
+      "videoEndSeconds": 26.608407800585937
+    },
+    {
+      "phase": "ascent",
+      "elapsedStart": 27.2290766,
+      "elapsedEnd": 37.726853600000005,
+      "reportSamples": 105,
+      "settledSamples": 70,
+      "switches": 3,
+      "videoStartSeconds": 26.721004700585937,
+      "videoEndSeconds": 37.21878170058594
+    },
+    {
+      "phase": "return-descent",
+      "elapsedStart": 37.8276592,
+      "elapsedEnd": 48.229300300000006,
+      "reportSamples": 104,
+      "settledSamples": 66,
+      "switches": 4,
+      "videoStartSeconds": 37.31958730058594,
+      "videoEndSeconds": 47.72122840058594
+    },
+    {
+      "phase": "second-hold",
+      "elapsedStart": 48.329883800000005,
+      "elapsedEnd": 52.1728831,
+      "reportSamples": 39,
+      "settledSamples": 39,
+      "switches": 0,
+      "videoStartSeconds": 47.82181190058594,
+      "videoEndSeconds": 51.66481120058594
+    }
+  ],
+  "samples": [
+    {
+      "videoSeconds": 0.0,
+      "estimatedPhase": "between-report-samples",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00000.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          28.466284722222223,
+          31.75444375,
+          33.644986805555554
+        ],
+        "rgbStd8Bit": [
+          47.362911732242985,
+          46.171113083609825,
+          45.17029755952214
+        ],
+        "luminanceP01": 0.003921568859368563,
+        "luminanceP99": 0.6516635417938232,
+        "nonBlackPixelFraction": 0.8498736111111111,
+        "nonWhitePixelFraction": 0.999725
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          187,
+          173,
+          168
+        ],
+        "rgbMean8Bit": [
+          66.27645903479237,
+          71.33233726150392,
+          73.76194584736251
+        ],
+        "rgbStd8Bit": [
+          60.96551320602152,
+          60.57890966844837,
+          60.85479258955705
+        ],
+        "luminanceP01": 0.003921568859368563,
+        "luminanceP99": 0.6443866491317749,
+        "nonBlackPixelFraction": 0.6261433782267115,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 1.0,
+      "estimatedPhase": "settling",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00001.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          28.461418055555555,
+          31.77605,
+          33.963911805555554
+        ],
+        "rgbStd8Bit": [
+          48.90311121420343,
+          47.24018987528357,
+          46.61116423872593
+        ],
+        "luminanceP01": 0.003921568859368563,
+        "luminanceP99": 0.6956972479820251,
+        "nonBlackPixelFraction": 0.8495875,
+        "nonWhitePixelFraction": 0.9995513888888888
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          201,
+          190,
+          182
+        ],
+        "rgbMean8Bit": [
+          63.00618686868687,
+          68.34856902356903,
+          72.11597222222223
+        ],
+        "rgbStd8Bit": [
+          64.02133956890017,
+          61.419060008209634,
+          61.393787890731254
+        ],
+        "luminanceP01": 0.003921568859368563,
+        "luminanceP99": 0.6912094354629517,
+        "nonBlackPixelFraction": 0.622699214365881,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 2.0,
+      "estimatedPhase": "settling",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00002.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          3.8118284722222224,
+          6.76555,
+          9.291801388888889
+        ],
+        "rgbStd8Bit": [
+          12.415001754292936,
+          16.550081860531783,
+          19.353952058489302
+        ],
+        "luminanceP01": 0.0,
+        "luminanceP99": 0.28758275508880615,
+        "nonBlackPixelFraction": 0.4153173611111111,
+        "nonWhitePixelFraction": 0.9995965277777777
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          0,
+          0,
+          0
+        ],
+        "rgbMean8Bit": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "rgbStd8Bit": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "luminanceP01": 0.0,
+        "luminanceP99": 0.0,
+        "nonBlackPixelFraction": 0.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 3.0,
+      "estimatedPhase": "settling",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00003.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          5
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          91.01613611111111,
+          95.06543819444444,
+          95.89855625
+        ],
+        "rgbStd8Bit": [
+          73.63100880536767,
+          66.1218577739465,
+          60.2492821431162
+        ],
+        "luminanceP01": 0.033091768622398376,
+        "luminanceP99": 0.730892539024353,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995694444444444
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          86,
+          104,
+          115
+        ],
+        "rgbMaximum8Bit": [
+          245,
+          226,
+          210
+        ],
+        "rgbMean8Bit": [
+          172.76412738496072,
+          165.19754489337822,
+          156.70941358024692
+        ],
+        "rgbStd8Bit": [
+          15.29926783975313,
+          11.215300251946644,
+          9.633052903514704
+        ],
+        "luminanceP01": 0.48853960633277893,
+        "luminanceP99": 0.7312275171279907,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 4.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00004.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          6
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          100.58076875,
+          101.39764236111111,
+          100.24455972222222
+        ],
+        "rgbStd8Bit": [
+          76.92983685558413,
+          69.53384318385864,
+          63.15942375127234
+        ],
+        "luminanceP01": 0.033091768622398376,
+        "luminanceP99": 0.7371200323104858,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995965277777777
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          135,
+          139,
+          124
+        ],
+        "rgbMaximum8Bit": [
+          212,
+          191,
+          185
+        ],
+        "rgbMean8Bit": [
+          176.0077581369248,
+          168.26836419753087,
+          158.29288720538722
+        ],
+        "rgbStd8Bit": [
+          12.060220382778942,
+          7.9416692380806095,
+          9.45913399644023
+        ],
+        "luminanceP01": 0.5800713896751404,
+        "luminanceP99": 0.7373670935630798,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 5.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00005.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          3,
+          7
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          112.77032638888889,
+          109.9312923611111,
+          106.43487152777777
+        ],
+        "rgbStd8Bit": [
+          80.9168396842,
+          73.2930680610265,
+          65.67387650721217
+        ],
+        "luminanceP01": 0.04315294325351715,
+        "luminanceP99": 0.7435380220413208,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995298611111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          142,
+          144,
+          128
+        ],
+        "rgbMaximum8Bit": [
+          196,
+          182,
+          170
+        ],
+        "rgbMean8Bit": [
+          172.628367003367,
+          166.20544332211,
+          155.2206509539843
+        ],
+        "rgbStd8Bit": [
+          9.623485962453511,
+          7.148942031236954,
+          8.340272028605913
+        ],
+        "luminanceP01": 0.5744776725769043,
+        "luminanceP99": 0.6996235847473145,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 6.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00006.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          7
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          114.28479305555555,
+          111.31737638888889,
+          107.13751666666667
+        ],
+        "rgbStd8Bit": [
+          81.74637000859433,
+          74.04656409438876,
+          66.2014810823716
+        ],
+        "luminanceP01": 0.04371921718120575,
+        "luminanceP99": 0.7315263152122498,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995131944444444
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          164,
+          159,
+          145
+        ],
+        "rgbMaximum8Bit": [
+          188,
+          178,
+          170
+        ],
+        "rgbMean8Bit": [
+          179.7296226150393,
+          171.43352272727273,
+          161.14093013468013
+        ],
+        "rgbStd8Bit": [
+          5.309175152012285,
+          4.127128905868781,
+          5.045786135054629
+        ],
+        "luminanceP01": 0.6360651254653931,
+        "luminanceP99": 0.6996235847473145,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 7.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00007.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          7,
+          8
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          114.37847430555556,
+          111.5319138888889,
+          107.55979166666667
+        ],
+        "rgbStd8Bit": [
+          81.8239601274565,
+          74.36943311256931,
+          66.64743933114194
+        ],
+        "luminanceP01": 0.04371921718120575,
+        "luminanceP99": 0.7055160999298096,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995493055555555
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          176,
+          168,
+          154
+        ],
+        "rgbMaximum8Bit": [
+          190,
+          180,
+          170
+        ],
+        "rgbMean8Bit": [
+          182.48621632996634,
+          173.68447671156005,
+          163.4194935465769
+        ],
+        "rgbStd8Bit": [
+          2.6695072663773995,
+          2.383736584642801,
+          2.882359593360906
+        ],
+        "luminanceP01": 0.6676847338676453,
+        "luminanceP99": 0.7015945315361023,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 8.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00008.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          8,
+          6
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          115.91802916666667,
+          112.85041875,
+          109.09138958333334
+        ],
+        "rgbStd8Bit": [
+          83.05618898918466,
+          75.26902772352673,
+          67.9395438054465
+        ],
+        "luminanceP01": 0.04315294325351715,
+        "luminanceP99": 0.7094376683235168,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995805555555556
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          179,
+          171,
+          161
+        ],
+        "rgbMaximum8Bit": [
+          190,
+          180,
+          170
+        ],
+        "rgbMean8Bit": [
+          184.47236952861954,
+          175.01069725028057,
+          165.1677960157127
+        ],
+        "rgbStd8Bit": [
+          1.7753597104210523,
+          1.6737532143294132,
+          1.928795527032725
+        ],
+        "luminanceP01": 0.6797482371330261,
+        "luminanceP99": 0.7055160999298096,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 9.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00009.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          9,
+          8
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          101.4963625,
+          102.50839652777778,
+          94.9334625
+        ],
+        "rgbStd8Bit": [
+          71.81143303462292,
+          67.10871728085577,
+          56.969295670119216
+        ],
+        "luminanceP01": 0.044290196150541306,
+        "luminanceP99": 0.6298941373825073,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995416666666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          155,
+          154,
+          137
+        ],
+        "rgbMaximum8Bit": [
+          164,
+          161,
+          145
+        ],
+        "rgbMean8Bit": [
+          160.22192059483726,
+          158.00845258136926,
+          140.56159511784512
+        ],
+        "rgbStd8Bit": [
+          1.3895758355241534,
+          1.0971177377669683,
+          1.290785604989391
+        ],
+        "luminanceP01": 0.6100188493728638,
+        "luminanceP99": 0.6240220069885254,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 10.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00010.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          2
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          70.36056736111111,
+          82.46517777777778,
+          62.04501041666666
+        ],
+        "rgbStd8Bit": [
+          48.37500386368529,
+          52.177034591973786,
+          33.26389890832003
+        ],
+        "luminanceP01": 0.036447059363126755,
+        "luminanceP99": 0.4868219494819641,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996666666666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          112,
+          77
+        ],
+        "rgbMaximum8Bit": [
+          118,
+          133,
+          93
+        ],
+        "rgbMean8Bit": [
+          109.76636503928171,
+          124.74823933782267,
+          86.11145482603816
+        ],
+        "rgbStd8Bit": [
+          2.2414247994562118,
+          2.337176755940908,
+          1.7254817929241184
+        ],
+        "luminanceP01": 0.4403294026851654,
+        "luminanceP99": 0.48457255959510803,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 11.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00011.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          70.43431527777778,
+          82.54880694444445,
+          58.74665347222222
+        ],
+        "rgbStd8Bit": [
+          48.44674842282449,
+          52.15221009582932,
+          31.143163412707743
+        ],
+        "luminanceP01": 0.036447059363126755,
+        "luminanceP99": 0.4851074516773224,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996576388888889
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          101,
+          116,
+          74
+        ],
+        "rgbMaximum8Bit": [
+          119,
+          133,
+          89
+        ],
+        "rgbMean8Bit": [
+          109.89692059483725,
+          125.37262205387205,
+          81.12865460157127
+        ],
+        "rgbStd8Bit": [
+          2.231662788169731,
+          2.1555902838050276,
+          1.7633794817431516
+        ],
+        "luminanceP01": 0.44198116660118103,
+        "luminanceP99": 0.48400628566741943,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 12.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00012.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          70.64589791666667,
+          82.19834930555555,
+          56.03470902777778
+        ],
+        "rgbStd8Bit": [
+          48.648477421737894,
+          51.90754102452834,
+          29.219104174455392
+        ],
+        "luminanceP01": 0.036447059363126755,
+        "luminanceP99": 0.4839749038219452,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996625
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          110,
+          68
+        ],
+        "rgbMaximum8Bit": [
+          118,
+          131,
+          84
+        ],
+        "rgbMean8Bit": [
+          109.77901936026936,
+          123.60272867564534,
+          76.53611812570146
+        ],
+        "rgbStd8Bit": [
+          2.8364182142944405,
+          2.981103433863045,
+          1.9345310563655769
+        ],
+        "luminanceP01": 0.4279670715332031,
+        "luminanceP99": 0.4766980707645416,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 13.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00013.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          67.19892916666667,
+          78.97383333333333,
+          57.39002986111111
+        ],
+        "rgbStd8Bit": [
+          47.48976090788365,
+          50.761960728413904,
+          30.76825065291669
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.476131796836853,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996583333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          95,
+          108,
+          63
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          131,
+          80
+        ],
+        "rgbMean8Bit": [
+          108.30351430976431,
+          122.49692059483726,
+          72.65547839506173
+        ],
+        "rgbStd8Bit": [
+          2.8762571536909984,
+          3.097314113033098,
+          1.9984523707908688
+        ],
+        "luminanceP01": 0.422362357378006,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 14.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00014.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          62.81597986111111,
+          75.47411944444444,
+          58.592921527777776
+        ],
+        "rgbStd8Bit": [
+          46.12399086295846,
+          49.50288356834319,
+          32.57488885068261
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          92,
+          106,
+          60
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          80
+        ],
+        "rgbMean8Bit": [
+          108.5326108305275,
+          123.05786335578003,
+          71.60373877665545
+        ],
+        "rgbStd8Bit": [
+          2.8321154941739413,
+          3.172183840339215,
+          1.908046431376762
+        ],
+        "luminanceP01": 0.4217960834503174,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 15.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00015.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          61.673821527777775,
+          74.66745833333333,
+          57.72653402777778
+        ],
+        "rgbStd8Bit": [
+          45.70215126776028,
+          49.227769271320255,
+          32.231348790310584
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996784722222222
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          96,
+          110,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          78
+        ],
+        "rgbMean8Bit": [
+          108.44440937149271,
+          123.32765852974187,
+          70.22162598204265
+        ],
+        "rgbStd8Bit": [
+          2.510552147201497,
+          2.675914811554944,
+          1.9232880925172673
+        ],
+        "luminanceP01": 0.4329945147037506,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 16.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00016.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.705040277777776,
+          73.69532430555556,
+          56.27154027777778
+        ],
+        "rgbStd8Bit": [
+          44.82033617537511,
+          48.40533056984493,
+          31.377970298382994
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4705270826816559,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996784722222222
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          106,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          76
+        ],
+        "rgbMean8Bit": [
+          107.69668209876544,
+          122.5917157687991,
+          69.17729377104376
+        ],
+        "rgbStd8Bit": [
+          3.28890342466313,
+          3.511983270083531,
+          2.324876298462228
+        ],
+        "luminanceP01": 0.4119819700717926,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 17.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00017.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.65002222222222,
+          73.57230347222222,
+          54.61193055555555
+        ],
+        "rgbStd8Bit": [
+          44.67191552190216,
+          48.21576314091114,
+          30.06315755839105
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996229166666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          95,
+          109,
+          60
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          73
+        ],
+        "rgbMean8Bit": [
+          105.65265852974186,
+          120.5309132996633,
+          67.56096380471381
+        ],
+        "rgbStd8Bit": [
+          2.6661690566028895,
+          2.867509963622686,
+          1.9198118016907002
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 18.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00018.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          62.315440277777775,
+          75.01408333333333,
+          53.22107777777778
+        ],
+        "rgbStd8Bit": [
+          45.7130195127367,
+          49.19775140533224,
+          28.566096885688587
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996229166666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          114,
+          129,
+          75
+        ],
+        "rgbMean8Bit": [
+          106.86778198653198,
+          121.81550925925926,
+          68.3157337261504
+        ],
+        "rgbStd8Bit": [
+          2.9643325175466138,
+          3.05686921833203,
+          2.168458707966551
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 19.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00019.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.45509027777778,
+          75.81478888888888,
+          51.70711527777778
+        ],
+        "rgbStd8Bit": [
+          45.868562806726466,
+          49.35566324196651,
+          27.035180433025673
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996229166666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          76
+        ],
+        "rgbMean8Bit": [
+          106.29992985409652,
+          121.21499719416386,
+          68.00444725028058
+        ],
+        "rgbStd8Bit": [
+          2.5434931607156046,
+          2.673733712260065,
+          1.8881147783246766
+        ],
+        "luminanceP01": 0.4212298095226288,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 20.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00020.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.67092569444445,
+          76.87446458333334,
+          51.162148611111114
+        ],
+        "rgbStd8Bit": [
+          46.2211201988125,
+          49.765556625606365,
+          26.35208822203812
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996229166666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          74
+        ],
+        "rgbMean8Bit": [
+          106.39072671156005,
+          121.30817901234568,
+          68.06749438832772
+        ],
+        "rgbStd8Bit": [
+          2.5553603086281274,
+          2.690276458795303,
+          1.820467884326989
+        ],
+        "luminanceP01": 0.4212298095226288,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 21.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00021.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.68244722222222,
+          76.73754236111111,
+          50.19727638888889
+        ],
+        "rgbStd8Bit": [
+          45.646604038395665,
+          49.232623598694296,
+          25.499920317367714
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46211764216423035,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996229166666667
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          111,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          109,
+          124,
+          71
+        ],
+        "rgbMean8Bit": [
+          102.07483164983165,
+          116.51186868686868,
+          64.95535914702582
+        ],
+        "rgbStd8Bit": [
+          2.596401312442114,
+          2.9362544738440786,
+          1.826333256846818
+        ],
+        "luminanceP01": 0.41338667273521423,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 22.0,
+      "estimatedPhase": "first-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00022.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.19770416666667,
+          76.108475,
+          49.436849305555555
+        ],
+        "rgbStd8Bit": [
+          44.91104410385852,
+          48.47360876875877,
+          24.89169355071008
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4509192109107971,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996138888888889
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          95,
+          109,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          105,
+          120,
+          70
+        ],
+        "rgbMean8Bit": [
+          100.62325336700337,
+          114.987338664422,
+          63.913909932659934
+        ],
+        "rgbStd8Bit": [
+          2.0419222939830415,
+          2.3882253986563473,
+          1.593456070588979
+        ],
+        "luminanceP01": 0.40946510434150696,
+        "luminanceP99": 0.4391545057296753,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 23.0,
+      "estimatedPhase": "first-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00023.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.25356736111111,
+          74.99762847222222,
+          48.64663680555555
+        ],
+        "rgbStd8Bit": [
+          43.96335587528292,
+          47.39584789666116,
+          24.402113219623907
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995645833333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          93,
+          106,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          100,
+          114,
+          66
+        ],
+        "rgbMean8Bit": [
+          97.95228675645342,
+          111.71404320987655,
+          62.211433782267115
+        ],
+        "rgbStd8Bit": [
+          0.9689173790727065,
+          1.2355809369603536,
+          0.8019991284006978
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 24.0,
+      "estimatedPhase": "first-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00024.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.253477777777775,
+          74.99752777777778,
+          48.646544444444444
+        ],
+        "rgbStd8Bit": [
+          43.96342301172148,
+          47.395918081772564,
+          24.40214140770012
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995645833333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          93,
+          106,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          100,
+          114,
+          66
+        ],
+        "rgbMean8Bit": [
+          97.95228675645342,
+          111.71404320987655,
+          62.211433782267115
+        ],
+        "rgbStd8Bit": [
+          0.9689173790727065,
+          1.2355809369603536,
+          0.8019991284006978
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 25.0,
+      "estimatedPhase": "first-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00025.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          6,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.23569583333333,
+          75.00900486111111,
+          48.611928472222225
+        ],
+        "rgbStd8Bit": [
+          43.96439786282908,
+          47.414974209775444,
+          24.396626583942393
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995083333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94617003367003,
+          111.7216470258137,
+          62.191400112233445
+        ],
+        "rgbStd8Bit": [
+          0.9715614956792998,
+          1.2292965527409005,
+          0.7936045594701692
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 26.0,
+      "estimatedPhase": "first-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00026.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          6,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.235595833333335,
+          75.00883263888889,
+          48.61182013888889
+        ],
+        "rgbStd8Bit": [
+          43.964391006007865,
+          47.41501971846075,
+          24.396520736281587
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995083333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94617003367003,
+          111.7216470258137,
+          62.191400112233445
+        ],
+        "rgbStd8Bit": [
+          0.9715614956792998,
+          1.2292965527409005,
+          0.7936045594701692
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 27.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00027.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.694427777777776,
+          75.52109375,
+          49.00168819444445
+        ],
+        "rgbStd8Bit": [
+          44.42424724924561,
+          47.92334141401795,
+          24.652874422282135
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995111111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          106,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          103,
+          118,
+          67
+        ],
+        "rgbMean8Bit": [
+          98.35829826038159,
+          112.20824214365881,
+          62.56438692480359
+        ],
+        "rgbStd8Bit": [
+          1.4617971925847268,
+          1.7564673574336862,
+          1.051097017974629
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4329945147037506,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 28.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00028.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.70174027777777,
+          76.69978541666667,
+          49.971882638888886
+        ],
+        "rgbStd8Bit": [
+          45.47764262359075,
+          49.095964415805454,
+          25.31337638483528
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.45876234769821167,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          96,
+          110,
+          60
+        ],
+        "rgbMaximum8Bit": [
+          106,
+          121,
+          69
+        ],
+        "rgbMean8Bit": [
+          102.69875841750842,
+          117.22746212121213,
+          65.2602904040404
+        ],
+        "rgbStd8Bit": [
+          2.1154530380301777,
+          2.4051931950534895,
+          1.3932316045777429
+        ],
+        "luminanceP01": 0.41338667273521423,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 29.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00029.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.72315208333333,
+          76.83163888888889,
+          50.880829166666665
+        ],
+        "rgbStd8Bit": [
+          46.01711383457382,
+          49.61950246994155,
+          26.024304126351158
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          60
+        ],
+        "rgbMaximum8Bit": [
+          111,
+          126,
+          73
+        ],
+        "rgbMean8Bit": [
+          104.02102272727272,
+          118.73917648709315,
+          66.47812149270483
+        ],
+        "rgbStd8Bit": [
+          2.4384597234152654,
+          2.7949604912878283,
+          1.7574711470178566
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.45819607377052307,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 30.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00030.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.23048819444445,
+          76.4454638888889,
+          51.48293541666666
+        ],
+        "rgbStd8Bit": [
+          46.16161087903404,
+          49.653502388115506,
+          26.765991204997217
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          99,
+          113,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          114,
+          128,
+          75
+        ],
+        "rgbMean8Bit": [
+          107.09451459034793,
+          122.0233024691358,
+          68.60060325476992
+        ],
+        "rgbStd8Bit": [
+          2.4218574672222135,
+          2.4894905212783973,
+          1.8047572985213598
+        ],
+        "luminanceP01": 0.4329945147037506,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 31.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00031.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          62.80432638888889,
+          75.19186458333333,
+          52.52654444444445
+        ],
+        "rgbStd8Bit": [
+          45.71665285142857,
+          49.17240727566789,
+          27.780567340908743
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          114,
+          129,
+          75
+        ],
+        "rgbMean8Bit": [
+          106.96193181818182,
+          121.78934483726151,
+          68.59133698092032
+        ],
+        "rgbStd8Bit": [
+          3.0750804146427138,
+          3.2810576968468994,
+          2.120656750421984
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 32.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00032.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          61.254139583333334,
+          73.9677,
+          53.95712291666667
+        ],
+        "rgbStd8Bit": [
+          45.00530359066727,
+          48.426999841958825,
+          29.462198563330134
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46806275844573975,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          93,
+          107,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          74
+        ],
+        "rgbMean8Bit": [
+          105.42633978675646,
+          120.15689534231201,
+          67.53254068462402
+        ],
+        "rgbStd8Bit": [
+          2.77453155531498,
+          3.082686848548775,
+          2.018946181847998
+        ],
+        "luminanceP01": 0.4153372645378113,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 33.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00033.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.45064305555555,
+          73.28469236111111,
+          55.512689583333334
+        ],
+        "rgbStd8Bit": [
+          44.54542565961165,
+          48.02954249562257,
+          30.836750420181374
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995333333333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          95,
+          108,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          114,
+          130,
+          76
+        ],
+        "rgbMean8Bit": [
+          106.03102553310886,
+          120.53304573512906,
+          68.15378086419753
+        ],
+        "rgbStd8Bit": [
+          2.85170781680149,
+          3.1454725823223533,
+          2.0617836002255525
+        ],
+        "luminanceP01": 0.4153372645378113,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 34.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00034.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.91813263888889,
+          73.89117361111111,
+          57.090626388888886
+        ],
+        "rgbStd8Bit": [
+          45.14694663095391,
+          48.67387743277518,
+          31.869976064640017
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996680555555556
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          76
+        ],
+        "rgbMean8Bit": [
+          108.69913019079685,
+          123.58193041526376,
+          70.11242985409652
+        ],
+        "rgbStd8Bit": [
+          2.7996075213749982,
+          3.0138441470733017,
+          1.9449421698790705
+        ],
+        "luminanceP01": 0.4212298095226288,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 35.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00035.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          61.23492152777778,
+          74.18255833333333,
+          58.21187916666667
+        ],
+        "rgbStd8Bit": [
+          45.59174505045586,
+          48.943385181176644,
+          32.57744987790022
+        ],
+        "luminanceP01": 0.03141960874199867,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996680555555556
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          96,
+          110,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          132,
+          78
+        ],
+        "rgbMean8Bit": [
+          108.45675505050505,
+          123.14889870931538,
+          70.97100869809204
+        ],
+        "rgbStd8Bit": [
+          2.5842121277155887,
+          2.8593261165924346,
+          2.0432219029245453
+        ],
+        "luminanceP01": 0.42963922023773193,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 36.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00036.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.96881388888889,
+          73.70077777777777,
+          59.40187708333333
+        ],
+        "rgbStd8Bit": [
+          45.59492477141491,
+          48.75374684416381,
+          33.07927783201284
+        ],
+        "luminanceP01": 0.0328243151307106,
+        "luminanceP99": 0.47221019864082336,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996694444444445
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          92,
+          105,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          82
+        ],
+        "rgbMean8Bit": [
+          108.39535634118967,
+          122.5838243546577,
+          72.38573232323232
+        ],
+        "rgbStd8Bit": [
+          2.6762282886221445,
+          2.9365845864057873,
+          2.0748118306526915
+        ],
+        "luminanceP01": 0.422362357378006,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 37.0,
+      "estimatedPhase": "ascent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00037.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          4
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.24291041666667,
+          72.82451597222222,
+          60.892615972222224
+        ],
+        "rgbStd8Bit": [
+          45.4043997741397,
+          48.43865404850553,
+          33.696822961705045
+        ],
+        "luminanceP01": 0.0328243151307106,
+        "luminanceP99": 0.4694212079048157,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996701388888889
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          96,
+          108,
+          65
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          131,
+          85
+        ],
+        "rgbMean8Bit": [
+          108.74055134680135,
+          122.76280162738496,
+          75.68954124579125
+        ],
+        "rgbStd8Bit": [
+          2.5665999442868745,
+          2.7328771805531114,
+          2.618017416593524
+        ],
+        "luminanceP01": 0.4262949228286743,
+        "luminanceP99": 0.47221019864082336,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 38.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00038.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          1
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.57963888888889,
+          73.21754444444444,
+          60.12675138888889
+        ],
+        "rgbStd8Bit": [
+          45.50285208551216,
+          48.574316238570006,
+          33.35358458872265
+        ],
+        "luminanceP01": 0.0328243151307106,
+        "luminanceP99": 0.47221019864082336,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996770833333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          96,
+          109,
+          65
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          131,
+          83
+        ],
+        "rgbMean8Bit": [
+          108.68120089786757,
+          122.671632996633,
+          73.82648709315376
+        ],
+        "rgbStd8Bit": [
+          2.4857975063283377,
+          2.6633640162878076,
+          2.379273555913863
+        ],
+        "luminanceP01": 0.43020549416542053,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 39.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00039.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          61.18444375,
+          74.02973680555556,
+          58.82196180555555
+        ],
+        "rgbStd8Bit": [
+          45.74461023907195,
+          48.999946893610115,
+          32.81540246899223
+        ],
+        "luminanceP01": 0.03252549096941948,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996770833333334
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          92,
+          105,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          116,
+          131,
+          80
+        ],
+        "rgbMean8Bit": [
+          108.43362794612794,
+          122.94549663299664,
+          71.48475028058361
+        ],
+        "rgbStd8Bit": [
+          2.762564384463714,
+          3.1147306110108883,
+          1.9082395017407494
+        ],
+        "luminanceP01": 0.4217960834503174,
+        "luminanceP99": 0.47444865107536316,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 40.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00040.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          61.343380555555555,
+          74.32621458333334,
+          57.813890972222225
+        ],
+        "rgbStd8Bit": [
+          45.66245589852484,
+          49.11924362687767,
+          32.28434627057963
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996708333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          109,
+          63
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          132,
+          78
+        ],
+        "rgbMean8Bit": [
+          108.4461349607183,
+          123.29391835016835,
+          70.2798891694725
+        ],
+        "rgbStd8Bit": [
+          2.4750386442295613,
+          2.672108199137089,
+          1.894071807617324
+        ],
+        "luminanceP01": 0.4329945147037506,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 41.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00041.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.60773611111111,
+          73.60458402777778,
+          56.28510902777778
+        ],
+        "rgbStd8Bit": [
+          44.85410565732686,
+          48.39792209971472,
+          31.370791965234623
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4705270826816559,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996569444444444
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          106,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          117,
+          132,
+          77
+        ],
+        "rgbMean8Bit": [
+          107.76238776655444,
+          122.65127665544333,
+          69.21696127946127
+        ],
+        "rgbStd8Bit": [
+          3.228891047436244,
+          3.4589195353739477,
+          2.339532091472213
+        ],
+        "luminanceP01": 0.41338667273521423,
+        "luminanceP99": 0.47388237714767456,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 42.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00042.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          60.62328541666667,
+          73.54540138888889,
+          54.64607430555556
+        ],
+        "rgbStd8Bit": [
+          44.65752020004094,
+          48.195208021475274,
+          30.074211679389048
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          111,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          73
+        ],
+        "rgbMean8Bit": [
+          105.6483164983165,
+          120.53347362514029,
+          67.54955106621773
+        ],
+        "rgbStd8Bit": [
+          2.6557700295334623,
+          2.8468289502478528,
+          1.9333993139876067
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 43.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00043.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          62.25298333333333,
+          74.96050694444445,
+          53.277910416666664
+        ],
+        "rgbStd8Bit": [
+          45.68683944025584,
+          49.153101419969644,
+          28.605995362139126
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          129,
+          74
+        ],
+        "rgbMean8Bit": [
+          106.76480780022446,
+          121.71831509539842,
+          68.2325968013468
+        ],
+        "rgbStd8Bit": [
+          2.9311583715463487,
+          3.0198387475518613,
+          2.135134318879605
+        ],
+        "luminanceP01": 0.4173082411289215,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 44.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00044.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.414995833333336,
+          75.78410902777777,
+          51.73625416666667
+        ],
+        "rgbStd8Bit": [
+          45.865605812190175,
+          49.333809824437544,
+          27.036657868425575
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          73
+        ],
+        "rgbMean8Bit": [
+          106.32126122334455,
+          121.27838804713805,
+          67.94659792368125
+        ],
+        "rgbStd8Bit": [
+          2.577066305663658,
+          2.668032338606157,
+          1.9179626163170969
+        ],
+        "luminanceP01": 0.4212298095226288,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 45.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00045.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.6448513888889,
+          76.88740625,
+          51.17066875
+        ],
+        "rgbStd8Bit": [
+          46.23988683774475,
+          49.785780695376125,
+          26.348982177051013
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46603924036026,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          98,
+          112,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          113,
+          128,
+          74
+        ],
+        "rgbMean8Bit": [
+          106.53994809203142,
+          121.49502665544333,
+          68.12027918069585
+        ],
+        "rgbStd8Bit": [
+          2.5214435227408063,
+          2.618687259878362,
+          1.787749364318209
+        ],
+        "luminanceP01": 0.4212298095226288,
+        "luminanceP99": 0.4699608087539673,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 46.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00046.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          4,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.65863055555556,
+          76.71790833333333,
+          50.22351527777778
+        ],
+        "rgbStd8Bit": [
+          45.65808365445578,
+          49.219299603595765,
+          25.51216769806368
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.46211764216423035,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996736111111111
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          111,
+          61
+        ],
+        "rgbMaximum8Bit": [
+          109,
+          124,
+          73
+        ],
+        "rgbMean8Bit": [
+          102.07538580246914,
+          116.5082982603816,
+          64.99741161616161
+        ],
+        "rgbStd8Bit": [
+          2.6413184307499376,
+          2.9995886632970015,
+          1.8449852500760076
+        ],
+        "luminanceP01": 0.41338667273521423,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 47.0,
+      "estimatedPhase": "return-descent",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00047.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          64.27817083333333,
+          76.23127777777778,
+          49.526036805555556
+        ],
+        "rgbStd8Bit": [
+          45.018615410561715,
+          48.57076199028861,
+          24.94011705567551
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.4509192109107971,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9996597222222222
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          111,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          105,
+          120,
+          69
+        ],
+        "rgbMean8Bit": [
+          101.16768378226712,
+          115.62803731762065,
+          64.21386784511785
+        ],
+        "rgbStd8Bit": [
+          2.0448542751576766,
+          2.3755100681558305,
+          1.5461983702110682
+        ],
+        "luminanceP01": 0.40946510434150696,
+        "luminanceP99": 0.4391545057296753,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 48.0,
+      "estimatedPhase": "second-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00048.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.24967361111111,
+          74.99791111111111,
+          48.65318194444445
+        ],
+        "rgbStd8Bit": [
+          43.96470816979877,
+          47.39280235516605,
+          24.381036158860525
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995847222222223
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          100,
+          114,
+          66
+        ],
+        "rgbMean8Bit": [
+          97.95564674523008,
+          111.71212822671156,
+          62.2055625701459
+        ],
+        "rgbStd8Bit": [
+          0.9656943704275447,
+          1.243166027752439,
+          0.8041654187886768
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 49.0,
+      "estimatedPhase": "second-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00049.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          5,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.24966944444444,
+          74.9979375,
+          48.653216666666665
+        ],
+        "rgbStd8Bit": [
+          43.964718287021256,
+          47.39277464747772,
+          24.381014692265367
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995847222222223
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          59
+        ],
+        "rgbMaximum8Bit": [
+          100,
+          114,
+          66
+        ],
+        "rgbMean8Bit": [
+          97.95564674523008,
+          111.71212822671156,
+          62.2055625701459
+        ],
+        "rgbStd8Bit": [
+          0.9656943704275447,
+          1.243166027752439,
+          0.8041654187886768
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 50.0,
+      "estimatedPhase": "second-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00050.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          6,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.23567361111111,
+          75.00855416666667,
+          48.612205555555555
+        ],
+        "rgbStd8Bit": [
+          43.964406906065825,
+          47.41464662253902,
+          24.396734558882226
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995083333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94666806958473,
+          111.72133136924803,
+          62.18999017957351
+        ],
+        "rgbStd8Bit": [
+          0.9715131517184434,
+          1.2312178465685653,
+          0.7926213275754468
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    },
+    {
+      "videoSeconds": 51.0,
+      "estimatedPhase": "second-hold",
+      "file": "Artifacts/Local/VideoFrames/20261026T204600.767611Z-e51c25a7/frame-00051.png",
+      "wholeImage": {
+        "rgbMinimum8Bit": [
+          0,
+          6,
+          0
+        ],
+        "rgbMaximum8Bit": [
+          255,
+          255,
+          255
+        ],
+        "rgbMean8Bit": [
+          63.23572361111111,
+          75.00857361111112,
+          48.61224166666667
+        ],
+        "rgbStd8Bit": [
+          43.96443203743427,
+          47.41467947029186,
+          24.39674953591157
+        ],
+        "luminanceP01": 0.030853334814310074,
+        "luminanceP99": 0.44699767231941223,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 0.9995083333333333
+      },
+      "terrainCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94666806958473,
+          111.72133136924803,
+          62.18999017957351
+        ],
+        "rgbStd8Bit": [
+          0.9715131517184434,
+          1.2312178465685653,
+          0.7926213275754468
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      }
+    }
+  ],
+  "sampleCount": 52,
+  "sampleIntervalSeconds": 1,
+  "samplingRule": "First source frame, then first source frame at least one second after the previous selected source PTS; actual PTS recorded.",
+  "contactSheets": [
+    {
+      "file": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/contact-sheet-001.png",
+      "firstSample": 0,
+      "sampleCount": 16,
+      "columns": 4,
+      "rows": 4,
+      "cellWidth": 400,
+      "cellHeight": 225
+    },
+    {
+      "file": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/contact-sheet-002.png",
+      "firstSample": 16,
+      "sampleCount": 16,
+      "columns": 4,
+      "rows": 4,
+      "cellWidth": 400,
+      "cellHeight": 225
+    },
+    {
+      "file": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/contact-sheet-003.png",
+      "firstSample": 32,
+      "sampleCount": 16,
+      "columns": 4,
+      "rows": 4,
+      "cellWidth": 400,
+      "cellHeight": 225
+    },
+    {
+      "file": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/contact-sheet-004.png",
+      "firstSample": 48,
+      "sampleCount": 4,
+      "columns": 4,
+      "rows": 4,
+      "cellWidth": 400,
+      "cellHeight": 225
+    }
+  ],
+  "sampledColorRange8Bit": {
+    "minimum": [
+      0,
+      0,
+      0
+    ],
+    "maximum": [
+      255,
+      255,
+      255
+    ],
+    "note": "RGB24 decoded values; FFmpeg performs the source video range/matrix conversion. This range alone does not establish correct exposure/color."
+  },
+  "holdCropMetrics": [
+    {
+      "phase": "first-hold",
+      "elapsedStart": 23.273675899999997,
+      "elapsedEnd": 27.1164797,
+      "reportSamples": 39,
+      "settledSamples": 39,
+      "switches": 0,
+      "videoStartSeconds": 22.765604000585935,
+      "videoEndSeconds": 26.608407800585937,
+      "boundaryTrimSeconds": 0.25,
+      "sampleIndices": [
+        24,
+        25,
+        26
+      ],
+      "sampleSeconds": [
+        24.0,
+        25.0,
+        26.0
+      ],
+      "consecutiveCropDifferences": [
+        {
+          "meanAbsoluteRgb": 0.00023644215252716094,
+          "rootMeanSquareRgb": 0.0011737595332175046,
+          "maximumAbsoluteRgb": 0.01568627543747425,
+          "p99AbsoluteRgb": 0.007843137718737125,
+          "pixelFractionAnyChannelOver2Of255": 0.000925925925925926,
+          "psnrDb": 58.608417347859465,
+          "identicalAfterDecode": false
+        },
+        {
+          "meanAbsoluteRgb": 0.0,
+          "rootMeanSquareRgb": 0.0,
+          "maximumAbsoluteRgb": 0.0,
+          "p99AbsoluteRgb": 0.0,
+          "pixelFractionAnyChannelOver2Of255": 0.0,
+          "psnrDb": null,
+          "identicalAfterDecode": true
+        }
+      ],
+      "firstToLastCropDifference": {
+        "meanAbsoluteRgb": 0.00023644215252716094,
+        "rootMeanSquareRgb": 0.0011737595332175046,
+        "maximumAbsoluteRgb": 0.01568627543747425,
+        "p99AbsoluteRgb": 0.007843137718737125,
+        "pixelFractionAnyChannelOver2Of255": 0.000925925925925926,
+        "psnrDb": 58.608417347859465,
+        "identicalAfterDecode": false
+      },
+      "maximumConsecutiveCropMae": 0.00023644215252716094,
+      "interpretation": "Sampled RGB changes include H.264 quantization; this is neither an all-frame check nor a visual pass/fail."
+    },
+    {
+      "phase": "second-hold",
+      "elapsedStart": 48.329883800000005,
+      "elapsedEnd": 52.1728831,
+      "reportSamples": 39,
+      "settledSamples": 39,
+      "switches": 0,
+      "videoStartSeconds": 47.82181190058594,
+      "videoEndSeconds": 51.66481120058594,
+      "boundaryTrimSeconds": 0.25,
+      "sampleIndices": [
+        49,
+        50,
+        51
+      ],
+      "sampleSeconds": [
+        49.0,
+        50.0,
+        51.0
+      ],
+      "consecutiveCropDifferences": [
+        {
+          "meanAbsoluteRgb": 0.00022973015438765287,
+          "rootMeanSquareRgb": 0.001135896323041363,
+          "maximumAbsoluteRgb": 0.019607843831181526,
+          "p99AbsoluteRgb": 0.007843137718737125,
+          "pixelFractionAnyChannelOver2Of255": 0.0006313131313131314,
+          "psnrDb": 58.89322612577155,
+          "identicalAfterDecode": false
+        },
+        {
+          "meanAbsoluteRgb": 0.0,
+          "rootMeanSquareRgb": 0.0,
+          "maximumAbsoluteRgb": 0.0,
+          "p99AbsoluteRgb": 0.0,
+          "pixelFractionAnyChannelOver2Of255": 0.0,
+          "psnrDb": null,
+          "identicalAfterDecode": true
+        }
+      ],
+      "firstToLastCropDifference": {
+        "meanAbsoluteRgb": 0.00022973015438765287,
+        "rootMeanSquareRgb": 0.001135896323041363,
+        "maximumAbsoluteRgb": 0.019607843831181526,
+        "p99AbsoluteRgb": 0.007843137718737125,
+        "pixelFractionAnyChannelOver2Of255": 0.0006313131313131314,
+        "psnrDb": 58.89322612577155,
+        "identicalAfterDecode": false
+      },
+      "maximumConsecutiveCropMae": 0.00022973015438765287,
+      "interpretation": "Sampled RGB changes include H.264 quantization; this is neither an all-frame check nor a visual pass/fail."
+    }
+  ],
+  "screenshotComparisons": [
+    {
+      "phase": "first-hold",
+      "screenshot": "Artifacts/V040/PlayerExplorer/07-first-surface-hold.png",
+      "videoFrame": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/07-first-surface-hold-video.png",
+      "comparisonSheet": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/07-first-surface-hold-comparison.png",
+      "selectionSource": "native.stages.videoFrameIndex (exact recorded frame index)",
+      "videoFrameIndex": 801,
+      "videoSeconds": 26.7,
+      "offsetFromEstimatedHoldEndSeconds": 0.09159219941406249,
+      "referenceSize": [
+        1600,
+        900
+      ],
+      "videoSize": [
+        1600,
+        900
+      ],
+      "videoResizedForComparison": false,
+      "cropPixels": [
+        512,
+        504,
+        1040,
+        774
+      ],
+      "referenceCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          110,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          102,
+          116,
+          66
+        ],
+        "rgbMean8Bit": [
+          99.69750982042649,
+          112.99819725028058,
+          63.78543069584736
+        ],
+        "rgbStd8Bit": [
+          1.0576756884126535,
+          1.4974082938790174,
+          0.8025524812084314
+        ],
+        "luminanceP01": 0.41086509823799133,
+        "luminanceP99": 0.42515137791633606,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      },
+      "videoCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94617003367003,
+          111.7216470258137,
+          62.191400112233445
+        ],
+        "rgbStd8Bit": [
+          0.9715614956792998,
+          1.2292965527409005,
+          0.7936045594701692
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      },
+      "orientationAndColorDiagnostics": {
+        "normalRgb": {
+          "meanAbsoluteRgb": 0.006045816000550985,
+          "rootMeanSquareRgb": 0.00648009059409429,
+          "maximumAbsoluteRgb": 0.019607843831181526,
+          "p99AbsoluteRgb": 0.0117647061124444,
+          "pixelFractionAnyChannelOver2Of255": 0.033901515151515155,
+          "psnrDb": 43.768378449747956,
+          "identicalAfterDecode": false
+        },
+        "verticalFlip": {
+          "meanAbsoluteRgb": 0.06709149479866028,
+          "rootMeanSquareRgb": 0.13754023618882597,
+          "maximumAbsoluteRgb": 0.5254902243614197,
+          "p99AbsoluteRgb": 0.3843137323856354,
+          "pixelFractionAnyChannelOver2Of255": 0.7502946127946128,
+          "psnrDb": 17.231404684158576,
+          "identicalAfterDecode": false
+        },
+        "redBlueSwap": {
+          "meanAbsoluteRgb": 0.09535093605518341,
+          "rootMeanSquareRgb": 0.11492986369941174,
+          "maximumAbsoluteRgb": 0.16470588743686676,
+          "p99AbsoluteRgb": 0.1568627506494522,
+          "pixelFractionAnyChannelOver2Of255": 1.0,
+          "psnrDb": 18.791342166933354,
+          "identicalAfterDecode": false
+        },
+        "verticalFlipAndRedBlueSwap": {
+          "meanAbsoluteRgb": 0.13707442581653595,
+          "rootMeanSquareRgb": 0.16674494147027136,
+          "maximumAbsoluteRgb": 0.3960784375667572,
+          "p99AbsoluteRgb": 0.3843137323856354,
+          "pixelFractionAnyChannelOver2Of255": 1.0,
+          "psnrDb": 15.55894664746315,
+          "identicalAfterDecode": false
+        }
+      },
+      "lowestErrorTransform": "normalRgb",
+      "bestVersusSecondBestMaeGap": 0.06104567879810929,
+      "interpretation": "Lossy video is not expected to equal PNG. Low-texture crops can make orientation inconclusive. Open both full context and enlarged crops; no human visual result is inferred."
+    },
+    {
+      "phase": "second-hold",
+      "screenshot": "Artifacts/V040/PlayerExplorer/09-return-surface-hold.png",
+      "videoFrame": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/09-return-surface-hold-video.png",
+      "comparisonSheet": "Artifacts/V040/VideoReview/20261026T204600.767611Z-e51c25a7/09-return-surface-hold-comparison.png",
+      "selectionSource": "native.stages.videoFrameIndex (exact recorded frame index)",
+      "videoFrameIndex": 1553,
+      "videoSeconds": 51.766666666666666,
+      "offsetFromEstimatedHoldEndSeconds": 0.10185546608072826,
+      "referenceSize": [
+        1600,
+        900
+      ],
+      "videoSize": [
+        1600,
+        900
+      ],
+      "videoResizedForComparison": false,
+      "cropPixels": [
+        512,
+        504,
+        1040,
+        774
+      ],
+      "referenceCrop": {
+        "rgbMinimum8Bit": [
+          97,
+          110,
+          62
+        ],
+        "rgbMaximum8Bit": [
+          102,
+          116,
+          66
+        ],
+        "rgbMean8Bit": [
+          99.69671015712683,
+          112.99800084175084,
+          63.78520622895623
+        ],
+        "rgbStd8Bit": [
+          1.0575063614124398,
+          1.4971597460775437,
+          0.8025011753766241
+        ],
+        "luminanceP01": 0.41086509823799133,
+        "luminanceP99": 0.42515137791633606,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      },
+      "videoCrop": {
+        "rgbMinimum8Bit": [
+          94,
+          108,
+          58
+        ],
+        "rgbMaximum8Bit": [
+          101,
+          114,
+          65
+        ],
+        "rgbMean8Bit": [
+          97.94666806958473,
+          111.72133136924803,
+          62.18999017957351
+        ],
+        "rgbStd8Bit": [
+          0.9715131517184434,
+          1.2312178465685653,
+          0.7926213275754468
+        ],
+        "luminanceP01": 0.40413883328437805,
+        "luminanceP99": 0.4195466637611389,
+        "nonBlackPixelFraction": 1.0,
+        "nonWhitePixelFraction": 1.0
+      },
+      "orientationAndColorDiagnostics": {
+        "normalRgb": {
+          "meanAbsoluteRgb": 0.006045917049050331,
+          "rootMeanSquareRgb": 0.006480614928545048,
+          "maximumAbsoluteRgb": 0.019607843831181526,
+          "p99AbsoluteRgb": 0.0117647061124444,
+          "pixelFractionAnyChannelOver2Of255": 0.034168069584736255,
+          "psnrDb": 43.767675662208,
+          "identicalAfterDecode": false
+        },
+        "verticalFlip": {
+          "meanAbsoluteRgb": 0.06709253042936325,
+          "rootMeanSquareRgb": 0.1375393288351664,
+          "maximumAbsoluteRgb": 0.5254902243614197,
+          "p99AbsoluteRgb": 0.3843137323856354,
+          "pixelFractionAnyChannelOver2Of255": 0.7506944444444444,
+          "psnrDb": 17.231461985207083,
+          "identicalAfterDecode": false
+        },
+        "redBlueSwap": {
+          "meanAbsoluteRgb": 0.09535276889801025,
+          "rootMeanSquareRgb": 0.11493206375125864,
+          "maximumAbsoluteRgb": 0.16470588743686676,
+          "p99AbsoluteRgb": 0.1568627506494522,
+          "pixelFractionAnyChannelOver2Of255": 1.0,
+          "psnrDb": 18.791175898358542,
+          "identicalAfterDecode": false
+        },
+        "verticalFlipAndRedBlueSwap": {
+          "meanAbsoluteRgb": 0.13706910610198975,
+          "rootMeanSquareRgb": 0.16674165727428908,
+          "maximumAbsoluteRgb": 0.3960784375667572,
+          "p99AbsoluteRgb": 0.3843137323856354,
+          "pixelFractionAnyChannelOver2Of255": 1.0,
+          "psnrDb": 15.559117725785098,
+          "identicalAfterDecode": false
+        }
+      },
+      "lowestErrorTransform": "normalRgb",
+      "bestVersusSecondBestMaeGap": 0.06104661338031292,
+      "interpretation": "Lossy video is not expected to equal PNG. Low-texture crops can make orientation inconclusive. Open both full context and enlarged crops; no human visual result is inferred."
+    }
+  ],
+  "nativeSampling": {
+    "framesPerSecond": 30,
+    "encodedFrames": 1554,
+    "actualReadFrames": 1499,
+    "repeatedFrames": 55,
+    "timestampUncertaintySeconds": 0.1
+  },
+  "interpretation": "pipelineSucceeded concerns extraction/decode/coverage only. View contact sheets and comparison PNGs before accepting orientation, color, terrain stability or visual quality. Every-second images cannot exclude subsecond LOD pops."
+}

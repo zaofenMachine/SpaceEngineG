@@ -41,3 +41,14 @@ GPU 实现额外使用解析频段的像素导数过滤，解决实际截图中�
 | [NASA: Jupiter's Colorful Cloud Belts](https://www.nasa.gov/image-article/jupiters-colorful-cloud-belts/) | 用连续变形云场替代均匀正弦条带与靶心风暴；不是观测拟合或大气动力学模拟。 |
 
 具体参数、测试设计和边界另见 `Rendering/GALAXY-VOLUME.md`、`Rendering/PLANET-WEATHER.md` 及 `Terrain/README.md`。GPU 哈希与 CPU 高度一致性单独测试，网格密度不变性、实际画面和连续降落分别验收。
+
+## 0.4 清晰度与探索交互
+
+2026-10-27 查阅 SpaceEngine 官方探索工具与 0.980 手册。这里参考其可解释的交互流程，不导入代码、图像或目录，也不声称拥有其全部功能或画面质量。
+
+| 原始资料 | 本项目采用范围 |
+| --- | --- |
+| [SpaceEngine: Exploration tools](https://spaceengine.org/universe/easy-to-explore) | 自由移动、滚轮速度、鼠标选中与自动飞往，以及搜索、时间和轨道线等探索工具。本项目在实际高精度坐标和生成目录上实现相应基础能力，搜索限于本系统、已解析邻域及手动添加的有效生成地址。 |
+| [SpaceEngine User manual 0.980：Camera control / Selecting Objects / Autopilot](https://spaceengine.org/manual/user-manual-0980/) | 手册将“选择”“居中”和“飞往”区分。采用 F3 搜索、C 居中、G 连续飞往；选中目标保持观察者位置，F 跳转和书签恢复明确标作位置跳转。其他快捷键按本项目界面列示，没有承诺逐键兼容旧版 SpaceEngine。 |
+
+本轮银河继续基于前节的有限三维发光/消光积分。先用同观察者的原生/半分辨率及积分收敛控制区分重建模糊与密度频谱不足，再加入可过滤的 Seed 三维细尘/年轻星团频段；不是对官方 SpaceEngine 内部银河算法的复现。高频指标、双质量参考、实际近臂和盘内图共同验证，闭合泡状尘纹与规则旋臂仍作为已知局限保留。数值和实际图见 [0.4 验收记录](VALIDATION-V040.md)。

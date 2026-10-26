@@ -3,6 +3,7 @@ import hashlib
 import json
 import pathlib
 import subprocess
+import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -54,8 +55,13 @@ def explorer_acceptance():
         if not screenshot.is_file() or screenshot.stat().st_size < 10000:
             raise RuntimeError('Missing explorer rendered screenshot: ' + name)
     capture = load(directory / 'capture-metadata.json')
-    if not capture['passed'] or capture['durationSeconds'] < 20 or not capture['capturedWindowTitle']:
-        raise RuntimeError('Missing actual player-window continuous video capture.')
+    if not capture['passed'] or capture['durationSeconds'] < 20 or capture.get('backend') != 'Unity framebuffer ReadPixels + rawvideo pipe':
+        raise RuntimeError('Missing actual game framebuffer continuous video capture.')
+    if capture['fullDecodeExitCode'] or capture['encoderExitCode'] or capture['decodedFrames'] != capture['native']['encodedFrames']:
+        raise RuntimeError('Incomplete native framebuffer video stream.')
+    comparisons=capture.get('stagePngComparisons', [])
+    if len(comparisons)<4 or not all(item['passed'] for item in comparisons):
+        raise RuntimeError('Video must match the actual 06-09 screenshot frames in content and orientation.')
     if (directory / 'descent.mp4').stat().st_size < 1000000:
         raise RuntimeError('Empty continuous flight video.')
     return report, capture
@@ -72,6 +78,9 @@ if __name__ == '__main__':
     for mode in ('editmode', 'playmode'):
         if load(OUT / (mode + '-tests.json'))['data']['status'] != 'succeeded':
             raise RuntimeError('Unity tests must pass before packaging: ' + mode)
+        final = ET.parse(OUT / ('final-' + mode + '.xml')).getroot()
+        if final.get('result') != 'Passed' or int(final.get('failed', '1')):
+            raise RuntimeError('Final source CLI tests must pass before packaging: ' + mode)
     for path in ('shaders.json', 'atmosphere-pixels.json', 'CelestialPixels/celestial-pixels.json',
                  'TerrainPixels/terrain-pixels.json', 'CloudPixels/cloud-pixels.json',
                  'GroundPixels/ground-pixels.json', 'GasHorizonPixels/gas-horizon-pixels.json',

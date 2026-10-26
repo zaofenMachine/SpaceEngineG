@@ -1,0 +1,34 @@
+{
+  "version": "0.4.0",
+  "sourceRevision": "02be496a763288407a3fa2f1894b6e5e02014d8b",
+  "buildGuid": "12402545998548b1a16b4a562a1d8459",
+  "verifiedGpu": "NVIDIA GeForce RTX 4070",
+  "graphicsApi": "Direct3D12",
+  "fileCount": 194,
+  "uncompressedBytes": 124542952,
+  "archive": "Builds/SpaceEngineG-0.4.0-windows-x64.zip",
+  "archiveBytes": 53954753,
+  "archiveSha256": "1409a7af063256e7e6e01e8191e36609accc74e99b03c827e6008ab587394259",
+  "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+  "unityPlayerSha256": "7f9c4c1b4a42d763422f1f792c0da193f0d6541048aaa84f0b3efd1e4ee90206",
+  "runtimeAssemblySha256": {
+    "SpaceEngine.Core": "93cd1f9b52bccd190081889bbdf64ecaeb4d8b5cd88ab87331786827bfa1aea3",
+    "SpaceEngine.Terrain": "a26d6ec82e223bc7786e70127bfed4967f14c4c896abe2211f17b565c474d83a",
+    "SpaceEngine.Rendering": "0520318622fd9178709b222eeb2f241d07743bb20a9542f6495aa8a8a4fe164f",
+    "SpaceEngine.Runtime": "a8453ff48ed461d3baef2e5b77006888d0d5e88be23b3b4c3cbe93757516363e"
+  },
+  "evidence": [
+    "Artifacts/V040/PlayerFlight",
+    "Artifacts/V040/PlayerGalaxy",
+    "Artifacts/V040/PlayerExplorer"
+  ],
+  "continuousVideo": {
+    "path": "Artifacts/V040/PlayerExplorer/descent.mp4",
+    "sha256": "e51c25a77690c345acfc2ce58c85aa946c64bd2d7570acddbb9ac50d37cf6c34",
+    "durationSeconds": 51.8,
+    "stationaryFrames": 951,
+    "stationaryChanges": 0,
+    "returnedPositionErrorMetres": 0.0004602997781066393
+  },
+  "notes": "Source revision recorded before build. Screenshot review is documented separately. Unity debug folders and PDBs remain locally but are excluded from this archive."
+}

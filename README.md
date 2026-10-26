@@ -6,11 +6,11 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 当前迭代 **0.4.0**：中文界面、天体搜索与筛选、目标选择/跟踪、真实轨道、标签、详情和书签；修复不同设备的滚轮调速，增加截图和时间倍率快捷键。银河使用原生视口分辨率及更细的空间尘埃结构；地形以父子三角形渐变与迟滞抑制 LOD 突变和阈值附近反复切换。
 
-**130 项 EditMode、22 项 PlayMode 与全部 87 项 GPU 断言通过**，包含实际中文字形、银河清晰度、父子 LOD 图像连续性和真实行星尺度的近地深度/大气检查。当前证据位于 [Artifacts/V040](Artifacts/V040/)；独立 Windows 程序三条路线、连续视频及分发包尚待最终验收，结果见下方待补项。截图审查与自动断言分别记录。
+**130 项 EditMode、22 项 PlayMode 与全部 87 项 GPU 断言通过**，包含实际中文字形、银河清晰度、父子 LOD 图像连续性和真实行星尺度的近地深度/大气检查。当前证据位于 [Artifacts/V040](Artifacts/V040/)；同一构建的三条独立 Windows 路线均通过，零运行时错误，已保存35张截图和51.8秒原生帧缓冲录像。[0.4实测记录](Docs/VALIDATION-V040.md)分别登记自动断言、截图、录像抽样与已知缺陷。
 
-![0.4 Editor 实际中文探索界面](Artifacts/V040/Explorer/01-chinese-home.png)
+![0.4 Windows实际中文探索界面](Artifacts/V040/PlayerExplorer/01-chinese-home.png)
 
-![0.4 Editor 实际银河总览](Artifacts/V040/Galaxy/01-galaxy-oblique.png)
+![0.4 Windows实际银河总览](Artifacts/V040/PlayerGalaxy/01-galaxy-oblique.png)
 
 ## 启动
 
@@ -18,13 +18,13 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.4.0/SpaceEngineG.exe`。
 
-计划交付包为 `Builds/SpaceEngineG-0.4.0-windows-x64.zip`，解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
+本地交付包为 `Builds/SpaceEngineG-0.4.0-windows-x64.zip`，解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
 
 | 0.4.0 最终交付项 | 状态 |
 | --- | --- |
-| 独立程序三条路线、退出码及运行时错误 | TBD，待最终验收 |
-| 连续下降/静止/上升/原路返回视频及实际复核结果 | TBD，待最终验收 |
-| ZIP 大小、SHA-256 与分发清单 | TBD，待最终验收 |
+| 独立程序三条路线、退出码及运行时错误 | 全部通过，退出码0、错误0；构建GUID见[清单](Artifacts/V040/package-manifest.json) |
+| 连续下降/静止/上升/原路返回视频及实际复核结果 | [51.8秒原生录像](Artifacts/V040/PlayerExplorer/descent.mp4)，1554帧全流解码；两次静止951帧无几何切换，返回误差0.46毫米；逐秒抽样记录见实测文档 |
+| ZIP 大小、SHA-256 与分发清单 | 53,954,753字节（53.95MB），[SHA-256清单](Artifacts/V040/package-manifest.json)，完整ZIP校验通过 |
 
 旧版程序、ZIP 和证据保留；[0.3 实测记录](Docs/VALIDATION-V030.md)及其[分发包清单与 SHA-256](Artifacts/V030/package-manifest.json)仅说明 0.3 的交付状态。
 
@@ -103,9 +103,9 @@ Windows 程序也能独立运行验证航线：
 
 前两条路线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。第三条在功能验收后按实际经过时间连续下降、静止、上升并原路返回，记录观察者、LOD、过渡、静止几何及帧耗时；`--record-descent` 启用这段路线，本身不编码视频。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。
 
-`python Scripts/verify_windows.py` 负责运行独立程序三条路线、记录退出码及报告，并将实际本程序窗口录为 `Artifacts/V040/PlayerExplorer/descent.mp4`；只录对应进程的窗口，避免录入其他桌面内容。截图和录制要求程序窗口实际可见，视频结果以最终验收为准。
+`python Scripts/verify_windows.py` 负责运行独立程序三条路线、记录退出码及报告，并从 Unity 最终游戏帧缓冲直接录为 `Artifacts/V040/PlayerExplorer/descent.mp4`；使用游戏内 ReadPixels 和后台编码管道，不抓取桌面或窗口合成图；录像按实际时间采样30帧/秒，停顿时重复最近帧，并记录重复数。截图和录制要求程序窗口实际可见。[录像复核](Artifacts/V040/VideoReview/video-review.json)包含逐秒联系表、静止区域图差和同帧截图比较；不等同人工逐帧验收。初始化跳转短暂黑场、近地材质对比低及规则银河尘纹仍列为未解决问题。
 
-全部独立程序验证通过后，运行 `python Scripts/package_windows.py` 生成分发 ZIP、完整性检查和哈希清单；三条路线必须使用相同构建 GUID，并保留实际窗口录制证据和字体许可证。`Artifacts/V040/source-revision.txt` 记录构建前的源码提交。
+全部独立程序验证通过后，运行 `python Scripts/package_windows.py` 生成分发 ZIP、完整性检查和哈希清单；三条路线必须使用相同构建 GUID，并保留实际游戏帧缓冲录制证据和字体许可证。`Artifacts/V040/source-revision.txt` 记录构建前的源码提交。
 
 ## 实现说明
 
