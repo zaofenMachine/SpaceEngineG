@@ -270,6 +270,7 @@ namespace SpaceEngine.Runtime
         void DrawBodyLabel(int i)
         {
             UniversalPosition pos=i<0?app.System.Position:app.PlanetPosition(i);
+            if(IsLabelOccluded(i,pos))return;
             Vector3 point=app.ViewCamera.WorldToScreenPoint(OrbitOverlay.Project(pos,app.Observer,app.RenderScale));
             if(point.z<=0)return;float x=point.x*1600/Screen.width,y=(Screen.height-point.y)*900/Screen.height;
             if(x<330||x>1220||y<205||y>786)return;
@@ -288,6 +289,21 @@ namespace SpaceEngine.Runtime
                 GUI.DrawTexture(new Rect(0,0,delta.magnitude,1),Texture2D.whiteTexture);GUI.matrix=matrix;
                 GUI.color=color;Panel(rect);GUI.Label(new Rect(rect.x+6,rect.y+2,rect.width-10,20),text,small);return;
             }
+        }
+        bool IsLabelOccluded(int body,UniversalPosition position)
+        {
+            Double3 delta=position.RelativeTo(app.Observer);double distance=delta.Length;if(distance<=0)return true;
+            Double3 direction=delta/distance;double targetRadius=body<0?app.System.StarRadius:app.System.Planets[body].Radius;
+            for(int other=-1;other<app.System.Planets.Length;other++)
+            {
+                if(other==body)continue;
+                Double3 centre=(other<0?app.System.Position:app.PlanetPosition(other)).RelativeTo(app.Observer);
+                double along=Double3.Dot(centre,direction);if(along<=0||along>=distance)continue;
+                double radius=other<0?app.System.StarRadius:app.System.Planets[other].Radius;
+                double discriminant=radius*radius-(centre.SqrLength-along*along);
+                if(discriminant>0&&along-Math.Sqrt(discriminant)<distance-targetRadius)return true;
+            }
+            return false;
         }
         void DrawSearch()
         {

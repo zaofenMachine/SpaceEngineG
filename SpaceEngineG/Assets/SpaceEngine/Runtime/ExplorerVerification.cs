@@ -25,6 +25,7 @@ namespace SpaceEngine.Runtime
             public List<Frame> frames=new List<Frame>();public long allocatedBytes;
         }
         UniverseApp app;Report report;string output;bool failed,quit,record;
+        VerificationVideoRecorder video;
         double start,nextSample;readonly List<TerrainPatchState> states=new List<TerrainPatchState>();
         IEnumerator Start()
         {
@@ -39,8 +40,18 @@ namespace SpaceEngine.Runtime
             int index=Array.IndexOf(args,"--evidence-path");output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V040/Explorer"));
             Directory.CreateDirectory(output);report=new Report{utc=DateTime.UtcNow.ToString("O"),version=Application.version,buildGuid=Application.buildGUID,gpu=SystemInfo.graphicsDeviceName,api=SystemInfo.graphicsDeviceType.ToString()};
             Application.logMessageReceived+=Log;start=Time.realtimeSinceStartupAsDouble;
+            int encoderIndex=Array.IndexOf(args,"--video-encoder"),videoIndex=Array.IndexOf(args,"--video-output");
+            if(encoderIndex>=0||videoIndex>=0)
+            {
+                bool valid=encoderIndex>=0&&encoderIndex+1<args.Length&&videoIndex>=0&&videoIndex+1<args.Length;
+                string videoError=null;
+                if(valid){video=gameObject.AddComponent<VerificationVideoRecorder>();valid=video.Begin(args[encoderIndex+1],args[videoIndex+1],output,out videoError);}
+                Check(valid,"Native game framebuffer recorder starts: "+(videoError??"complete encoder/output arguments"));
+            }
             if(requested)yield return ToolsRoute();
             if(record)yield return DescentRoute();
+            if(video!=null)
+            {yield return video.Finish();Check(video.Result!=null&&video.Result.passed,"Native framebuffer pipe finalizes successfully");}
             report.allocatedBytes=Profiler.GetTotalAllocatedMemoryLong();report.passed=!failed&&report.errors==0;
             File.WriteAllText(Path.Combine(output,"explorer-verification.json"),JsonUtility.ToJson(report,true));
             Application.logMessageReceived-=Log;app.VerificationOwnsFlight=false;
@@ -124,7 +135,7 @@ namespace SpaceEngine.Runtime
         }
         IEnumerator Frames(int count){for(int i=0;i<count;i++)yield return null;}
         IEnumerator Capture(string name)
-        {yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));report.screenshots.Add(name+".png");yield return Frames(4);}
+        {yield return new WaitForEndOfFrame();video?.MarkScreenshot(name+".png");ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));report.screenshots.Add(name+".png");yield return Frames(4);}
         void Check(bool passed,string message){report.checks.Add((passed?"PASS ":"FAIL ")+message);if(!passed){failed=true;Debug.LogWarning(message);}}
         void Log(string text,string trace,LogType type){if(type==LogType.Error||type==LogType.Exception||type==LogType.Assert){report.errors++;report.runtimeErrors.Add(text+"\n"+trace);}}
     }
