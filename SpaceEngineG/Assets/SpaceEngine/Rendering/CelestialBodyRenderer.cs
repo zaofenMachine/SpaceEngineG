@@ -19,7 +19,7 @@ namespace SpaceEngine.Rendering
         [Range(1, 64)] public int RingRadialSegments = 8;
         [Range(.25f, 3f)] public float BandFrequencyMultiplier = 1;
         [Range(0, 1)] public float BandContrast = .72f;
-        [Range(0, 1)] public float CloudTurbulence = .22f;
+        [Range(0, 1)] public float CloudTurbulence = .65f;
         [Range(0, 1)] public float StormStrength = .85f;
         [Range(.01f, .5f)] public float StormSize = .15f;
         [Range(0, 2)] public float DifferentialWindRate = .12f;
@@ -51,7 +51,7 @@ namespace SpaceEngine.Rendering
             ReleaseResources();
             Definition = definition;
             var random = new DeterministicRandom(unchecked((ulong)(long)definition.Seed));
-            bandCount = (float)random.Range(10, 23);
+            bandCount = (float)random.Range(9, 17);
             shaderSeed = (float)random.Range(0, 1000);
             axialRotation = Quaternion.AngleAxis((float)(definition.AxialTilt * Mathf.Rad2Deg), Vector3.forward);
             if (!definition.IsLandable)
@@ -99,8 +99,13 @@ namespace SpaceEngine.Rendering
                 cloudObject.transform.SetPositionAndRotation(center, spin);
                 cloudObject.transform.localScale = Vector3.one * radius;
                 UploadCommon(cloudMaterial, toSun);
-                cloudMaterial.SetColor("_LightCloudColor", Color.Lerp(Definition.SurfaceTint, Color.white, .6f));
-                cloudMaterial.SetColor("_DarkCloudColor", Definition.SurfaceTint * .66f);
+                bool iceGiant = Definition.Kind == PlanetKind.IceGiant;
+                cloudMaterial.SetColor("_LightCloudColor", iceGiant
+                    ? Color.Lerp(Definition.SurfaceTint, new Color(.79f, .91f, .98f), .44f)
+                    : Color.Lerp(Definition.SurfaceTint, new Color(.97f, .94f, .85f), .75f));
+                cloudMaterial.SetColor("_DarkCloudColor", iceGiant
+                    ? Definition.SurfaceTint * .69f
+                    : Color.Lerp(Definition.SurfaceTint, new Color(.52f, .35f, .23f), .55f));
                 cloudMaterial.SetFloat("_IceFraction", Definition.Kind == PlanetKind.IceGiant ? 1 : 0);
                 cloudMaterial.SetFloat("_BandCount", bandCount * BandFrequencyMultiplier);
                 cloudMaterial.SetFloat("_BandContrast", BandContrast);
@@ -110,6 +115,12 @@ namespace SpaceEngine.Rendering
                 cloudMaterial.SetFloat("_WindPhase", (float)((turns * DifferentialWindRate % 1) * Math.PI * 2));
                 cloudMaterial.SetVector("_PlanetCenter", center);
                 cloudMaterial.SetFloat("_PlanetRadius", radius);
+                // The mesh bounds raster coverage only. The shader intersects
+                // the physical sphere and writes its analytic depth in both passes.
+                double halfLongitude = Math.PI / Mathf.Clamp(LongitudeSegments, 24, 768);
+                double halfLatitude = Math.PI / (2 * Mathf.Clamp(LatitudeSegments, 12, 384));
+                double diagonal = Math.Sqrt(halfLongitude * halfLongitude + halfLatitude * halfLatitude);
+                cloudMaterial.SetFloat("_RasterInflation", (float)(1 / Math.Cos(diagonal) + .00001));
                 cloudMaterial.SetVector("_RingNormal", axialRotation * Vector3.up);
                 cloudMaterial.SetFloat("_RingInnerRatio", HasRings ? (float)(Definition.RingInnerRadius / Definition.Radius) : 0);
                 cloudMaterial.SetFloat("_RingOuterRatio", HasRings ? (float)(Definition.RingOuterRadius / Definition.Radius) : 0);

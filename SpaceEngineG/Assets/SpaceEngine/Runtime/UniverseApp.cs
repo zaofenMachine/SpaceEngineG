@@ -29,13 +29,15 @@ namespace SpaceEngine.Runtime
         public PlanetTerrain[] Terrains { get; private set; }
         public StarCatalogueRenderer Stars { get; private set; }
         public GalaxyField Galaxy { get; private set; }
+        public GalaxyVolume GalacticLight {get;private set;}
+        public PlanetCloudRenderer[] Clouds {get;private set;}
         public CelestialBodyRenderer[] Celestials {get;private set;}
         public bool GalaxyOverview {get;private set;}
         public bool NucleusView {get;private set;}
         public bool StellarView {get;private set;}
         public string SavePath => Path.Combine(Application.persistentDataPath,"flight-v2.json");
         public double LocalStellarDensity => GalaxyModel.SampleDensity(GalaxyModel.ToGalacticLy(Observer,Settings.Galaxy),Settings.Galaxy);
-        public int BodyTriangles {get{int total=0;if(Celestials!=null)foreach(var c in Celestials)total+=c.TriangleCount;return total;}}
+        public int BodyTriangles {get{int total=0;if(Celestials!=null)foreach(var c in Celestials)total+=c.TriangleCount;if(Clouds!=null)foreach(var c in Clouds)total+=c.TriangleCount;return total;}}
         public string Navigation { get; private set; } = "FREE FLIGHT";
         public double FrameMilliseconds { get; private set; }
         public bool VerificationOwnsFlight;
@@ -50,6 +52,7 @@ namespace SpaceEngine.Runtime
 
         AtmosphereRenderer atmosphere;
         Material terrainMaterial,starMaterial,starBillboard,atmosphereMaterial,galaxyMaterial,gasMaterial,ringMaterial,nucleusMaterial;
+        Material galaxyVolumeMaterial,galaxyCompositeMaterial,cloudMaterial;
         GameObject nucleusObject;
         GameObject starObject;
         Mesh starMesh;
@@ -77,6 +80,9 @@ namespace SpaceEngine.Runtime
             galaxyMaterial=Resolve(Settings.GalaxyMaterial,"SpaceEngine/GalaxyField");
             gasMaterial=Resolve(Settings.GasGiantMaterial,"SpaceEngine/GasGiant");
             ringMaterial=Resolve(Settings.RingMaterial,"SpaceEngine/PlanetRing");
+            galaxyVolumeMaterial=Resolve(Settings.GalaxyVolumeMaterial,"SpaceEngine/GalaxyVolume");
+            galaxyCompositeMaterial=Resolve(Settings.GalaxyVolumeCompositeMaterial,"SpaceEngine/GalaxyVolumeComposite");
+            cloudMaterial=Resolve(Settings.PlanetCloudMaterial,"SpaceEngine/PlanetCloud");
             terrainMaterial.SetFloat("_AmbientFloor",Settings.AmbientLight);
             RenderSettings.skybox=null; RenderSettings.fog=false; RenderSettings.ambientLight=Color.black;
             var cameraObject=new GameObject("Observer camera - always local origin");
@@ -89,6 +95,8 @@ namespace SpaceEngine.Runtime
             Stars=new GameObject("Streamed star catalogue").AddComponent<StarCatalogueRenderer>();
             Galaxy=new GameObject("Three dimensional galactic population").AddComponent<GalaxyField>();
             Galaxy.Configure(Settings.Galaxy,Settings.GalaxyParticleCount,galaxyMaterial);
+            GalacticLight=new GameObject("Finite galactic emission and dust volume").AddComponent<GalaxyVolume>();
+            GalacticLight.Configure(Settings.Galaxy,galaxyVolumeMaterial,galaxyCompositeMaterial);
             starObject=new GameObject("Procedural stellar photosphere");
             starMesh=CreateStarMesh(); starObject.AddComponent<MeshFilter>().sharedMesh=starMesh;
             starObject.AddComponent<MeshRenderer>().sharedMaterial=starMaterial;
@@ -114,18 +122,25 @@ namespace SpaceEngine.Runtime
         {
             if(Terrains!=null)foreach(var terrain in Terrains)Destroy(terrain.gameObject);
             if(Celestials!=null)foreach(var celestial in Celestials)Destroy(celestial.gameObject);
+            if(Clouds!=null)foreach(var cloud in Clouds)Destroy(cloud.gameObject);
             Settings.Galaxy.Seed=Settings.UniverseSeed;
             if(Galaxy!=null&&(Galaxy.GeneratedSeed!=Settings.UniverseSeed||!ReferenceEquals(Galaxy.Definition,Settings.Galaxy)))
                 Galaxy.Configure(Settings.Galaxy,Settings.GalaxyParticleCount,galaxyMaterial);
+            if(GalacticLight!=null&&!ReferenceEquals(GalacticLight.Definition,Settings.Galaxy))
+                GalacticLight.Configure(Settings.Galaxy,galaxyVolumeMaterial,galaxyCompositeMaterial);
             CellX=x;CellY=y;CellZ=z;
             System=UniverseGenerator.GenerateSystem(Settings.UniverseSeed,x,y,z,Settings.Galaxy);
             SelectedPlanet=0; radialNavigation=false;
             Terrains=new PlanetTerrain[System.Planets.Length];
             Celestials=new CelestialBodyRenderer[Terrains.Length];
+            Clouds=new PlanetCloudRenderer[Terrains.Length];
             for(int i=0;i<Terrains.Length;i++)
             {
                 var terrain=new GameObject(System.Planets[i].Name).AddComponent<PlanetTerrain>();
                 terrain.PatchResolution=Settings.TerrainResolution;terrain.MaximumLevel=Settings.TerrainMaxLevel;
+                terrain.MaterialMapResolution=Settings.TerrainMaterialResolution;terrain.MaterialDetailStrength=Settings.TerrainMaterialDetail;
+                terrain.OceanRoughness=Settings.OceanRoughness;terrain.OceanSpecularStrength=Settings.OceanSpecularStrength;
+                terrain.SurfaceNormalStrength=Settings.SurfaceNormalStrength;
                 terrain.MaximumVisiblePatches=Settings.TerrainPatchBudget;terrain.MaximumResidentPatches=Settings.TerrainPatchBudget*2;
                 terrain.BuildsPerFrame=Settings.MeshBuildsPerFrame;terrain.BuildBudgetMilliseconds=Settings.MeshBuildBudgetMs;
                 terrain.RefinementThreshold=Settings.TerrainRefinement;
@@ -136,6 +151,10 @@ namespace SpaceEngine.Runtime
                 celestial.BandContrast=Settings.GasBandContrast;celestial.StormStrength=Settings.GasStormStrength;celestial.RingOpticalDepth=Settings.RingOpticalDepth;
                 celestial.LongitudeSegments=Settings.GasLongitudeSegments;celestial.LatitudeSegments=Settings.GasLatitudeSegments;celestial.RingAngularSegments=Settings.RingAngularSegments;
                 celestial.Configure(System.Planets[i],gasMaterial,ringMaterial);Celestials[i]=celestial;
+                var cloud=new GameObject("Weather - "+System.Planets[i].Name).AddComponent<PlanetCloudRenderer>();
+                cloud.Coverage=Settings.CloudCoverage;cloud.Opacity=Settings.CloudOpacity;cloud.CloudHeightMeters=Settings.CloudHeightMeters;
+                cloud.WeatherScale=Settings.CloudWeatherScale;cloud.DetailStrength=Settings.CloudDetailStrength;cloud.WindRate=Settings.CloudWindRate;
+                cloud.Configure(System.Planets[i],cloudMaterial);Clouds[i]=cloud;
             }
             Stars.Generate(Settings.UniverseSeed,x,y,z,Settings.StarCellRadius,starBillboard,Settings.Galaxy);
             starMaterial.SetColor("_BaseColor",System.Kind==StellarKind.BlackHole?Color.black:StarCatalogueRenderer.TemperatureColor(System.StarTemperature));
@@ -402,6 +421,7 @@ namespace SpaceEngine.Runtime
 
         public void RenderUniverse()
         {
+            ViewCamera.fieldOfView=GalaxyOverview?Settings.GalaxyOverviewFieldOfView:Settings.FieldOfView;
             Double3 selectedRelative=CameraFromPlanet;
             Vector3 selectedCenter=(-(selectedRelative*RenderScale)).ToVector3();
             Vector3 sunDirection=DirectionToSun(SelectedPlanet);
@@ -420,6 +440,8 @@ namespace SpaceEngine.Runtime
                 if(detailed&&System.Planets[i].IsLandable)Terrains[i].Tick(from,scale,(-(from*scale)).ToVector3(),DirectionToSun(i));
                 Celestials[i].ShowRenderer=detailed;
                 Celestials[i].Tick(from,scale,DirectionToSun(i),SimulationTime);
+                Clouds[i].SunIntensity=light*Settings.SunLightingExposure;Clouds[i].SunColor=stellarTint;Clouds[i].ShowRenderer=detailed;
+                Clouds[i].Tick(from,scale,DirectionToSun(i),SimulationTime);
             }
             atmosphere.enabled=Planet.AtmosphereHeight>0&&selectedRelative.Length<Planet.Radius*25;
             if(atmosphere.enabled)
@@ -437,6 +459,12 @@ namespace SpaceEngine.Runtime
             Galaxy.Exposure=Settings.GalaxyExposure;Galaxy.KernelScale=Settings.GalaxyKernelScale;Galaxy.DustStrength=Settings.GalaxyDustStrength;
             Galaxy.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;Galaxy.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
             Galaxy.LocalFadeLy=Settings.GalaxyLocalFadeLy;Galaxy.Tick(Observer);
+            GalacticLight.Exposure=Settings.GalaxyVolumeExposure;GalacticLight.ResolutionScale=Settings.GalaxyResolutionScale;
+            GalacticLight.SampleCount=Settings.GalaxyVolumeSamples;GalacticLight.DustStrength=Settings.GalaxyDustStrength;
+            GalacticLight.InteriorExposureMultiplier=Settings.GalaxyInteriorExposure;GalacticLight.ExteriorExposureMultiplier=Settings.GalaxyExteriorExposure;
+            GalacticLight.Contrast=Settings.GalaxyContrast;
+            GalacticLight.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;GalacticLight.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
+            GalacticLight.Tick(Observer,ViewCamera);
             Double3 coreFrom=GalaxyModel.Center(Settings.Galaxy).RelativeTo(Observer);
             double coreScale=RenderScale*ProxyScale(coreFrom.Length*RenderScale);
             nucleusObject.transform.position=(coreFrom*coreScale).ToVector3();nucleusObject.transform.localScale=Vector3.one*(float)(NucleusRadius*coreScale);
@@ -506,10 +534,12 @@ namespace SpaceEngine.Runtime
         {
             if(Terrains!=null)foreach(var terrain in Terrains)if(terrain!=null)Destroy(terrain.gameObject);
             if(Celestials!=null)foreach(var celestial in Celestials)if(celestial!=null)Destroy(celestial.gameObject);
+            if(Clouds!=null)foreach(var cloud in Clouds)if(cloud!=null)Destroy(cloud.gameObject);
+            if(GalacticLight!=null)Destroy(GalacticLight.gameObject);
             if(Galaxy!=null)Destroy(Galaxy.gameObject);if(nucleusObject!=null)Destroy(nucleusObject);
             if(Stars!=null)Destroy(Stars.gameObject);if(starObject!=null)Destroy(starObject);if(starMesh!=null)Destroy(starMesh);
             if(ViewCamera!=null)Destroy(ViewCamera.gameObject);
-            foreach(var material in new[]{terrainMaterial,starMaterial,starBillboard,atmosphereMaterial,galaxyMaterial,gasMaterial,ringMaterial,nucleusMaterial})if(material!=null)Destroy(material);
+            foreach(var material in new[]{terrainMaterial,starMaterial,starBillboard,atmosphereMaterial,galaxyMaterial,gasMaterial,ringMaterial,nucleusMaterial,galaxyVolumeMaterial,galaxyCompositeMaterial,cloudMaterial})if(material!=null)Destroy(material);
             if(Settings!=null)Destroy(Settings);
         }
     }

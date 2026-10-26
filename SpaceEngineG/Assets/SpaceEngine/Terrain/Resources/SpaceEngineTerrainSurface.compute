@@ -1,0 +1,84 @@
+#pragma kernel BakeSurface
+#pragma kernel ProbeSurface
+#pragma kernel ProbeInteger
+#pragma target 4.5
+#include "../TerrainMaterialNoise.hlsl"
+
+RWTexture2DArray<float> _SurfaceOutput;
+StructuredBuffer<float4> _ProbeDirections;
+RWStructuredBuffer<float2> _ProbeOutput;
+RWStructuredBuffer<uint4> _IntegerProbeOutput;
+int _TerrainSeed, _TerrainKind, _TerrainHasOcean, _MapResolution, _ProbeCount;
+float _TerrainRadius, _TerrainAmplitude;
+float4 _CraterCenters[10];
+float4 _CraterStrengths[10];
+
+float TerrainHeight(float3 p)
+{
+    p = normalize(p);
+    uint seed = asuint(_TerrainSeed);
+    float continents = TerrainExactFractal(p * 2.2, seed, 5, .52);
+    float hills = TerrainExactFractal(p * 17, seed + 7919u, 4, .5);
+    float ridge = 1 - abs(TerrainExactNoise(p * 37, seed + 104729u));
+    ridge = ridge * ridge * ridge;
+    float mountainMask = smoothstep(-.06, .30, continents);
+    float fine = TerrainExactFractal(p * 151, seed + 15485863u, 3, .5);
+    float relief = continents * 1.20 + hills * .16 + ridge * mountainMask * .55 + fine * .045;
+    float3 metres = p * _TerrainRadius;
+    float detail = TerrainExactNoise(metres / 10000, seed + 32452843u) * 350
+        + TerrainExactNoise(metres / 1600, seed + 49979687u) * 220
+        + TerrainExactNoise(metres / 200, seed + 67867967u) * 40
+        + TerrainExactNoise(metres / 25, seed + 86028121u) * 5
+        + TerrainExactNoise(metres / 6, seed + 104395301u) * .75;
+    relief += detail * saturate(_TerrainAmplitude / 8000) / max(1, _TerrainAmplitude);
+    if (_TerrainHasOcean == 0)
+    {
+        if (_TerrainKind == 0 || _TerrainKind == 3)
+        {
+            float craters = 0;
+            [loop] for (int i = 0; i < 10; i++)
+            {
+                float q = max(0, 2 * (1 - dot(p, _CraterCenters[i].xyz))) * _CraterCenters[i].w;
+                if (q >= 1.5) continue;
+                float bowl = q < 1 ? -.75 * (1 - q) * (1 - q) : 0;
+                float rimDistance = (q - .92) / .21;
+                float rim = .21 * exp(-rimDistance * rimDistance) * (1 - smoothstep(1.2, 1.5, q));
+                craters += (bowl + rim) * _CraterStrengths[i].x;
+            }
+            relief += craters * (_TerrainKind == 3 ? .7 : 1);
+        }
+        else if (_TerrainKind == 4)
+        {
+            float field = TerrainExactNoise(p * 24, seed + 1301081u)
+                + .16 * TerrainExactNoise(p * 55, seed + 15485863u);
+            relief -= (1 - smoothstep(.018, .075, abs(field))) * .16;
+        }
+    }
+    return _TerrainAmplitude * tanh(relief + (_TerrainHasOcean != 0 ? -.08 : .2));
+}
+[numthreads(8,8,1)]
+void BakeSurface(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= (uint)_MapResolution || id.y >= (uint)_MapResolution || id.z >= 6u) return;
+    float2 uv = float2(id.xy) * (2.0 / (_MapResolution - 1)) - 1;
+    _SurfaceOutput[id] = TerrainHeight(TerrainFaceDirection(id.z, uv));
+}
+[numthreads(64,1,1)]
+void ProbeSurface(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= (uint)_ProbeCount) return;
+    float4 direction = _ProbeDirections[id.x];
+    _ProbeOutput[id.x] = float2(TerrainHeight(direction.xyz), TerrainExactNoise(direction.xyz * direction.w, asuint(_TerrainSeed)));
+}
+[numthreads(64,1,1)]
+void ProbeInteger(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= (uint)_ProbeCount) return;
+    uint2 key = TerrainSeedKey(asuint(_TerrainSeed));
+    float4 p = _ProbeDirections[id.x];
+    int3 cell = (int3)floor(p.xyz * p.w);
+    int3 upper = cell + int3(0,1,0);
+    uint2 hash = TerrainHash64(upper, key);
+    float3 delta = p.xyz*p.w - floor(p.xyz*p.w) - float3(0,1,0);
+    _IntegerProbeOutput[id.x] = uint4(hash, TerrainGradientIndex(upper,key), asuint(TerrainGradient(upper,key,delta)));
+}

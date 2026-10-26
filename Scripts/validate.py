@@ -9,7 +9,7 @@ import time
 from unity_rpc import rpc
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUT = ROOT / 'Artifacts' / 'V020'
+OUT = ROOT / 'Artifacts' / 'V030'
 
 def call(name, arguments):
     envelope = rpc('tools/call', {'name': name, 'arguments': arguments})
@@ -42,7 +42,13 @@ def tests(mode):
 def graphics():
     for menu,filename in [('Space Engine/Validate Shaders','shaders.json'),
                           ('Space Engine/Validate Atmosphere Pixels','atmosphere-pixels.json'),
-                          ('Space Engine/Validate Celestial Pixels','CelestialPixels/celestial-pixels.json')]:
+                          ('Space Engine/Validate Celestial Pixels','CelestialPixels/celestial-pixels.json'),
+                          ('Space Engine/Validate Terrain Pixels','TerrainPixels/terrain-pixels.json'),
+                          ('Space Engine/Validate Ground Terrain Pixels','GroundPixels/ground-pixels.json'),
+                          ('Space Engine/Validate Ground Atmosphere Pixels','GroundAtmospherePixels/ground-pixels.json'),
+                          ('Space Engine/Validate Planet Cloud Pixels','CloudPixels/cloud-pixels.json'),
+                          ('Space Engine/Validate Gas Horizon Pixels','GasHorizonPixels/gas-horizon-pixels.json'),
+                          ('Space Engine/Validate Galaxy Pixels','GalaxyPixels/galaxy-pixels.json')]:
         call('execute_menu_item', {'menu_path':menu})
         result=json.loads((OUT/filename).read_text(encoding='utf-8-sig'))
         print(filename,'PASS' if result['passed'] else 'FAIL',flush=True)

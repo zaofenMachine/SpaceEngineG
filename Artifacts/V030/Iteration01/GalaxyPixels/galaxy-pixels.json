@@ -1,0 +1,95 @@
+{
+    "utcTimestamp": "2026-10-26T14:31:45.7019762Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "256x256 half-float observer-dependent galaxy volume readbacks plus floating-point URP opaque-depth fixture. All viewpoints integrate the same bounded seeded 3D density. Submission/readback timings include synchronization and are not gameplay performance.",
+    "exception": "",
+    "passed": false,
+    "checks": [
+        {
+            "name": "Bounded galaxy produces continuous luminous structure in exterior view",
+            "passed": true,
+            "measured": 15205.0,
+            "threshold": 800.0
+        },
+        {
+            "name": "Unchanged observer reuses deterministic radiance without another GPU integration",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0
+        },
+        {
+            "name": "96-step overview converges toward the independent 192-step budget",
+            "passed": true,
+            "measured": 0.0001487427798565477,
+            "threshold": 0.03500000014901161
+        },
+        {
+            "name": "Edge-on view has a thinner projected stellar disk than the oblique observer",
+            "passed": false,
+            "measured": 0.8484547734260559,
+            "threshold": 0.800000011920929
+        },
+        {
+            "name": "Seeded dust attenuates the interior disk and core",
+            "passed": true,
+            "measured": 0.08377420902252197,
+            "threshold": 0.0020000000949949028
+        },
+        {
+            "name": "Dust lane changes a spatial area rather than only isolated stellar points",
+            "passed": true,
+            "measured": 39612.0,
+            "threshold": 300.0
+        },
+        {
+            "name": "Seed changes three-dimensional arm phase and dust structures",
+            "passed": true,
+            "measured": 0.0064294347539544109,
+            "threshold": 0.0020000000949949028
+        },
+        {
+            "name": "Moving the galactic observer changes perspective rather than replaying a fixed background",
+            "passed": true,
+            "measured": 0.06082208827137947,
+            "threshold": 0.004999999888241291
+        },
+        {
+            "name": "Rays pointing away from the finite outer halo remain black",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.000009999999747378752
+        },
+        {
+            "name": "Zero optical exposure removes galactic emission",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0
+        },
+        {
+            "name": "Far-depth volume respects real URP opaque geometry",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0020000000949949028
+        },
+        {
+            "name": "URP composite preserves the actual integrated volume outside the opaque fixture",
+            "passed": false,
+            "measured": 0.010031692683696747,
+            "threshold": 0.0020000000949949028
+        }
+    ],
+    "submitAndReadbackMilliseconds": [
+        131.752197265625,
+        8.487899780273438,
+        7.786600112915039,
+        7.593699932098389,
+        8.859600067138672,
+        6.565899848937988,
+        8.250399589538575,
+        3.345599889755249,
+        4.638700008392334,
+        6.158199787139893
+    ]
+}

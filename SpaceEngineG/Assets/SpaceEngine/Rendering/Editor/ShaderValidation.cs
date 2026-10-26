@@ -18,11 +18,12 @@ namespace SpaceEngine.Rendering.Editor
         {
             "SpaceEngine/Terrain", "SpaceEngine/Atmosphere",
             "SpaceEngine/StarBillboard", "SpaceEngine/Star",
-            "SpaceEngine/GasGiant", "SpaceEngine/PlanetRing", "SpaceEngine/GalaxyField"
+            "SpaceEngine/GasGiant", "SpaceEngine/PlanetRing", "SpaceEngine/GalaxyField",
+            "SpaceEngine/GalaxyVolume", "SpaceEngine/GalaxyVolumeComposite", "SpaceEngine/PlanetCloud"
         };
 
         public static string ReportPath => Path.GetFullPath(Path.Combine(
-            Application.dataPath, "..", "..", "Artifacts", "V020", "shaders.json"));
+            Application.dataPath, "..", "..", "Artifacts", "V030", "shaders.json"));
 
         [MenuItem("Space Engine/Validate Shaders")]
         public static void ValidateShaders()
@@ -95,6 +96,11 @@ namespace SpaceEngine.Rendering.Editor
                 {
                     material.EnableKeyword("_ATMOSPHERE_EXTINCTION");
                     CompileMaterial(material, "_ATMOSPHERE_EXTINCTION", passes);
+                }
+                if (shaderName == "SpaceEngine/Terrain" || shaderName == "SpaceEngine/GasGiant")
+                {
+                    material.EnableKeyword("_GBUFFER_NORMALS_OCT");
+                    CompileMaterial(material, "_GBUFFER_NORMALS_OCT", passes);
                 }
             }
             catch (Exception exception)

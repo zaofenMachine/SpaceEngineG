@@ -37,7 +37,7 @@ namespace SpaceEngine.Runtime
             if(app==null||app.System==null||!app.ShowHud)return;
             Styles();GUI.matrix=Matrix4x4.Scale(new Vector3(Screen.width/1600f,Screen.height/900f,1));
             Rect(0,0,1600,78,new Color(.016f,.027f,.041f,.92f));Rect(0,77,1600,1,new Color(.18f,.32f,.38f,.75f));
-            Text(30,14,330,"SPACE ENGINE  G",title);Text(32,45,500,"PROCEDURAL UNIVERSE  /  EXPLORER 02",small);
+            Text(30,14,330,"SPACE ENGINE  G",title);Text(32,45,500,"PROCEDURAL UNIVERSE  /  EXPLORER 03",small);
             Text(700,20,500,app.GalaxyOverview?"BARRED SPIRAL GALAXY / "+(app.Settings.Galaxy.RadiusLy*2).ToString("N0")+" ly":app.NucleusView?"GALACTIC NUCLEUS":app.System.Name,body);
             Text(700,45,500,"SEED "+app.Settings.UniverseSeed+"   ·   GEN "+UniverseGenerator.GenerationVersion+"   ·   "+app.Settings.Galaxy.ArmCount+" SPIRAL ARMS",small);
             if(Button(1230,23,140,settingsOpen?"CLOSE SETTINGS":"SETTINGS"))settingsOpen=!settingsOpen;
@@ -81,7 +81,7 @@ namespace SpaceEngine.Runtime
             Rect(0,818,1600,82,new Color(.016f,.027f,.041f,.94f));Rect(0,818,1600,1,new Color(.18f,.32f,.38f,.75f));
             Text(30,833,430,app.Navigation,body);Text(30,861,670,app.Notice,small);
             Text(700,831,510,"GEOMETRY  "+(app.ActiveTriangles+app.BodyTriangles).ToString("N0")+" tris / LOD "+app.MaxLod,body);
-            Text(700,858,510,app.Stars.Count+" resolved stars   ·   "+app.Galaxy.ParticleCount.ToString("N0")+" galactic population kernels",small);
+            Text(700,858,510,app.GalaxyOverview?"SPATIAL VOLUME / "+app.GalacticLight.RenderedWidth+" × "+app.GalacticLight.RenderedHeight+" / "+app.Settings.GalaxyVolumeSamples+" steps":app.Stars.Count+" stars / surface "+app.Settings.TerrainMaterialResolution+"² × 6 + pixel detail",small);
             Text(1220,833,370,"SECTOR  "+app.Observer.sectorX+" / "+app.Observer.sectorY+" / "+app.Observer.sectorZ,small);
             Text(1220,856,370,"CAMERA-RELATIVE   ·   64-BIT LOCAL",small);
             Rect(792,448,16,1,new Color(.5f,.8f,.85f,.5f));Rect(800,440,1,16,new Color(.5f,.8f,.85f,.5f));
@@ -94,7 +94,9 @@ namespace SpaceEngine.Runtime
             Rect(1010,425,564,375,new Color(.018f,.032f,.047f,.98f));Text(1030,441,500,"RENDER & GENERATION",title);
             Text(1030,486,210,"Atmosphere exposure");app.Settings.AtmosphereExposure=GUI.HorizontalSlider(new UnityEngine.Rect(1260,495,275,18),app.Settings.AtmosphereExposure,.1f,5);
             Text(1030,525,210,"Star exposure");app.Settings.StarBrightness=GUI.HorizontalSlider(new UnityEngine.Rect(1260,534,275,18),app.Settings.StarBrightness,.25f,3);
-            Text(1030,564,210,"Field of view");app.Settings.FieldOfView=GUI.HorizontalSlider(new UnityEngine.Rect(1260,573,275,18),app.Settings.FieldOfView,40,100);app.ViewCamera.fieldOfView=app.Settings.FieldOfView;
+            Text(1030,564,210,app.GalaxyOverview?"Galaxy field of view":"Field of view");
+            if(app.GalaxyOverview)app.Settings.GalaxyOverviewFieldOfView=GUI.HorizontalSlider(new UnityEngine.Rect(1260,573,275,18),app.Settings.GalaxyOverviewFieldOfView,30,90);
+            else app.Settings.FieldOfView=GUI.HorizontalSlider(new UnityEngine.Rect(1260,573,275,18),app.Settings.FieldOfView,40,100);
             Text(1030,603,210,"Terrain budget  "+app.Settings.TerrainPatchBudget);app.Settings.TerrainPatchBudget=(int)GUI.HorizontalSlider(new UnityEngine.Rect(1260,612,275,18),app.Settings.TerrainPatchBudget,64,384);
             foreach(var terrain in app.Terrains){terrain.MaximumVisiblePatches=app.Settings.TerrainPatchBudget;terrain.MaximumResidentPatches=app.Settings.TerrainPatchBudget*2;}
             Text(1030,650,130,"Universe seed");seedText=GUI.TextField(new UnityEngine.Rect(1160,649,190,28),seedText);

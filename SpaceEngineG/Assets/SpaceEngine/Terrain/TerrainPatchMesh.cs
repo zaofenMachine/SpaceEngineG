@@ -12,6 +12,9 @@ namespace SpaceEngine.Terrain
         public Vector3[] Normals;
         public Color[] Colors;
         public Vector2[] UV;
+        // Exact raw signed height at each geometric vertex. Close-range surface
+        // material must agree with the unmodified collision/landing field.
+        public Vector2[] SurfaceData;
         public int[] Triangles;
 
         public static double SurfaceHeight(Double3 direction, PlanetDefinition definition)
@@ -50,6 +53,7 @@ namespace SpaceEngine.Terrain
                 Anchor = SurfacePoint(CubeSphere.CenterDirection(key), definition),
                 Vertices = new Vector3[vertexCount], Normals = new Vector3[vertexCount],
                 Colors = new Color[vertexCount], UV = new Vector2[vertexCount],
+                SurfaceData = new Vector2[vertexCount],
                 Triangles = new int[resolution * resolution * 6 + boundaryCount * 12]
             };
             for (int y = 0; y < row; y++)
@@ -65,6 +69,7 @@ namespace SpaceEngine.Terrain
                 data.Normals[i] = normal.ToVector3();
                 data.Colors[i] = Biome(direction, normal, rawHeight, definition);
                 data.UV[i] = new Vector2((float)(u0 + span * x / resolution), (float)(v0 + span * y / resolution));
+                data.SurfaceData[i] = new Vector2((float)rawHeight, 0);
             }
             int triangle = 0;
             for (int y = 0; y < resolution; y++)
@@ -91,6 +96,7 @@ namespace SpaceEngine.Terrain
                 Double3 absolute = data.Anchor + new Double3(data.Vertices[source].x, data.Vertices[source].y, data.Vertices[source].z);
                 data.Vertices[skirt] = (absolute - absolute.Normalized * skirtDepth - data.Anchor).ToVector3();
                 data.Normals[skirt] = data.Normals[source]; data.Colors[skirt] = data.Colors[source]; data.UV[skirt] = data.UV[source];
+                data.SurfaceData[skirt] = data.SurfaceData[source];
                 int next = (edge + 1) % boundaryCount;
                 AddTriangle(data, ref triangle, source, surfaceVertexCount + next, skirt);
                 AddTriangle(data, ref triangle, source, boundary[next], surfaceVertexCount + next);

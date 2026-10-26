@@ -1,0 +1,137 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "223fc168a5fb458b897ef601859d4597",
+    "status": "failed",
+    "mode": "EditMode",
+    "started_unix_ms": 1793024771794,
+    "finished_unix_ms": 1793024790897,
+    "last_update_unix_ms": 1793024790897,
+    "progress": {
+      "completed": 106,
+      "total": 106,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh(Lava)",
+      "last_finished_unix_ms": 1793024790674,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": true,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Oceanic)",
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  9025.0325263986433d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Desert)",
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  7155.5847726755292d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Lava)",
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  7155.5847726755292d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(9371)",
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(-1873647123)",
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(int.MinValue)",
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry",
+          "message": "System.IndexOutOfRangeException : Index 16447 is out of range of '4096' Length."
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 106,
+        "passed": 99,
+        "failed": 7,
+        "skipped": 0,
+        "durationSeconds": 14.5681107,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Oceanic)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Oceanic)",
+          "state": "Failed",
+          "durationSeconds": 11.1996734,
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  9025.0325263986433d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures (SpaceEngine.Core.PlanetKind kind) [0x0017c] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:62\r\n",
+          "output": "Oceanic GPU/CPU height error maximum=9025.032526m mean=1631.503846m across 128 positions\r\n"
+        },
+        {
+          "name": "GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Desert)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Desert)",
+          "state": "Failed",
+          "durationSeconds": 0.0034118,
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  7155.5847726755292d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures (SpaceEngine.Core.PlanetKind kind) [0x0017c] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:62\r\n",
+          "output": "Desert GPU/CPU height error maximum=7155.584773m mean=1490.129089m across 128 positions\r\n"
+        },
+        {
+          "name": "GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Lava)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Lava)",
+          "state": "Failed",
+          "durationSeconds": 0.0041875,
+          "message": "  Orbital material zero-contours must represent the CPU landing field.\r\n  Expected: less than 3\r\n  But was:  7155.5847726755292d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures (SpaceEngine.Core.PlanetKind kind) [0x0017c] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:62\r\n",
+          "output": "Lava GPU/CPU height error maximum=7155.584773m mean=1616.858559m across 128 positions\r\n"
+        },
+        {
+          "name": "GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(9371)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(9371)",
+          "state": "Failed",
+          "durationSeconds": 0.0028556,
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates (System.Int32 seed) [0x000f2] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:32\r\n",
+          "output": ""
+        },
+        {
+          "name": "GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(-1873647123)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(-1873647123)",
+          "state": "Failed",
+          "durationSeconds": 0.0030965,
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates (System.Int32 seed) [0x000f2] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:32\r\n",
+          "output": ""
+        },
+        {
+          "name": "GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(int.MinValue)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(int.MinValue)",
+          "state": "Failed",
+          "durationSeconds": 0.001735,
+          "message": "  A different integer hash draws a different planet despite a sharp texture.\r\n  Expected: less than 1.9999999999999999E-06d\r\n  But was:  0.5d\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates (System.Int32 seed) [0x000f2] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:32\r\n",
+          "output": ""
+        },
+        {
+          "name": "MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry",
+          "state": "Failed:Error",
+          "durationSeconds": 0.0068531,
+          "message": "System.IndexOutOfRangeException : Index 16447 is out of range of '4096' Length.",
+          "stackTrace": "  at Unity.Collections.NativeArray`1[T].FailOutOfRangeError (System.Int32 index) [0x00072] in <5ecefda573de420b8643923ab4ab8ab5>:0 \r\n  at SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry () [0x000f9] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainMaterialGpuTests.cs:84 \r\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\r\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <816f70bc2a9c4332b0bd119906a8d40e>:0 ",
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

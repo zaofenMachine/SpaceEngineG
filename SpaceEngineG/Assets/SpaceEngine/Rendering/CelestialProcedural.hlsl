@@ -18,6 +18,27 @@ float CelestialNoise(float3 p)
                      lerp(CelestialHash(cell + float3(0,1,1)), CelestialHash(cell + float3(1,1,1)), f.x), f.y), f.z);
 }
 
+// Fixed-cost octave field with a screen-space low-pass at each spatial frequency.
+// Filtered octaves tend to their mean; rotating the 3D domain avoids axis-aligned
+// streaks without introducing a latitude/longitude texture seam.
+float CelestialFbm(float3 p, float footprint, int layers)
+{
+    float value = 0, amplitude = .5, normalization = 0;
+    [loop] for (int octave = 0; octave < 6; octave++)
+    {
+        if (octave >= layers) break;
+        float visibility = 1 - smoothstep(.18, .8, footprint);
+        value += lerp(.5, CelestialNoise(p), visibility) * amplitude;
+        normalization += amplitude;
+        p = float3(.00 * p.x + .80 * p.y + .60 * p.z,
+                   -.80 * p.x + .36 * p.y - .48 * p.z,
+                   -.60 * p.x - .48 * p.y + .64 * p.z) * 2.03 + 17.17;
+        footprint *= 2.03;
+        amplitude *= .51;
+    }
+    return value / max(.001, normalization);
+}
+
 // A dimensionless, deterministic radial optical-depth profile shared by rings and ring shadows.
 // Gaps and band density are procedural appearance parameters; no individual particles are simulated.
 float CelestialSinc(float x)

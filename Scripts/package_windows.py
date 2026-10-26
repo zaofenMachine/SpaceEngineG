@@ -1,4 +1,4 @@
-"""Package the verified v0.2 Windows player; preserve the previous release and evidence."""
+"""Package the verified Windows player; preserve previous releases and evidence."""
 import hashlib
 import json
 import pathlib
@@ -6,9 +6,9 @@ import subprocess
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 BUILD = ROOT / 'Builds' / ('Windows-v' + VERSION)
-OUT = ROOT / 'Artifacts' / 'V020'
+OUT = ROOT / 'Artifacts' / 'V030'
 ARCHIVE = ROOT / 'Builds' / ('SpaceEngineG-' + VERSION + '-windows-x64.zip')
 
 
@@ -48,9 +48,15 @@ if __name__ == '__main__':
     for mode in ('editmode', 'playmode'):
         if load(OUT / (mode + '-tests.json'))['data']['status'] != 'succeeded':
             raise RuntimeError('Unity tests must pass before packaging: ' + mode)
-    for path in ('shaders.json', 'atmosphere-pixels.json', 'CelestialPixels/celestial-pixels.json'):
+    for path in ('shaders.json', 'atmosphere-pixels.json', 'CelestialPixels/celestial-pixels.json',
+                 'TerrainPixels/terrain-pixels.json', 'CloudPixels/cloud-pixels.json',
+                 'GroundPixels/ground-pixels.json', 'GasHorizonPixels/gas-horizon-pixels.json',
+                 'GroundAtmospherePixels/ground-pixels.json',
+                 'GalaxyPixels/galaxy-pixels.json'):
         if not load(OUT / path)['passed']:
             raise RuntimeError('Graphics validation must pass: ' + path)
+    if galaxy['movingViewFrames'] < 120 or galaxy['movingViewRecomputations'] < 118:
+        raise RuntimeError('Galaxy performance evidence must include uncached moving-view frames.')
     for name in ('SpaceEngineG.exe', 'UnityPlayer.dll', 'SpaceEngineG_Data/globalgamemanagers'):
         if not (BUILD / name).is_file():
             raise RuntimeError('Incomplete Unity player: ' + name)
@@ -85,7 +91,7 @@ if __name__ == '__main__':
         'unityPlayerSha256': digest(BUILD / 'UnityPlayer.dll'),
         'runtimeAssemblySha256': {name: digest(BUILD / 'SpaceEngineG_Data' / 'Managed' / (name + '.dll'))
             for name in ('SpaceEngine.Core', 'SpaceEngine.Terrain', 'SpaceEngine.Rendering', 'SpaceEngine.Runtime')},
-        'evidence': ['Artifacts/V020/PlayerFlight', 'Artifacts/V020/PlayerGalaxy'],
+        'evidence': ['Artifacts/V030/PlayerFlight', 'Artifacts/V030/PlayerGalaxy'],
         'notes': 'Source revision recorded before build. Screenshot review is documented separately. '
                  'Unity debug folders and PDBs remain locally but are excluded from this archive.'}
     (OUT / 'package-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

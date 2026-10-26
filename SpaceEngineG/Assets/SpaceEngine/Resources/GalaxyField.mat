@@ -36,7 +36,7 @@ Material:
     - _GalaxyRadiusLy: 52000
     - _KernelScale: 1
     - _LocalFadeLy: 100
-    - _MaximumAngularRadius: 0.005
+    - _MaximumAngularRadius: 0.00075
     - _MaximumFootprintCompensation: 2
     m_Colors: []
   m_BuildTextureStacks: []

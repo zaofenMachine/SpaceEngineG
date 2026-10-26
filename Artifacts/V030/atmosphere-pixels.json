@@ -1,0 +1,108 @@
+{
+    "utcTimestamp": "2026-10-26T17:59:48.2108116Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "colorSpace": "Linear",
+    "scope": "64x64 floating-point GPU renders via RenderPipeline.SubmitRenderRequest. Checks sky/vacuum, scale invariance and opaque depth termination. Does not replace terrain or full-route image review.",
+    "exception": "",
+    "fixtureWarmupNote": "The first draw already matched the subsequent independent reference.",
+    "fixtureRegistrationWarmupLinearRgb": [
+        0.03310476243495941,
+        0.10048151761293411,
+        0.010022825561463833
+    ],
+    "passed": true,
+    "checks": [
+        {
+            "name": "Vacuum renders black",
+            "passed": true,
+            "actualLinearRgb": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "referenceLinearRgb": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "tolerance": 0.00009999999747378752
+        },
+        {
+            "name": "Terrestrial zenith scatters blue light",
+            "passed": true,
+            "actualLinearRgb": [
+                0.031969401985406879,
+                0.051111962646245959,
+                0.0907691940665245
+            ],
+            "referenceLinearRgb": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "tolerance": 0.004999999888241291
+        },
+        {
+            "name": "Disabling the configured component removes visible scattering",
+            "passed": true,
+            "actualLinearRgb": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "referenceLinearRgb": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "tolerance": 0.00009999999747378752
+        },
+        {
+            "name": "Render scale preserves optical appearance",
+            "passed": true,
+            "actualLinearRgb": [
+                0.031969401985406879,
+                0.051111962646245959,
+                0.0907691940665245
+            ],
+            "referenceLinearRgb": [
+                0.031969401985406879,
+                0.051111962646245959,
+                0.0907691940665245
+            ],
+            "tolerance": 0.003000000026077032
+        },
+        {
+            "name": "Independent URP unlit patch matches its linear base color",
+            "passed": true,
+            "actualLinearRgb": [
+                0.03310476243495941,
+                0.10048151761293411,
+                0.010022825561463833
+            ],
+            "referenceLinearRgb": [
+                0.03310476243495941,
+                0.10048151761293411,
+                0.010022825561463833
+            ],
+            "tolerance": 0.0010000000474974514
+        },
+        {
+            "name": "Camera depth limits measurable fog at a ten metre surface",
+            "passed": true,
+            "actualLinearRgb": [
+                0.033419981598854068,
+                0.10079319775104523,
+                0.010367619805037976
+            ],
+            "referenceLinearRgb": [
+                0.03310476243495941,
+                0.10048151761293411,
+                0.010022825561463833
+            ],
+            "tolerance": 0.003000000026077032
+        }
+    ]
+}

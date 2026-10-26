@@ -30,8 +30,14 @@ MonoBehaviour:
     LocalNumberDensityPerCubicParsec: 0.1
     CentralMassSolarMasses: 4100000
   GalaxyParticleCount: 60000
-  GalaxyExposure: 2.5
-  GalaxyKernelScale: 3.5
+  GalaxyExposure: 0.15
+  GalaxyKernelScale: 0.5
+  GalaxyVolumeExposure: 1
+  GalaxyResolutionScale: 0.5
+  GalaxyVolumeSamples: 96
+  GalaxyInteriorExposure: 0.22
+  GalaxyExteriorExposure: 1.6
+  GalaxyContrast: 2
   GalaxyDustStrength: 1
   GalaxyDustScaleHeightLy: 220
   GalaxyDustAttenuationLengthLy: 1200
@@ -46,6 +52,17 @@ MonoBehaviour:
   GasCloudSafetyClearance: 10000
   StarCellRadius: 5
   TerrainResolution: 12
+  TerrainMaterialResolution: 1024
+  TerrainMaterialDetail: 0.65
+  OceanRoughness: 0.12
+  OceanSpecularStrength: 0.8
+  SurfaceNormalStrength: 0.7
+  CloudCoverage: 0.42
+  CloudOpacity: 0.65
+  CloudHeightMeters: 12000
+  CloudWeatherScale: 5
+  CloudDetailStrength: 0.45
+  CloudWindRate: 0.08
   TerrainMaxLevel: 20
   TerrainPatchBudget: 256
   MeshBuildsPerFrame: 6
@@ -72,6 +89,7 @@ MonoBehaviour:
   StarMinimumAngularRadius: 0.00065
   StarCoreRadius: 0.3
   FieldOfView: 60
+  GalaxyOverviewFieldOfView: 45
   InitialAltitude: 12000000
   MinimumClearance: 2
   TerrainMaterial: {fileID: 2100000, guid: 252f029212f0490438d850afbf6fd2ac, type: 2}
@@ -81,3 +99,6 @@ MonoBehaviour:
   GalaxyMaterial: {fileID: 2100000, guid: 7f547008c45e30940923626fc9eea623, type: 2}
   GasGiantMaterial: {fileID: 2100000, guid: 5c13256c8ca441043ada3d552f0455b9, type: 2}
   RingMaterial: {fileID: 2100000, guid: 3d27f9b038501c24d9576ae31106f3fe, type: 2}
+  GalaxyVolumeMaterial: {fileID: 2100000, guid: 35ee45adb1345c84d90dc542305d06ff, type: 2}
+  GalaxyVolumeCompositeMaterial: {fileID: 2100000, guid: b4da22aaf178f804da7c46099396fa95, type: 2}
+  PlanetCloudMaterial: {fileID: 2100000, guid: 7b44467f349441b43907a37c5aeb6a23, type: 2}

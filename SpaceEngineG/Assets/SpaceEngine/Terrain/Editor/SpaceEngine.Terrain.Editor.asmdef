@@ -1,0 +1,7 @@
+{
+  "name": "SpaceEngine.Terrain.Editor",
+  "rootNamespace": "SpaceEngine.Terrain.Editor",
+  "references": ["SpaceEngine.Core", "SpaceEngine.Terrain", "SpaceEngine.Rendering"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true
+}

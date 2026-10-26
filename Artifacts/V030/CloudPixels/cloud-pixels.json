@@ -1,0 +1,84 @@
+{
+    "utcTimestamp": "2026-10-26T17:59:50.9971948Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "512x512 floating-point actual URP cloud pixels against an independent opaque unlit blue sphere fixture. This fixture isolates optical weather; it is not runtime planet geometry. Timings include synchronous readback and do not measure gameplay performance.",
+    "exception": "",
+    "passed": true,
+    "checks": [
+        {
+            "name": "Weather changes actual lit planet pixels",
+            "passed": true,
+            "measured": 0.08666057139635086,
+            "threshold": 0.004999999888241291
+        },
+        {
+            "name": "Default weather retains clear/thin terrain windows instead of a white blanket",
+            "passed": true,
+            "measured": 0.46236667037010195,
+            "threshold": 0.6499999761581421
+        },
+        {
+            "name": "Default cloud radiance retains headroom before display clipping",
+            "passed": true,
+            "measured": 0.6152622103691101,
+            "threshold": 0.9800000190734863
+        },
+        {
+            "name": "Same seed and explicit simulation time repeat pixel radiance",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.000009999999747378752
+        },
+        {
+            "name": "Different weather seed changes visible cloud geography",
+            "passed": true,
+            "measured": 0.0991416648030281,
+            "threshold": 0.003000000026077032
+        },
+        {
+            "name": "Explicit simulation time advects the weather field",
+            "passed": true,
+            "measured": 0.10742656141519547,
+            "threshold": 0.003000000026077032
+        },
+        {
+            "name": "Analytic planet shadow removes cloud direct light",
+            "passed": true,
+            "measured": 0.08810820430517197,
+            "threshold": 0.009999999776482582
+        },
+        {
+            "name": "Weather angular appearance is invariant under render scale",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0010000000474974514
+        },
+        {
+            "name": "Zero configured coverage removes all optical weather",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.000009999999747378752
+        },
+        {
+            "name": "Thin layer is actually hidden before surface entry",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0
+        }
+    ],
+    "submitAndReadbackMilliseconds": [
+        7.769400119781494,
+        6.066199779510498,
+        6.9653000831604,
+        6.9359002113342289,
+        6.318399906158447,
+        6.315899848937988,
+        17.048900604248048,
+        6.650100231170654,
+        6.263199806213379,
+        6.47790002822876,
+        6.532700061798096
+    ]
+}

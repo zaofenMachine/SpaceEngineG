@@ -27,3 +27,17 @@
 | [ESO 黑洞研究](https://elt.eso.org/science/blackholes/) | 中央质量取约四百万太阳质量量级，计算几何 Schwarzschild 半径；不将黑色球面当作相对论黑洞渲染完成。 |
 
 GPU 实现额外使用解析频段的像素导数过滤，解决实际截图中的细环摩尔纹；尘埃积分先裁剪至薄层，避免在长达十万光年的视线中完全漏采。它们属于本项目本轮定位后的修复，不是对上述论文精度的声称。
+
+## 0.3 材料、空间积分与天气外观
+
+2026-10-26 至 27 日继续查阅原始实现与论文，代码仍为自行实现，无外部贴图或模型包。
+
+| 原始资料 | 实现取舍 |
+| --- | --- |
+| [GPU Gems 2: GPU-Based Geometry Clipmaps](https://developer.nvidia.com/gpugems/gpugems2/part-i-geometric-complexity/chapter-2-terrain-rendering-using-gpu-based-geometry) | 将几何细分和材料细节分开、按尺度过滤；当前仍是原 cube-sphere 四叉树，没有声称实现 geometry clipmaps。 |
+| [PBRT 4: Transmittance](https://www.pbr-book.org/4ed/Volume_Scattering/Transmittance)、[Equation of Transfer](https://www.pbr-book.org/4ed/Light_Transport_II_Volume_Rendering/The_Equation_of_Transfer) | 银河体积内按 Beer–Lambert 定律积分发光与消光；以解析常系数区间累积，仍是有偏有限步近似，不包含尘埃散射。 |
+| [GPU Gems 3: Real-Time Simulation and Rendering of 3D Fluids](https://developer.nvidia.com/gpugems/gpugems3/part-v-physics-simulation/chapter-30-real-time-simulation-and-rendering-3d-fluids) | 低分辨率 HDR 体积积分后合成；未实现文中的流体求解。 |
+| [Guerrilla: The Real-Time Volumetric Cloudscapes of Horizon Zero Dawn](https://www.guerrilla-games.com/read/the-real-time-volumetric-cloudscapes-of-horizon-zero-dawn) | 分离天气覆盖、主体形状与细节侵蚀。当前海洋星球只实现廉价轨道薄片，不具有论文的体积天气或同等画面质量。 |
+| [NASA: Jupiter's Colorful Cloud Belts](https://www.nasa.gov/image-article/jupiters-colorful-cloud-belts/) | 用连续变形云场替代均匀正弦条带与靶心风暴；不是观测拟合或大气动力学模拟。 |
+
+具体参数、测试设计和边界另见 `Rendering/GALAXY-VOLUME.md`、`Rendering/PLANET-WEATHER.md` 及 `Terrain/README.md`。GPU 哈希与 CPU 高度一致性单独测试，网格密度不变性、实际画面和连续降落分别验收。

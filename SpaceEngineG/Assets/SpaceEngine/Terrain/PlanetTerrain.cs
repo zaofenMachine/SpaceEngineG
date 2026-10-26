@@ -34,6 +34,16 @@ namespace SpaceEngine.Terrain
         [Range(0, 5)] public int OrbitalMinimumLevel = 3;
         [Tooltip("Apply orbital minimum LOD when the planet's angular diameter exceeds this many degrees.")]
         [Range(1, 45)] public float OrbitalDetailMinimumDegrees = 5;
+        [Header("Surface material independent of geometry LOD")]
+        [Tooltip("Pixels per cube face for the GPU baked, seed-exact geological height map. 1024 uses approximately 32 MiB including mips.")]
+        [Range(64, 2048)] public int MaterialMapResolution = 1024;
+        [Range(0, 2)] public float MaterialDetailStrength = .65f;
+        [Range(.03f, .4f)] public float OceanRoughness = .12f;
+        [Range(0, 2)] public float OceanSpecularStrength = .8f;
+        [Range(0, 2)] public float SurfaceNormalStrength = .7f;
+        public bool MaterialMapReady => surfaceMap != null && surfaceMap.Texture != null;
+        public long MaterialMapBytes => surfaceMap == null ? 0 : surfaceMap.EstimatedBytes;
+        public double LastMaterialBakeCpuMilliseconds => surfaceMap == null ? 0 : surfaceMap.DispatchCpuMilliseconds;
 
         public int ActivePatchCount { get; private set; }
         public int TriangleCount { get; private set; }
@@ -74,6 +84,8 @@ namespace SpaceEngine.Terrain
         int tick;
         Double3 cameraPosition;
         bool orbitalDetail;
+        TerrainMaterialMap surfaceMap;
+        bool materialBakeAttempted;
 
         public void Configure(PlanetDefinition planetDefinition, Material terrainMaterial)
         {
@@ -86,6 +98,12 @@ namespace SpaceEngine.Terrain
             properties.SetFloat("_IsLava", definition.Kind == PlanetKind.Lava && !definition.HasOcean ? 1 : 0);
             uint lavaSeed = unchecked((uint)definition.Seed);
             properties.SetVector("_LavaSeed", new Vector4(lavaSeed & 0xffffu, lavaSeed >> 16, 0, 0));
+            properties.SetColor("_SurfaceTint", definition.SurfaceTint);
+            properties.SetFloat("_TerrainRadius", (float)definition.Radius);
+            properties.SetFloat("_TerrainAmplitude", (float)definition.TerrainHeight);
+            properties.SetFloat("_PlanetKind", (int)definition.Kind);
+            properties.SetFloat("_HasOcean", definition.HasOcean ? 1 : 0);
+            properties.SetFloat("_SurfaceMapReady", 0);
             configured = true;
             gameObject.name = $"Terrain - {definition.Name}";
         }
@@ -95,6 +113,20 @@ namespace SpaceEngine.Terrain
             if (!configured || material == null || renderScale <= 0 || double.IsNaN(renderScale)) return;
             tick++;
             cameraPosition = cameraFromPlanetMeters;
+            // Lazy allocation: distant/unloaded bodies never reserve high-resolution
+            // material memory. Dispatch precedes drawing on the same graphics queue.
+            double angularRadius = definition.Radius / Math.Max(1, cameraPosition.Length);
+            if (!materialBakeAttempted && definition.IsLandable && angularRadius > .015)
+            {
+                materialBakeAttempted = true;
+                surfaceMap = new TerrainMaterialMap();
+                if (surfaceMap.Bake(definition, MaterialMapResolution))
+                {
+                    properties.SetTexture("_SurfaceHeightMap", surfaceMap.Texture);
+                    properties.SetFloat("_SurfaceMapReady", 1);
+                    properties.SetFloat("_MaterialMapResolution", surfaceMap.Resolution);
+                }
+            }
             stopwatch.Restart();
             foreach (Patch patch in patches.Values)
             {
@@ -107,6 +139,14 @@ namespace SpaceEngine.Terrain
             properties.SetVector(sunDirectionId, sunDirection.normalized);
             properties.SetFloat("_SunIntensity",SunIntensity);
             properties.SetColor("_SunColor",SunColor);
+            properties.SetFloat("_MaterialDetailStrength", MaterialDetailStrength);
+            properties.SetFloat("_OceanRoughness", OceanRoughness);
+            properties.SetFloat("_OceanSpecularStrength", OceanSpecularStrength);
+            properties.SetFloat("_SurfaceNormalStrength", SurfaceNormalStrength);
+            properties.SetFloat("_RenderUnitsPerMetre",(float)renderScale);
+            double groundBelowCamera = cameraPosition.SqrLength > 0
+                ? TerrainPatchMesh.SurfaceHeight(cameraPosition.Normalized, definition) : 0;
+            properties.SetFloat("_CameraAltitudeMetres", (float)Math.Max(0, cameraPosition.Length - definition.Radius - groundBelowCamera));
             ActivePatchCount = TriangleCount = MaxActiveLevel = 0;
             for (int face = 0; face < 6; face++)
             {
@@ -231,6 +271,7 @@ namespace SpaceEngine.Terrain
                 patch.Mesh.normals = payload.Normals;
                 patch.Mesh.colors = payload.Colors;
                 patch.Mesh.uv = payload.UV;
+                patch.Mesh.uv2 = payload.SurfaceData;
                 patch.Mesh.triangles = payload.Triangles;
                 patch.Triangles = payload.Triangles.Length / 3;
                 patch.Mesh.RecalculateBounds();
@@ -274,6 +315,8 @@ namespace SpaceEngine.Terrain
             patch.Object.transform.localScale = Vector3.one * (float)scale;
             Double3 anchorUnits = patch.Anchor / definition.Radius;
             properties.SetVector("_PatchAnchor", new Vector4((float)anchorUnits.x, (float)anchorUnits.y, (float)anchorUnits.z, (float)(1 / definition.Radius)));
+            properties.SetVector("_PatchDetailAnchor", new Vector4((float)(patch.Anchor.x % 16384),
+                (float)(patch.Anchor.y % 16384), (float)(patch.Anchor.z % 16384), 0));
             patch.Renderer.SetPropertyBlock(properties);
             patch.Renderer.enabled = true;
             ActivePatchCount++;
@@ -298,6 +341,8 @@ namespace SpaceEngine.Terrain
 
         public void Clear()
         {
+            surfaceMap?.Dispose(); surfaceMap = null; materialBakeAttempted = false;
+            properties?.SetFloat("_SurfaceMapReady", 0);
             foreach (Patch patch in patches.Values) Release(patch);
             patches.Clear(); pending.Clear(); frontier.Clear();
             ActivePatchCount = TriangleCount = MaxActiveLevel = PendingBuildCount = 0;

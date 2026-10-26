@@ -70,9 +70,12 @@ namespace SpaceEngine.Tests.PlayMode
             settings.name = "PlayMode temporary settings";
             settings.StarCellRadius = 2;
             settings.GalaxyParticleCount = 1000;
+            settings.GalaxyResolutionScale = .2f;
+            settings.GalaxyVolumeSamples = 32;
             if (settings.Galaxy == null) settings.Galaxy = GalaxyModel.Default(settings.UniverseSeed);
             settings.Galaxy.Seed = settings.UniverseSeed;
             settings.TerrainResolution = 6;
+            settings.TerrainMaterialResolution = 128;
             settings.TerrainPatchBudget = 48;
             settings.TerrainMaxLevel = 18;
             settings.MeshBuildsPerFrame = 2;
@@ -147,6 +150,95 @@ namespace SpaceEngine.Tests.PlayMode
             }
             Assert.That(visibleMesh, Is.True, "A live MeshRenderer must use generated terrain vertices, colors and normals.");
             // Pixel correctness is checked by the separate captured acceptance route.
+        }
+
+        [UnityTest]
+        public IEnumerator SelectedSolidMaterialMapAllocatesAtConfiguredResolutionWithoutChangingPhysicalHeight()
+        {
+            if (!SystemInfo.supportsComputeShaders || !SystemInfo.supports2DArrayTextures)
+                Assert.Ignore("This graphics backend cannot allocate the procedural surface array.");
+            const int planetIndex = 1;
+            PlanetDefinition body = app.System.Planets[planetIndex];
+            Assert.That(body.IsLandable, Is.True);
+            var directions = new[] { new Double3(.23,.81,-.54).Normalized, new Double3(-.76,.12,.64).Normalized,
+                new Double3(.19,-.93,.31).Normalized };
+            var physicalHeights = new double[directions.Length];
+            for (int i = 0; i < directions.Length; i++) physicalHeights[i] = TerrainNoise.Height(directions[i], body);
+            app.FramePlanet(planetIndex, body.Radius * 2);
+            UniversalPosition position = app.Observer;
+            PlanetTerrain terrain = app.Terrains[planetIndex];
+            for (int frame = 0; frame < 30 && !terrain.MaterialMapReady; frame++) yield return null;
+            Assert.That(terrain.MaterialMapReady, Is.True, "The selected orbital planet must actually bake its seeded surface image.");
+            Assert.That(terrain.MaterialMapResolution, Is.EqualTo(settings.TerrainMaterialResolution));
+            long expectedBytes = (long)settings.TerrainMaterialResolution * settings.TerrainMaterialResolution * 6 * 4 * 4 / 3;
+            Assert.That(terrain.MaterialMapBytes, Is.EqualTo(expectedBytes), "RFloat six-face mip storage must use the configured resolution.");
+            for (int i = 0; i < directions.Length; i++)
+            {
+                Assert.That(TerrainNoise.Height(directions[i], body), Is.EqualTo(physicalHeights[i]), "Material detail must not rewrite physical geology.");
+                Assert.That(app.SurfaceHeight(directions[i]), Is.EqualTo(body.HasOcean ? Math.Max(0, physicalHeights[i]) : physicalHeights[i]));
+            }
+            Assert.That(app.Observer.Equals(position), Is.True);
+            Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator OceanicWeatherRendersInOrbitAndFadesBeforeTheActualSurfaceWithoutMovingFlight()
+        {
+            Assert.That(app.System.Planets[0].Kind, Is.EqualTo(PlanetKind.Oceanic));
+            app.FramePlanet(0, app.System.Planets[0].Radius);
+            UniversalPosition orbit = app.Observer;
+            yield return null;
+            yield return null;
+            var cloud = app.Clouds[0];
+            Assert.That(cloud.HasCloudLayer, Is.True);
+            Assert.That(cloud.Visible, Is.True, "The integrated optical weather renderer must be active in orbit.");
+            Assert.That(cloud.ObserverFade, Is.EqualTo(1));
+            Assert.That(app.Observer.Equals(orbit), Is.True);
+            Assert.That(cloud.GetComponentsInChildren<Collider>().Length, Is.Zero);
+            app.SetAltitude(2, true);
+            UniversalPosition surface = app.Observer;
+            double physicalHeight = app.SurfaceHeight(app.CameraFromPlanet.Normalized);
+            yield return null;
+            yield return null;
+            Assert.That(cloud.Visible, Is.False, "The orbital thin layer must disappear before entry instead of becoming a ground ceiling.");
+            Assert.That(cloud.ObserverFade, Is.Zero);
+            Assert.That(app.Observer.Equals(surface), Is.True, "Cloud fade must not alter the SI observer or landing clearance.");
+            app.ConstrainGround();
+            Assert.That(app.Observer.RelativeTo(surface).Length, Is.LessThan(.0003));
+            Assert.That(app.SurfaceHeight(app.CameraFromPlanet.Normalized), Is.EqualTo(physicalHeight).Within(.0003));
+            Assert.That(app.Altitude, Is.EqualTo(settings.MinimumClearance).Within(.0003));
+            Assert.That(app.Terrains[0].gameObject.activeSelf, Is.True);
+            Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero));
+        }
+
+        [UnityTest]
+        public IEnumerator GalacticVolumeCachesStableFlightAndInvalidatesOnAstronomicalMotionAndViewRotation()
+        {
+            app.FrameGalaxy();
+            yield return null;
+            yield return null;
+            UniversalPosition fixedObserver = app.Observer;
+            Quaternion fixedRotation = app.ViewCamera.transform.rotation;
+            int firstRevision = app.GalacticLight.RenderRevision;
+            Assert.That(firstRevision, Is.GreaterThan(0));
+            Assert.That(app.GalacticLight.RadianceTexture, Is.Not.Null);
+            for (int frame = 0; frame < 3; frame++) yield return null;
+            Assert.That(app.GalacticLight.RenderRevision, Is.EqualTo(firstRevision), "A stationary observer/view must reuse the radiance cache.");
+            Assert.That(app.Observer.Equals(fixedObserver), Is.True);
+            UniversalPosition moved = fixedObserver.Add(new Double3(50 * PhysicalConstants.LightYear, 0, 0));
+            app.SetObserver(moved, fixedRotation);
+            yield return null;
+            yield return null;
+            int movedRevision = app.GalacticLight.RenderRevision;
+            Assert.That(movedRevision, Is.GreaterThan(firstRevision), "Moving fifty real light years must re-integrate the finite galactic volume.");
+            Assert.That(app.Observer.Equals(moved), Is.True);
+            for (int frame = 0; frame < 2; frame++) yield return null;
+            Assert.That(app.GalacticLight.RenderRevision, Is.EqualTo(movedRevision));
+            app.SetObserver(moved, fixedRotation * Quaternion.Euler(0, 5, 0));
+            yield return null;
+            Assert.That(app.GalacticLight.RenderRevision, Is.GreaterThan(movedRevision), "Rotating the real flight camera must invalidate directional radiance.");
+            Assert.That(app.Observer.Equals(moved), Is.True);
+            Assert.That(app.ViewCamera.transform.position, Is.EqualTo(Vector3.zero), "Float camera origin stays local while the astronomical observer moves.");
         }
 
         [UnityTest]

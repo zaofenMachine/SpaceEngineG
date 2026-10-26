@@ -1,0 +1,49 @@
+{
+    "utcTimestamp": "2026-10-26T16:32:38.1221600Z",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "Actual seed20261026 origin planet, CPU-generated terrain meshes, planetary double anchors, camera-relative translations,2metre clearance and near-horizon view. Isolated terrain without atmosphere/HUD. Checker residual compares visible material with the same mesh/vertex-lighting control;2mm motion and2x render scale cover material precision. This supplements the complete player flight route.",
+    "error": "",
+    "cameraFromPlanet": "(989982.50519059808, 646182.87985739275, 5667211.4903275026)",
+    "passed": false,
+    "terrainSeed": 1295153162,
+    "maximumLod": 20,
+    "triangles": 80160,
+    "planetRadiusMetres": 5787295.104746511,
+    "materialCheckerResidual": 0.031987286133431627,
+    "controlCheckerResidual": 6.731382261357352e-7,
+    "twoMillimetreDifference": 0.05820139082870224,
+    "renderScaleDifference": 0.0,
+    "checks": [
+        {
+            "name": "Actual near-ground mesh reaches fine geometry",
+            "passed": true,
+            "measured": 80160.0,
+            "threshold": 1000.0
+        },
+        {
+            "name": "Near-ground radiance contains no NaN or infinity",
+            "passed": true,
+            "measured": 1.0,
+            "threshold": 1.0
+        },
+        {
+            "name": "Material avoids planetary-direction quantization noise",
+            "passed": false,
+            "measured": 0.031987286133431627,
+            "threshold": 0.0020020194146784075
+        },
+        {
+            "name": "Two-millimetre camera translation remains visually continuous",
+            "passed": false,
+            "measured": 0.05820139082870224,
+            "threshold": 0.015
+        },
+        {
+            "name": "Render scale retains physical material frequencies",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.005
+        }
+    ]
+}

@@ -4,7 +4,7 @@ Shader "SpaceEngine/GalaxyField"
     {
         _Exposure("Galaxy radiance exposure",Range(0,8))=1
         _KernelScale("Spatial kernel size",Range(.2,5))=1
-        _MaximumAngularRadius("Maximum population kernel radius (rad)",Range(.0005,.035))=.005
+        _MaximumAngularRadius("Maximum stellar accent radius (rad)",Range(.0001,.002))=.00075
         _MaximumFootprintCompensation("Maximum capped-kernel radiance compensation",Range(1,8))=2
         _DustStrength("Galactic dust attenuation",Range(0,5))=1
         _DustScaleHeightLy("Dust vertical scale height (ly)",Float)=220

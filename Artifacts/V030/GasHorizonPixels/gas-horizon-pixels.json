@@ -1,0 +1,322 @@
+{
+    "utcTimestamp": "2026-10-26T17:59:51.3635690Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "Real floating-point 512x256 URP near-tangent silhouettes at 10 km above a 68,849 km cloud reference. Color and explicit DepthOnly draws are compared to independent double-precision pixel-center ray/sphere intersections. 24x12 and 384x192 meshes must show the same physical silhouette; polygon chords cannot pass this check.",
+    "exception": "",
+    "passed": true,
+    "checks": [
+        {
+            "name": "Coarse raster mesh preserves independent analytic near-horizon silhouette",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 32.0
+        },
+        {
+            "name": "Production mesh preserves independent analytic near-horizon silhouette",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 32.0
+        },
+        {
+            "name": "Near-horizon coverage is independent of raster mesh density",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 8.0
+        },
+        {
+            "name": "Independent URP plane draws across the full viewport with engine-standard depth clear",
+            "passed": true,
+            "measured": 131072.0,
+            "threshold": 131072.0
+        },
+        {
+            "name": "Actual DepthOnly uses physical sphere depth against an independent opaque plane",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 32.0
+        },
+        {
+            "name": "Active URP camera depth prepass preserves physical near-horizon coverage",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 32.0
+        },
+        {
+            "name": "Active URP depth/normal textures contain analytic sphere values rather than far sky",
+            "passed": true,
+            "measured": 0.5555210709571838,
+            "threshold": 0.6000000238418579
+        }
+    ],
+    "clearZeroBluePixels": 0,
+    "clearOneBluePixels": 131072,
+    "alwaysBluePixels": 131072,
+    "actualCameraDepthMeanError": 0.000002420471219011233,
+    "actualCameraNormalMeanError": 0.0027671335265040399,
+    "postSubmitNormalGlobalFormat": "R8G8B8A8_SRGB",
+    "postSubmitDepthGlobalFormat": "R8G8B8A8_SRGB",
+    "activeRendererMode": "ForwardPlus",
+    "urpDeviceSelectedNormalFormat": "R8G8B8A8_SNorm",
+    "normalFormatOracleSource": "Active UniversalRenderer.renderingModeActual plus live DepthNormalOnlyPass.GetGraphicsFormat() device selection; UniversalRendererRenderGraph.CreateCameraNormalsTexture uses that method for non-deferred rendering. Post-submit global textures are not used as attachment evidence.",
+    "normalFormatOracleVerified": true,
+    "normalQuantizationErrorBound": 0.004724409431219101,
+    "formatQuantizedNormalMeanError": 0.0008690907852724195,
+    "normalConversionToleranceUlp": 0.6000000238418579,
+    "maximumNormalComponentError": 0.0043741813860833649,
+    "maximumNormalConversionErrorUlp": 0.5555210709571838,
+    "normalConversionToleranceSource": "Microsoft D3D FLOAT->SNORM conversion permits 0.6 ULP on the integer side; D3D12_FLOAT32_TO_INTEGER_TOLERANCE_IN_ULP=0.6f. https://github.com/microsoft/DirectX-Headers/blob/main/include/directx/d3d12.idl ; https://microsoft.github.io/DirectX-Specs/d3d/archive/D3D11_3_FunctionalSpec.htm#3.2.3.4%20FLOAT%20-%3E%20SNORM",
+    "cpuClipOracle": [
+        {
+            "x": -0.008080000057816506,
+            "y": 0.008080000057816506,
+            "z": 9.199013675242895e-7,
+            "w": 0.00800000037997961
+        },
+        {
+            "x": 0.008080000057816506,
+            "y": 0.008080000057816506,
+            "z": 9.199013675242895e-7,
+            "w": 0.00800000037997961
+        },
+        {
+            "x": 0.008080000057816506,
+            "y": -0.008080000057816506,
+            "z": 9.199013675242895e-7,
+            "w": 0.00800000037997961
+        },
+        {
+            "x": -0.008080000057816506,
+            "y": -0.008080000057816506,
+            "z": 9.199013675242895e-7,
+            "w": 0.00800000037997961
+        }
+    ],
+    "normalSamples": [
+        {
+            "x": 64,
+            "y": 8,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999952912330627,
+            "analyticNormalZ": 0.0030651825945824386,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.0030640100594609977,
+            "analyticEyeDepth": 0.0030651825945824386
+        },
+        {
+            "x": 192,
+            "y": 8,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999952912330627,
+            "analyticNormalZ": 0.0030646221712231638,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.0030634505674242975,
+            "analyticEyeDepth": 0.0030646221712231638
+        },
+        {
+            "x": 320,
+            "y": 8,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999952912330627,
+            "analyticNormalZ": 0.0030646242666989567,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.0030634549912065269,
+            "analyticEyeDepth": 0.0030646242666989567
+        },
+        {
+            "x": 448,
+            "y": 8,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999952912330627,
+            "analyticNormalZ": 0.0030651893466711046,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.0030640161130577327,
+            "analyticEyeDepth": 0.0030651893466711046
+        },
+        {
+            "x": 64,
+            "y": 32,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.999992311000824,
+            "analyticNormalZ": 0.003911452833563089,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.003909952472895384,
+            "analyticEyeDepth": 0.003911452833563089
+        },
+        {
+            "x": 192,
+            "y": 32,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999923706054688,
+            "analyticNormalZ": 0.003910263534635305,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.003908764570951462,
+            "analyticEyeDepth": 0.003910263534635305
+        },
+        {
+            "x": 320,
+            "y": 32,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.9999923706054688,
+            "analyticNormalZ": 0.0039102681912481789,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.0039087762124836449,
+            "analyticEyeDepth": 0.0039102681912481789
+        },
+        {
+            "x": 448,
+            "y": 32,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.0,
+            "analyticNormalY": 0.999992311000824,
+            "analyticNormalZ": 0.003911467269062996,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.0,
+            "actualEyeDepth": 0.003909972030669451,
+            "analyticEyeDepth": 0.003911467269062996
+        },
+        {
+            "x": 64,
+            "y": 56,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999849200248718,
+            "analyticNormalZ": 0.005476965103298426,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.005474813748151064,
+            "analyticEyeDepth": 0.005476965103298426
+        },
+        {
+            "x": 192,
+            "y": 56,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999850392341614,
+            "analyticNormalZ": 0.0054735164158046249,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.0054713767021894459,
+            "analyticEyeDepth": 0.0054735164158046249
+        },
+        {
+            "x": 320,
+            "y": 56,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999850392341614,
+            "analyticNormalZ": 0.0054735299199819569,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.0054713967256248,
+            "analyticEyeDepth": 0.0054735299199819569
+        },
+        {
+            "x": 448,
+            "y": 56,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999849200248718,
+            "analyticNormalZ": 0.005477006081491709,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.005474869627505541,
+            "analyticEyeDepth": 0.005477006081491709
+        },
+        {
+            "x": 64,
+            "y": 76,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999620318412781,
+            "analyticNormalZ": 0.00868995487689972,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.008685945533216,
+            "analyticEyeDepth": 0.00868995487689972
+        },
+        {
+            "x": 192,
+            "y": 76,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999623894691467,
+            "analyticNormalZ": 0.008673290722072125,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.008669321425259114,
+            "analyticEyeDepth": 0.008673290722072125
+        },
+        {
+            "x": 320,
+            "y": 76,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.999962329864502,
+            "analyticNormalZ": 0.008673355914652348,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.008669407106935978,
+            "analyticEyeDepth": 0.008673355914652348
+        },
+        {
+            "x": 448,
+            "y": 76,
+            "actualEncodedG": 1.0,
+            "actualEncodedB": 0.5039370059967041,
+            "actualNormalY": 1.0,
+            "actualNormalZ": 0.007874011993408203,
+            "analyticNormalY": 0.9999620318412781,
+            "analyticNormalZ": 0.008690152317285538,
+            "quantizedNormalY": 1.0,
+            "quantizedNormalZ": 0.007874015718698502,
+            "actualEyeDepth": 0.008686196990311146,
+            "analyticEyeDepth": 0.008690152317285538
+        }
+    ]
+}

@@ -14,7 +14,7 @@ namespace SpaceEngine.Runtime
         [Serializable] public sealed class Sample
         {
             public string stage;public double clearance,frameMs,terrainBuildMs;public int lod,patches,triangles;
-            public long allocatedBytes;public string coordinate;
+            public long allocatedBytes,materialMapBytes;public int materialResolution;public double materialBakeCpuMilliseconds;public string coordinate;
         }
         [Serializable] public sealed class Report
         {
@@ -33,7 +33,7 @@ namespace SpaceEngine.Runtime
             app=GetComponent<UniverseApp>();
             var args=Environment.GetCommandLineArgs();requested=Array.IndexOf(args,"--verify-flight")>=0;quit=Array.IndexOf(args,"--quit-after-verification")>=0;
             int index=Array.IndexOf(args,"--evidence-path");
-            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V020/Flight"));
+            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V030/Flight"));
 #if UNITY_EDITOR
             if(UnityEditor.SessionState.GetBool("SpaceEngine.VerifyFlight",false))
             {requested=true;UnityEditor.SessionState.SetBool("SpaceEngine.VerifyFlight",false);}
@@ -112,7 +112,10 @@ namespace SpaceEngine.Runtime
             string path=Path.Combine(output,name+".png");
             ScreenCapture.CaptureScreenshot(path);
             report.samples.Add(new Sample{stage=name,clearance=app.Altitude,frameMs=app.FrameMilliseconds,terrainBuildMs=app.BuildMilliseconds,
-                lod=app.MaxLod,patches=app.ActivePatches,triangles=app.ActiveTriangles,allocatedBytes=Profiler.GetTotalAllocatedMemoryLong(),coordinate=app.Observer.ToString()});
+                lod=app.MaxLod,patches=app.ActivePatches,triangles=app.ActiveTriangles,allocatedBytes=Profiler.GetTotalAllocatedMemoryLong(),coordinate=app.Observer.ToString(),
+                materialMapBytes=app.Terrains[app.SelectedPlanet].MaterialMapBytes,
+                materialResolution=app.Terrains[app.SelectedPlanet].MaterialMapReady?app.Terrains[app.SelectedPlanet].MaterialMapResolution:0,
+                materialBakeCpuMilliseconds=app.Terrains[app.SelectedPlanet].LastMaterialBakeCpuMilliseconds});
             for(int i=0;i<3;i++)yield return null;
         }
         void Check(bool passed,string description){report.assertions.Add((passed?"PASS ":"FAIL ")+description);if(!passed)Fail(description);}

@@ -15,7 +15,8 @@ namespace SpaceEngine.Runtime
         {
             public string name,bodyKind,stellarKind,position;public double frameMs,clearance,starRadius,starMass,starLuminosity;
             public int terrainTriangles,celestialTriangles,lod,resolvedStars,galaxyKernels;
-            public long allocatedBytes;
+            public long allocatedBytes,materialMapBytes,totalMaterialMapBytes;public int materialResolution,volumeWidth,volumeHeight;
+            public double coldApproachMeanFrameMs,coldApproachMaxFrameMs;
         }
         struct SourceCell
         {
@@ -26,9 +27,10 @@ namespace SpaceEngine.Runtime
         {
             public string utc,version,buildGuid,unity,gpu,api;public bool passed;public int errors,seed,generationVersion;
             public List<string> checks=new List<string>();public List<string> runtimeErrors=new List<string>();public List<Stage> stages=new List<Stage>();
+            public double movingViewMeanFrameMs,movingViewP95FrameMs,movingViewMaxFrameMs;public int movingViewFrames,movingViewRecomputations;
             public string scope="Real screen frames and runtime assertions. Galaxy kernels are 3D population aggregates; only nearby admitted cells are resolved systems. Overview framing is explicit navigation, not a continuous intergalactic journey.";
         }
-        UniverseApp app;Report report;string output;bool failed,quit;
+        UniverseApp app;Report report;string output;bool failed,quit;double coldMean,coldMax;
         IEnumerator Start()
         {
             var args=Environment.GetCommandLineArgs();bool requested=Array.IndexOf(args,"--verify-galaxy")>=0;
@@ -38,7 +40,7 @@ namespace SpaceEngine.Runtime
 #endif
             if(!requested)yield break;
             app=GetComponent<UniverseApp>();app.VerificationOwnsFlight=true;app.TimeRate=0;
-            int at=Array.IndexOf(args,"--evidence-path");output=at>=0&&at+1<args.Length?args[at+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V020/Galaxy"));
+            int at=Array.IndexOf(args,"--evidence-path");output=at>=0&&at+1<args.Length?args[at+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V030/Galaxy"));
             Directory.CreateDirectory(output);
             report=new Report{utc=DateTime.UtcNow.ToString("O"),version=Application.version,buildGuid=Application.buildGUID,unity=Application.unityVersion,
                 gpu=SystemInfo.graphicsDeviceName,api=SystemInfo.graphicsDeviceType.ToString(),seed=app.Settings.UniverseSeed,generationVersion=UniverseGenerator.GenerationVersion};
@@ -58,7 +60,13 @@ namespace SpaceEngine.Runtime
                 var body=app.System.Planets[i];
                 app.FramePlanet(i,Math.Max(5000000,body.Radius*2));
                 app.Notice=(body.IsMoon?"PARENT-RELATIVE MOON / ":"PLANET / ")+body.Kind;
-                yield return Settle(140);
+                coldMean=0;coldMax=0;
+                for(int warmup=0;warmup<140;warmup++)
+                {
+                    yield return null;double interval=Time.unscaledDeltaTime*1000;
+                    coldMean+=interval;coldMax=Math.Max(coldMax,interval);
+                }
+                coldMean/=140;
                 yield return Capture((4+i).ToString("D2")+"-"+body.Kind.ToString().ToLowerInvariant()+(body.IsMoon?"-moon":""));
                 if(!body.IsLandable)
                 {
@@ -133,6 +141,21 @@ namespace SpaceEngine.Runtime
                 yield return Settle(140);yield return Capture("22-desert");
                 Check(app.Planet.Kind==PlanetKind.Desert&&app.Planet.IsLandable,"Desert frame uses its procedural solid terrain");
             }
+            app.FrameGalaxy();yield return Settle(30);
+            app.Notice="GALACTIC VOLUME / rotating-view performance capture";
+            var motionTimes=new List<double>();var motionObserver=app.Observer;var motionRotation=app.ViewCamera.transform.rotation;
+            int beforeRevision=app.GalacticLight.RenderRevision;
+            for(int i=0;i<120;i++)
+            {
+                app.SetObserver(motionObserver,Quaternion.AngleAxis((float)Math.Sin(i*.13)*5,Vector3.up)*motionRotation);
+                yield return null;motionTimes.Add(Time.unscaledDeltaTime*1000);
+            }
+            report.movingViewFrames=motionTimes.Count;report.movingViewRecomputations=app.GalacticLight.RenderRevision-beforeRevision;
+            motionTimes.Sort();double motionSum=0;foreach(double ms in motionTimes)motionSum+=ms;
+            report.movingViewMeanFrameMs=motionSum/motionTimes.Count;report.movingViewP95FrameMs=motionTimes[(int)((motionTimes.Count-1)*.95)];
+            report.movingViewMaxFrameMs=motionTimes[motionTimes.Count-1];
+            Check(report.movingViewRecomputations>=118,"Moving-view benchmark recomputes the spatial volume instead of timing only cached frames");
+            yield return Capture("23-galaxy-moving-view");
             Check(report.errors==0,"No error/exception logs during galaxy and body-type render expedition");
             report.passed=!failed&&report.errors==0;
             File.WriteAllText(Path.Combine(output,"galaxy-verification.json"),JsonUtility.ToJson(report,true));
@@ -145,10 +168,15 @@ namespace SpaceEngine.Runtime
         IEnumerator Capture(string name)
         {
             yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));
+            long totalMaps=0;foreach(var terrain in app.Terrains)totalMaps+=terrain.MaterialMapBytes;
             report.stages.Add(new Stage{name=name,bodyKind=app.Planet.Kind.ToString(),stellarKind=app.System.Kind.ToString(),position=app.Observer.ToString(),frameMs=app.FrameMilliseconds,
                 starRadius=app.System.StarRadius,starMass=app.System.StarMass,starLuminosity=app.System.StarLuminosity,
                 clearance=app.Altitude,terrainTriangles=app.ActiveTriangles,celestialTriangles=app.BodyTriangles,lod=app.MaxLod,
-                resolvedStars=app.Stars.Count,galaxyKernels=app.Galaxy.ParticleCount,allocatedBytes=Profiler.GetTotalAllocatedMemoryLong()});
+                resolvedStars=app.Stars.Count,galaxyKernels=app.Galaxy.ParticleCount,allocatedBytes=Profiler.GetTotalAllocatedMemoryLong(),
+                materialMapBytes=app.Terrains[app.SelectedPlanet].MaterialMapBytes,materialResolution=app.Terrains[app.SelectedPlanet].MaterialMapReady?app.Terrains[app.SelectedPlanet].MaterialMapResolution:0,
+                totalMaterialMapBytes=totalMaps,coldApproachMeanFrameMs=coldMean,coldApproachMaxFrameMs=coldMax,
+                volumeWidth=app.GalacticLight.RenderedWidth,volumeHeight=app.GalacticLight.RenderedHeight});
+            coldMean=0;coldMax=0;
             for(int i=0;i<4;i++)yield return null;
         }
         void Check(bool pass,string message){report.checks.Add((pass?"PASS ":"FAIL ")+message);if(!pass){failed=true;Debug.LogWarning(message);}}

@@ -25,13 +25,16 @@ namespace SpaceEngine.Editor
             settings.GalaxyMaterial=CreateMaterial("GalaxyField","SpaceEngine/GalaxyField");
             settings.GasGiantMaterial=CreateMaterial("GasGiant","SpaceEngine/GasGiant");
             settings.RingMaterial=CreateMaterial("PlanetRing","SpaceEngine/PlanetRing");
+            settings.GalaxyVolumeMaterial=CreateMaterial("GalaxyVolume","SpaceEngine/GalaxyVolume");
+            settings.GalaxyVolumeCompositeMaterial=CreateMaterial("GalaxyVolumeComposite","SpaceEngine/GalaxyVolumeComposite");
+            settings.PlanetCloudMaterial=CreateMaterial("PlanetCloud","SpaceEngine/PlanetCloud");
             EditorUtility.SetDirty(settings);
             var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
             new GameObject("Universe simulation").AddComponent<UniverseApp>().Settings=settings;
             EditorSceneManager.SaveScene(scene,ScenePath);
             EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(ScenePath,true)};
             PlayerSettings.companyName="SpaceEngineG";PlayerSettings.productName="SpaceEngineG Explorer";
-            PlayerSettings.bundleVersion="0.2.0";
+            PlayerSettings.bundleVersion="0.3.0";
             PlayerSettings.defaultScreenWidth=1600;PlayerSettings.defaultScreenHeight=900;
             PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.runInBackground=true;
             AssetDatabase.SaveAssets();
@@ -70,10 +73,10 @@ namespace SpaceEngine.Editor
         public static void BuildWindows()
         {
             string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../.."));
-            string output=Path.Combine(root,"Builds/Windows-v0.2.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
+            string output=Path.Combine(root,"Builds/Windows-v0.3.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
             var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
-            Directory.CreateDirectory(Path.Combine(root,"Artifacts/V020"));
-            File.WriteAllText(Path.Combine(root,"Artifacts/V020/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.2.0/SpaceEngineG.exe\n");
+            Directory.CreateDirectory(Path.Combine(root,"Artifacts/V030"));
+            File.WriteAllText(Path.Combine(root,"Artifacts/V030/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.3.0/SpaceEngineG.exe\n");
             if(result.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Player build failed");
         }
     }
