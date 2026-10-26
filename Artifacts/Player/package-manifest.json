@@ -1,0 +1,21 @@
+{
+  "version": "0.1.0",
+  "sourceRevision": "449874a02faaecfc0f90edbecc353d3bd14842f6",
+  "buildGuid": "9e2291404cab47a8b3a735a886ba6389",
+  "verifiedGpu": "NVIDIA GeForce RTX 4070",
+  "graphicsApi": "Direct3D12",
+  "fileCount": 192,
+  "uncompressedBytes": 105857383,
+  "archive": "Builds/SpaceEngineG-0.1.0-windows-x64.zip",
+  "archiveBytes": 40118902,
+  "archiveSha256": "04f9a7109d91cc9d970abb5fed9af67dad49080a83887ffdbaf35ff8ca13fa56",
+  "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+  "unityPlayerSha256": "7f9c4c1b4a42d763422f1f792c0da193f0d6541048aaa84f0b3efd1e4ee90206",
+  "runtimeAssemblySha256": {
+    "SpaceEngine.Core": "0ae2cfbb2bd2ffccf75b086d4db1c579129640235d8ed9da998f82f31caa2b98",
+    "SpaceEngine.Terrain": "05086da60203d7ab3cf824bbec8182f5097294fd88a583ed6ecba4661fb884bd",
+    "SpaceEngine.Rendering": "4f8110646ec124e97017556636eb2243b315a81343288f2da9cef955b6dab639",
+    "SpaceEngine.Runtime": "c5551c68dea6922386aa1f469c10ba4bef832fe1ba42d19fc0648980a712c2cc"
+  },
+  "notes": "Source revision identifies the committed runtime used by this local build. Unity-generated debug folders and PDB files remain in the build directory but are excluded from the distributable ZIP."
+}

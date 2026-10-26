@@ -4,11 +4,17 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 这是可运行的早期探索版本；基础系统与图形验证证据随源码维护，尚未达到 SpaceEngine 的天体种类、画面质量和科学完整度。
 
+当前版本 **0.1.0**：49 项 Unity 测试、6 项大气 GPU 像素检查和独立 Windows 完整降落航线通过。详细结果见 [实测记录](Docs/VALIDATION-2026-10-26.md)。
+
+![独立 Windows 程序实际轨道画面](Artifacts/Player/02-orbit.png)
+
 ## 启动
 
 使用 Unity Hub 打开仓库中的 **`SpaceEngineG/`** 子目录，版本 **6000.5.7f1**。载入 `Assets/Scenes/Universe.unity` 后按 Play。项目已包含入口场景、资源材质和默认配置，无需下载美术包。
 
 若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows/SpaceEngineG.exe`。
+
+本地交付包为 `Builds/SpaceEngineG-0.1.0-windows-x64.zip`（约 40.1 MB），解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。[分发包清单与 SHA-256](Artifacts/Player/package-manifest.json) 记录实际验收版本。
 
 ## 操作
 
@@ -53,6 +59,8 @@ Windows 程序也能独立运行验证航线：
 ```
 
 验证航线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。
+
+独立程序截图要求实际可见窗口；隐藏窗口截图失败的证据也已保留。完成独立程序验证后，运行 `python Scripts/package_windows.py` 可生成分发 ZIP、完整性检查和哈希清单。
 
 ## 实现说明
 
