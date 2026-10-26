@@ -73,7 +73,11 @@ namespace SpaceEngine.Runtime
             // Finish the navigation state as well as crossing its distance tolerance.
             // Capturing immediately at +0.007 m could leave the HUD showing a stale descent speed.
             for(int i=0;i<8&&!app.Navigation.StartsWith("LANDED");i++)
-            {app.AdvanceRadialFlight(.15);app.ConstrainGround();yield return null;}
+            {
+                app.AdvanceRadialFlight(.15);app.ConstrainGround();yield return null;
+                report.routeSteps++;report.minClearance=Math.Min(report.minClearance,app.Altitude);
+                frameTimes.Add(Time.unscaledDeltaTime*1000);
+            }
             Check(app.Navigation.StartsWith("LANDED")&&app.Speed==0,"Descent completes its landed navigation state and stops reported motion");
             yield return Settle(180);
             yield return Capture("05-surface");
