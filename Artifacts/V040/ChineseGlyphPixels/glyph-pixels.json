@@ -1,0 +1,398 @@
+{
+    "utcTimestamp": "2026-10-26T19:54:10.0821718Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "graphicsApi": "Direct3D12",
+    "fontName": "NotoSansCJKsc-Regular",
+    "scope": "Actual 1024x320 URP float GPU render of distinct CJK glyphs from the bundled OFL font. Each requested Chinese character must have a distinct atlas rectangle and visible cell pixels. This fixture verifies glyph rasterization, not the whole HUD layout.",
+    "exception": "",
+    "passed": true,
+    "checks": [
+        {
+            "name": "Chinese font bytes are embedded and dynamic",
+            "passed": true,
+            "measured": 1.0,
+            "threshold": 1.0
+        },
+        {
+            "name": "Chinese characters have distinct actual atlas glyphs",
+            "passed": true,
+            "measured": 45.0,
+            "threshold": 45.0
+        },
+        {
+            "name": "Every Chinese glyph produces visible GPU ink",
+            "passed": true,
+            "measured": 45.0,
+            "threshold": 45.0
+        },
+        {
+            "name": "Chinese glyph rasterization preserves shaped ink and transparent gaps",
+            "passed": true,
+            "measured": 45.0,
+            "threshold": 45.0
+        }
+    ],
+    "glyphs": [
+        {
+            "character": "宇",
+            "x": 32,
+            "y": 260,
+            "litPixels": 498,
+            "metricArea": 1482,
+            "inkFraction": 0.3360323905944824
+        },
+        {
+            "character": "宙",
+            "x": 100,
+            "y": 260,
+            "litPixels": 652,
+            "metricArea": 1440,
+            "inkFraction": 0.45277777314186098
+        },
+        {
+            "character": "银",
+            "x": 168,
+            "y": 260,
+            "litPixels": 667,
+            "metricArea": 1600,
+            "inkFraction": 0.4168750047683716
+        },
+        {
+            "character": "河",
+            "x": 236,
+            "y": 260,
+            "litPixels": 530,
+            "metricArea": 1600,
+            "inkFraction": 0.33125001192092898
+        },
+        {
+            "character": "恒",
+            "x": 304,
+            "y": 260,
+            "litPixels": 616,
+            "metricArea": 1600,
+            "inkFraction": 0.38499999046325686
+        },
+        {
+            "character": "星",
+            "x": 372,
+            "y": 260,
+            "litPixels": 721,
+            "metricArea": 1406,
+            "inkFraction": 0.5128023028373718
+        },
+        {
+            "character": "行",
+            "x": 440,
+            "y": 260,
+            "litPixels": 471,
+            "metricArea": 1600,
+            "inkFraction": 0.2943750023841858
+        },
+        {
+            "character": "地",
+            "x": 508,
+            "y": 260,
+            "litPixels": 611,
+            "metricArea": 1560,
+            "inkFraction": 0.3916666805744171
+        },
+        {
+            "character": "表",
+            "x": 576,
+            "y": 260,
+            "litPixels": 598,
+            "metricArea": 1600,
+            "inkFraction": 0.3737500011920929
+        },
+        {
+            "character": "轨",
+            "x": 644,
+            "y": 260,
+            "litPixels": 613,
+            "metricArea": 1600,
+            "inkFraction": 0.3831250071525574
+        },
+        {
+            "character": "道",
+            "x": 712,
+            "y": 260,
+            "litPixels": 703,
+            "metricArea": 1560,
+            "inkFraction": 0.45064103603363039
+        },
+        {
+            "character": "标",
+            "x": 780,
+            "y": 260,
+            "litPixels": 569,
+            "metricArea": 1640,
+            "inkFraction": 0.3469512164592743
+        },
+        {
+            "character": "签",
+            "x": 848,
+            "y": 260,
+            "litPixels": 656,
+            "metricArea": 1560,
+            "inkFraction": 0.4205128252506256
+        },
+        {
+            "character": "书",
+            "x": 916,
+            "y": 260,
+            "litPixels": 468,
+            "metricArea": 1560,
+            "inkFraction": 0.30000001192092898
+        },
+        {
+            "character": "搜",
+            "x": 32,
+            "y": 196,
+            "litPixels": 738,
+            "metricArea": 1600,
+            "inkFraction": 0.4612500071525574
+        },
+        {
+            "character": "索",
+            "x": 100,
+            "y": 196,
+            "litPixels": 651,
+            "metricArea": 1482,
+            "inkFraction": 0.4392712414264679
+        },
+        {
+            "character": "暂",
+            "x": 168,
+            "y": 196,
+            "litPixels": 716,
+            "metricArea": 1560,
+            "inkFraction": 0.45897436141967776
+        },
+        {
+            "character": "停",
+            "x": 236,
+            "y": 196,
+            "litPixels": 616,
+            "metricArea": 1600,
+            "inkFraction": 0.38499999046325686
+        },
+        {
+            "character": "继",
+            "x": 304,
+            "y": 196,
+            "litPixels": 698,
+            "metricArea": 1520,
+            "inkFraction": 0.45921051502227785
+        },
+        {
+            "character": "续",
+            "x": 372,
+            "y": 196,
+            "litPixels": 620,
+            "metricArea": 1600,
+            "inkFraction": 0.38749998807907107
+        },
+        {
+            "character": "视",
+            "x": 440,
+            "y": 196,
+            "litPixels": 632,
+            "metricArea": 1600,
+            "inkFraction": 0.39500001072883608
+        },
+        {
+            "character": "场",
+            "x": 508,
+            "y": 196,
+            "litPixels": 577,
+            "metricArea": 1560,
+            "inkFraction": 0.3698717951774597
+        },
+        {
+            "character": "设",
+            "x": 576,
+            "y": 196,
+            "litPixels": 562,
+            "metricArea": 1560,
+            "inkFraction": 0.3602564036846161
+        },
+        {
+            "character": "置",
+            "x": 644,
+            "y": 196,
+            "litPixels": 739,
+            "metricArea": 1406,
+            "inkFraction": 0.5256045460700989
+        },
+        {
+            "character": "种",
+            "x": 712,
+            "y": 196,
+            "litPixels": 659,
+            "metricArea": 1600,
+            "inkFraction": 0.41187500953674319
+        },
+        {
+            "character": "子",
+            "x": 780,
+            "y": 196,
+            "litPixels": 385,
+            "metricArea": 1482,
+            "inkFraction": 0.259784072637558
+        },
+        {
+            "character": "巡",
+            "x": 848,
+            "y": 196,
+            "litPixels": 590,
+            "metricArea": 1520,
+            "inkFraction": 0.3881579041481018
+        },
+        {
+            "character": "航",
+            "x": 916,
+            "y": 196,
+            "litPixels": 668,
+            "metricArea": 1640,
+            "inkFraction": 0.40731707215309145
+        },
+        {
+            "character": "速",
+            "x": 32,
+            "y": 132,
+            "litPixels": 700,
+            "metricArea": 1560,
+            "inkFraction": 0.44871795177459719
+        },
+        {
+            "character": "度",
+            "x": 100,
+            "y": 132,
+            "litPixels": 693,
+            "metricArea": 1600,
+            "inkFraction": 0.43312498927116396
+        },
+        {
+            "character": "目",
+            "x": 168,
+            "y": 132,
+            "litPixels": 598,
+            "metricArea": 1110,
+            "inkFraction": 0.5387387275695801
+        },
+        {
+            "character": "选",
+            "x": 236,
+            "y": 132,
+            "litPixels": 617,
+            "metricArea": 1600,
+            "inkFraction": 0.3856250047683716
+        },
+        {
+            "character": "择",
+            "x": 304,
+            "y": 132,
+            "litPixels": 638,
+            "metricArea": 1600,
+            "inkFraction": 0.3987500071525574
+        },
+        {
+            "character": "定",
+            "x": 372,
+            "y": 132,
+            "litPixels": 564,
+            "metricArea": 1600,
+            "inkFraction": 0.35249999165534975
+        },
+        {
+            "character": "位",
+            "x": 440,
+            "y": 132,
+            "litPixels": 539,
+            "metricArea": 1600,
+            "inkFraction": 0.33687499165534975
+        },
+        {
+            "character": "跟",
+            "x": 508,
+            "y": 132,
+            "litPixels": 724,
+            "metricArea": 1520,
+            "inkFraction": 0.47631579637527468
+        },
+        {
+            "character": "踪",
+            "x": 576,
+            "y": 132,
+            "litPixels": 683,
+            "metricArea": 1600,
+            "inkFraction": 0.4268749952316284
+        },
+        {
+            "character": "保",
+            "x": 644,
+            "y": 132,
+            "litPixels": 574,
+            "metricArea": 1680,
+            "inkFraction": 0.34166666865348818
+        },
+        {
+            "character": "存",
+            "x": 712,
+            "y": 132,
+            "litPixels": 563,
+            "metricArea": 1600,
+            "inkFraction": 0.3518750071525574
+        },
+        {
+            "character": "恢",
+            "x": 780,
+            "y": 132,
+            "litPixels": 634,
+            "metricArea": 1600,
+            "inkFraction": 0.39625000953674319
+        },
+        {
+            "character": "复",
+            "x": 848,
+            "y": 132,
+            "litPixels": 688,
+            "metricArea": 1600,
+            "inkFraction": 0.4300000071525574
+        },
+        {
+            "character": "中",
+            "x": 916,
+            "y": 132,
+            "litPixels": 443,
+            "metricArea": 1440,
+            "inkFraction": 0.30763888359069826
+        },
+        {
+            "character": "文",
+            "x": 32,
+            "y": 68,
+            "litPixels": 462,
+            "metricArea": 1600,
+            "inkFraction": 0.2887499928474426
+        },
+        {
+            "character": "输",
+            "x": 100,
+            "y": 68,
+            "litPixels": 722,
+            "metricArea": 1600,
+            "inkFraction": 0.45124998688697817
+        },
+        {
+            "character": "入",
+            "x": 168,
+            "y": 68,
+            "litPixels": 296,
+            "metricArea": 1520,
+            "inkFraction": 0.19473683834075929
+        }
+    ]
+}

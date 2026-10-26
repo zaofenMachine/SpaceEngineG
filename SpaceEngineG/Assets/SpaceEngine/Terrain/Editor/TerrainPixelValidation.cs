@@ -17,7 +17,7 @@ namespace SpaceEngine.Terrain.Editor
     {
         const int Size = 512, Layer = 28;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V030", "TerrainPixels", "terrain-pixels.json"));
+            "Artifacts", "V040", "TerrainPixels", "terrain-pixels.json"));
 
         [MenuItem("Space Engine/Validate Ground Terrain Pixels")]
         public static void ValidateGroundPixels() => ValidateGroundPixels(false);
@@ -43,7 +43,7 @@ namespace SpaceEngine.Terrain.Editor
                 material = new Material(Shader.Find("SpaceEngine/Terrain"));
                 string phase = material.HasProperty("_RenderUnitsPerMetre") ? "CameraRelativeGradients" : "OriginalDirectionNormals";
                 if(includeAtmosphere) phase=material.FindPass("DepthNormalsOnly")>=0?"DepthNormalsPresent":"MissingDepthNormals";
-                directory = Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V030",
+                directory = Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V040",
                     includeAtmosphere?"GroundAtmospherePixels":"GroundPixels",phase));
                 Directory.CreateDirectory(directory);
                 root = new GameObject("Temporary actual planetary ground fixture") { hideFlags = HideFlags.HideAndDontSave };
@@ -75,10 +75,10 @@ namespace SpaceEngine.Terrain.Editor
                 terrain.MaximumResidentPatches=1024;terrain.BuildsPerFrame=32;terrain.BuildBudgetMilliseconds=30;
                 terrain.MaterialMapResolution=1024;terrain.SunIntensity=1.5f;terrain.SunColor=Color.white;
                 terrain.Configure(planet,material);
-                for (int frame=0;frame<160;frame++)
+                for (int frame=0;frame<400;frame++)
                 {
-                    terrain.Tick(from,1,Vector3.zero,sun.ToVector3());
-                    if (terrain.PendingBuildCount==0 && terrain.MaxActiveLevel>=20) break;
+                    terrain.Tick(from,1,Vector3.zero,sun.ToVector3(),.1f);
+                    if (terrain.IsSettled && terrain.MaxActiveLevel>=20) break;
                 }
                 foreach (Renderer renderer in terrain.GetComponentsInChildren<Renderer>()) renderer.gameObject.layer=Layer;
                 report.planetRadiusMetres=planet.Radius;report.terrainSeed=planet.Seed;
@@ -149,7 +149,7 @@ namespace SpaceEngine.Terrain.Editor
                 if (depthMesh!=null) Object.DestroyImmediate(depthMesh);
                 if (target!=null) { target.Release();Object.DestroyImmediate(target); }
             }
-            if (directory==null) directory=Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V030","GroundPixels","Error"));
+            if (directory==null) directory=Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V040","GroundPixels","Error"));
             Directory.CreateDirectory(directory);report.checks=checks.ToArray();
             report.passed=string.IsNullOrEmpty(report.error)&&checks.Count==(includeAtmosphere?7:5)&&checks.TrueForAll(c=>c.passed);
             string path=Path.Combine(directory,"ground-pixels.json");string json=JsonUtility.ToJson(report,true);File.WriteAllText(path,json);

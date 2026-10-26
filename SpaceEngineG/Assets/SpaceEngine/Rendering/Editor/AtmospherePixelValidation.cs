@@ -175,7 +175,7 @@ namespace SpaceEngine.Rendering.Editor
                 if (target != null) { target.Release(); UnityEngine.Object.DestroyImmediate(target); }
             }
             report.checks = checks.ToArray();
-            string path = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Artifacts", "V030", "atmosphere-pixels.json"));
+            string path = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..", "Artifacts", "V040", "atmosphere-pixels.json"));
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
             if (report.passed) Debug.Log("Atmosphere GPU pixel validation passed: " + path);

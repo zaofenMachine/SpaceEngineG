@@ -33,8 +33,12 @@ MonoBehaviour:
   GalaxyExposure: 0.15
   GalaxyKernelScale: 0.5
   GalaxyVolumeExposure: 1
-  GalaxyResolutionScale: 0.5
-  GalaxyVolumeSamples: 96
+  GalaxyResolutionScale: 1
+  GalaxyVolumeSamples: 128
+  GalaxyInteriorSamples: 224
+  GalaxyDetailStrength: 1
+  GalaxyDetailScaleLy: 360
+  GalaxyNearDetailDistanceLy: 8000
   GalaxyInteriorExposure: 0.22
   GalaxyExteriorExposure: 1.6
   GalaxyContrast: 2
@@ -43,6 +47,8 @@ MonoBehaviour:
   GalaxyDustAttenuationLengthLy: 1200
   GalaxyLocalFadeLy: 100
   MaximumFlightSpeedLyPerSecond: 50000
+  ScrollSpeedFactor: 1.6
+  MouseLookSensitivity: 0.12
   GasBandContrast: 0.72
   GasStormStrength: 0.85
   GasLongitudeSegments: 384
@@ -68,6 +74,8 @@ MonoBehaviour:
   MeshBuildsPerFrame: 6
   MeshBuildBudgetMs: 5
   TerrainRefinement: 2.5
+  TerrainLodHysteresis: 0.2
+  TerrainLodTransitionSeconds: 0.35
   OrbitalMinimumLod: 3
   OrbitalDetailMinimumDegrees: 5
   SkirtDepthFactor: 0.08
@@ -102,3 +110,4 @@ MonoBehaviour:
   GalaxyVolumeMaterial: {fileID: 2100000, guid: 35ee45adb1345c84d90dc542305d06ff, type: 2}
   GalaxyVolumeCompositeMaterial: {fileID: 2100000, guid: b4da22aaf178f804da7c46099396fa95, type: 2}
   PlanetCloudMaterial: {fileID: 2100000, guid: 7b44467f349441b43907a37c5aeb6a23, type: 2}
+  OrbitMaterial: {fileID: 2100000, guid: 27f7f3e249070f84faabbd51756950df, type: 2}

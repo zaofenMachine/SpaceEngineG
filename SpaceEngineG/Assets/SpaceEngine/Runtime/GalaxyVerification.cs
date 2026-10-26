@@ -40,7 +40,7 @@ namespace SpaceEngine.Runtime
 #endif
             if(!requested)yield break;
             app=GetComponent<UniverseApp>();app.VerificationOwnsFlight=true;app.TimeRate=0;
-            int at=Array.IndexOf(args,"--evidence-path");output=at>=0&&at+1<args.Length?args[at+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V030/Galaxy"));
+            int at=Array.IndexOf(args,"--evidence-path");output=at>=0&&at+1<args.Length?args[at+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V040/Galaxy"));
             Directory.CreateDirectory(output);
             report=new Report{utc=DateTime.UtcNow.ToString("O"),version=Application.version,buildGuid=Application.buildGUID,unity=Application.unityVersion,
                 gpu=SystemInfo.graphicsDeviceName,api=SystemInfo.graphicsDeviceType.ToString(),seed=app.Settings.UniverseSeed,generationVersion=UniverseGenerator.GenerationVersion};

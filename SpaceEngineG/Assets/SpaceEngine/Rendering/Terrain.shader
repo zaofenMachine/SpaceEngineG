@@ -27,6 +27,8 @@ Shader "SpaceEngine/Terrain"
         [HideInInspector] _CameraAltitudeMetres ("Observer altitude", Float) = 1000000
         [HideInInspector] _RenderUnitsPerMetre ("Camera relative render scale", Float) = 1
         [HideInInspector] _PatchDetailAnchor ("Periodic physical detail anchor", Vector) = (0,0,0,0)
+        [HideInInspector] _LodMorph ("Parent triangle to geometric detail", Range(0,1)) = 1
+        [HideInInspector] _TerrainSampleMetres ("Morphed geometric sample spacing", Float) = 0
         [HideInInspector] _IsLava ("Lava body flag", Float) = 0
         [HideInInspector] _LavaSeed ("Lava seed low/high words", Vector) = (0,0,0,0)
         [HideInInspector] _PatchAnchor ("Patch anchor / radius, inverse radius", Vector) = (0,0,1,1)
@@ -56,6 +58,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
+                float _LodMorph, _TerrainSampleMetres;
             CBUFFER_END
             #include "TerrainSurface.hlsl"
 
@@ -65,6 +68,9 @@ Shader "SpaceEngine/Terrain"
                 float3 normalOS : NORMAL;
                 float4 color : COLOR;
                 float2 surfaceData : TEXCOORD1;
+                float4 parentData : TEXCOORD2;
+                float3 parentNormal : TEXCOORD3;
+                float4 parentColor : TEXCOORD4;
             };
             struct Varyings
             {
@@ -79,15 +85,19 @@ Shader "SpaceEngine/Terrain"
             Varyings Vert(Attributes input)
             {
                 Varyings output;
-                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                float3 positionOS = input.positionOS.xyz + input.parentData.xyz * (1 - _LodMorph);
+                float3 normalOS = lerp(input.parentNormal, input.normalOS, _LodMorph);
+                output.positionWS = TransformObjectToWorld(positionOS);
                 output.positionCS = TransformWorldToHClip(output.positionWS);
-                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                // Uniform terrain scale: leave interpolation unnormalised so
+                // child t=0 normals exactly reproduce the parent triangles.
+                output.normalWS = TransformObjectToWorldDir(normalOS, false);
                 // Bounded planet-relative coordinates are reconstructed from the double CPU anchor.
                 // Never subtract two large world-space floats to obtain a surface direction.
-                output.planetPosition = _PatchAnchor.xyz + input.positionOS.xyz * _PatchAnchor.w;
-                output.color = input.color;
-                output.detailPosition = input.positionOS.xyz + _PatchDetailAnchor.xyz;
-                output.rawHeight = input.surfaceData.x;
+                output.planetPosition = _PatchAnchor.xyz + positionOS * _PatchAnchor.w;
+                output.color = lerp(input.parentColor, input.color, _LodMorph);
+                output.detailPosition = positionOS + _PatchDetailAnchor.xyz;
+                output.rawHeight = lerp(input.parentData.w, input.surfaceData.x, _LodMorph);
                 return output;
             }
 
@@ -194,14 +204,16 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
+                float _LodMorph, _TerrainSampleMetres;
             CBUFFER_END
-            struct DepthNormalInput { float4 positionOS:POSITION;float3 normalOS:NORMAL; };
+            struct DepthNormalInput { float4 positionOS:POSITION;float3 normalOS:NORMAL;float4 parentData:TEXCOORD2;float3 parentNormal:TEXCOORD3; };
             struct DepthNormalOutput { float4 positionCS:SV_POSITION;float3 normalWS:TEXCOORD0; };
             DepthNormalOutput DepthNormalVert(DepthNormalInput input)
             {
                 DepthNormalOutput output;
-                output.positionCS=TransformObjectToHClip(input.positionOS.xyz);
-                output.normalWS=TransformObjectToWorldNormal(input.normalOS);
+                float3 positionOS=input.positionOS.xyz+input.parentData.xyz*(1-_LodMorph);
+                output.positionCS=TransformObjectToHClip(positionOS);
+                output.normalWS=TransformObjectToWorldDir(lerp(input.parentNormal,input.normalOS,_LodMorph),false);
                 return output;
             }
             struct DepthNormalFragmentOutput
@@ -244,10 +256,12 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
+                float _LodMorph, _TerrainSampleMetres;
             CBUFFER_END
-            float4 DepthVert(float4 positionOS : POSITION) : SV_POSITION
+            struct DepthInput { float4 positionOS:POSITION;float4 parentData:TEXCOORD2; };
+            float4 DepthVert(DepthInput input) : SV_POSITION
             {
-                return TransformObjectToHClip(positionOS.xyz);
+                return TransformObjectToHClip(input.positionOS.xyz+input.parentData.xyz*(1-_LodMorph));
             }
             half DepthFrag() : SV_Target { return 0; }
             ENDHLSL

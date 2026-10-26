@@ -1,0 +1,63 @@
+{
+    "utcTimestamp": "2026-10-26T19:54:07.6199196Z",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "Actual seed20261026 planet terrain at2m clearance with production AtmosphereRenderer. Reads camera-depth occupancy against the same opaque terrain and measures atmosphere-only horizontal row discontinuity. Includes the5 material precision checks; player screenshots still verify full composition.",
+    "error": "",
+    "cameraFromPlanet": "(989982.50519059808, 646182.87985739275, 5667211.4903275026)",
+    "passed": true,
+    "terrainSeed": 1295153162,
+    "maximumLod": 20,
+    "triangles": 80160,
+    "planetRadiusMetres": 5787295.104746511,
+    "materialCheckerResidual": 0.000012105044280730689,
+    "controlCheckerResidual": 6.731462830777052e-7,
+    "twoMillimetreDifference": 0.000021071262103807735,
+    "renderScaleDifference": 0.0,
+    "checks": [
+        {
+            "name": "Actual near-ground mesh reaches fine geometry",
+            "passed": true,
+            "measured": 80160.0,
+            "threshold": 1000.0
+        },
+        {
+            "name": "Near-ground radiance contains no NaN or infinity",
+            "passed": true,
+            "measured": 1.0,
+            "threshold": 1.0
+        },
+        {
+            "name": "Material avoids planetary-direction quantization noise",
+            "passed": true,
+            "measured": 0.000012105044280730689,
+            "threshold": 0.0020020194388492334
+        },
+        {
+            "name": "Two-millimetre camera translation remains visually continuous",
+            "passed": true,
+            "measured": 0.000021071262103807735,
+            "threshold": 0.015
+        },
+        {
+            "name": "Render scale retains physical material frequencies",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.005
+        },
+        {
+            "name": "Actual terrain populates camera depth used by atmosphere",
+            "passed": true,
+            "measured": 1.0,
+            "threshold": 0.98
+        },
+        {
+            "name": "Near-ground atmosphere has no reference-sea-level horizontal band",
+            "passed": true,
+            "measured": 0.000005354012512130502,
+            "threshold": 0.01
+        }
+    ],
+    "opaqueDepthCoverageFraction": 1.0,
+    "atmosphereMaximumHorizontalStep": 0.000005354012512130502
+}

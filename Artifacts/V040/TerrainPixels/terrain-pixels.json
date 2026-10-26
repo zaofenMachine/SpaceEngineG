@@ -1,0 +1,43 @@
+{
+    "utcTimestamp": "2026-10-26T19:54:06.5059665Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "512x512 floating-point URP shader renders/readbacks of an isolated flat chart. Controls compare 2 versus 8192 triangles, identical vertex colors, seed changes and metre-scale ground material. This isolates material correctness; it is not a substitute for real planet/player screenshots. Bake timing includes GPU completion/readback and fixture overhead, not gameplay frame time.",
+    "error": "",
+    "passed": true,
+    "bakeAndReadbackMilliseconds": 99.9795,
+    "materialMapBytes": 33554432,
+    "checks": [
+        {
+            "name": "Seed height and biomes draw a visible material",
+            "passed": true,
+            "measured": 147456.0,
+            "threshold": 30000.0
+        },
+        {
+            "name": "Material does not inherit a 2-triangle vertex color grid",
+            "passed": true,
+            "measured": 0.000032782925528193926,
+            "threshold": 0.003
+        },
+        {
+            "name": "Per-pixel geological material differs from identical vertex colors",
+            "passed": true,
+            "measured": 0.42256011514271249,
+            "threshold": 0.025
+        },
+        {
+            "name": "Changing geological seed changes visible coast and biomes",
+            "passed": true,
+            "measured": 0.09302727576178743,
+            "threshold": 0.012
+        },
+        {
+            "name": "Physical metre-scale ground detail survives without vertex color variation",
+            "passed": true,
+            "measured": 0.08303076120750187,
+            "threshold": 0.002
+        }
+    ]
+}

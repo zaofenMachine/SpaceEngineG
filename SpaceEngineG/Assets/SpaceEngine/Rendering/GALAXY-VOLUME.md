@@ -39,14 +39,53 @@ A separate 16-step optically thin outer-halo integral keeps the halo finite
 without diluting the disk budget. Outer-halo light is an approximation that
 does not receive the full foreground dust integration.
 
-`ResolutionScale` defaults to 0.5 in each dimension. `SampleCount` defaults to
-96 (range 32--192); 192 is the validation reference. `Exposure`, `DustStrength`,
+`ResolutionScale` defaults to 1 in each dimension. `SampleCount` defaults to
+128 (range 32--384); 256 is the exterior clarity reference. `Exposure`, `DustStrength`,
 `DustScaleHeightLy` and `DustAttenuationLengthLy` are explicit controls. The target
 uses half-float linear radiance and bilinear reconstruction. The far-depth draw
 tests the real opaque depth buffer, so it cannot cover a rendered planet.
 The subsequent atmospheric extinction pass attenuates this galactic background.
-Half-resolution sampling is suitable for broad volume structure; the retained
-local catalogue and small stellar accents provide fine points separately.
+Lower resolution remains an explicit performance control, but native resolution
+is the quality default. The retained local catalogue and small stellar accents
+provide fine points separately; increasing their size/brightness is not the
+solution to missing continuous galactic detail.
+
+### Native resolution and physical fine structure (v0.4)
+
+The v0.3 screenshots exhibited three different limits. A 1600x900 view integrated
+only 800x450 rays then bilinearly enlarged the image. The coarse three-octave
+cloud field had its finest significant scale near 300 ly with weak amplitude;
+the young arms were broad Gaussian profiles. Finally, embedded near-horizontal
+views spent uniform samples over tens of thousands of light years. Exterior
+96/192-step readbacks differed by only about 0.0003 mean absolute radiance, so
+adding exterior steps alone would not remove the soft density spectrum.
+
+v0.4 therefore adds a **distinct seeded physical frequency band**, not an image
+sharpening pass. `DetailScaleLy` defaults to 360 ly. Continuous domain-warped
+three-dimensional ridges describe narrow molecular filaments and correlated
+compact young stellar associations. `DetailStrength` defaults to 1 (0 disables
+the additional field for a controlled comparison). Their density/luminosity
+varies at their own galactic coordinates and therefore changes angular size and
+perspective when approaching an arm. Both pixel angular footprint and ray-step
+footprint smoothly attenuate unresolved frequencies to avoid sparkling noise.
+No giant stellar billboards or screen-space edge amplification are introduced.
+
+`InteriorSampleCount` defaults to 224 and is used as a minimum when embedded
+within the disk. `NearDetailDistanceLy` defaults to 8000 ly. A ray crossing that
+near-observer interval spends 65 percent of its available samples there and
+retains the other 35 percent for the distant disk. The thin-slab allocation is
+still applied first. `EffectiveSampleCount` reports the actual budget rather
+than the exterior setting. The six large-scale density components and catalogue
+admission model are unchanged.
+
+`Invalidate()` explicitly requests another integration at an unchanged observer;
+it exists for caller material changes and honest non-cached profiling. Cache
+reuse is still the default. Native resolution and the new field increase moving
+view cost; 120 FPS cached frames do not establish their GPU cost. The clarity
+fixture records its first allocation/integration/readback and three forced
+warm integrations separately. Shader caches may already be warm from earlier
+validation menus, which the report states explicitly. Player cold-start and
+moving-view frame intervals remain separate required measurements.
 
 `InteriorExposureMultiplier` defaults to 0.22, `ExteriorExposureMultiplier` to
 1.6, and `Contrast` to 2. These are explicit display controls. Exposure varies
@@ -72,7 +111,7 @@ cache reuse.
 ## Validation
 
 `Space Engine/Validate Galaxy Pixels` renders/readbacks 256-square HDR targets
-and saves controls under `Artifacts/V030/GalaxyPixels`. It checks visible
+and saves controls under `Artifacts/V040/GalaxyPixels`. It checks visible
 continuous exterior structure, deterministic caching, convergence from 96 to
 192 steps, thin edge-on projection, interior dust attenuation over a spatial
 area, seed changes, observer translation/perspective, finite empty exterior,
@@ -85,6 +124,16 @@ EditMode tests check owned resource lifecycle, geometric parameter upload and
 invalid configuration. Compiler support alone is not acceptance. The root
 validation also inspects full game and standalone screenshots for exterior,
 edge-on, inside-disk and planetary views.
+
+`Space Engine/Validate Galaxy Clarity` writes additional comparable GPU images
+and metrics under `Artifacts/V040/GalaxyClarity`. It holds the seed, observer,
+projection and exposure fixed for native, half-resolution and detail-disabled
+controls, then compares them to a double-image-resolution/double-quadrature
+reference. It measures spatial high-frequency contrast, reference error and
+isolated bright speckles together; increased noisy edge energy alone cannot
+pass. An observer close to the actual seeded arm tests that approaching it
+reveals finite physical detail. A separate embedded observer compares fine dust
+with its disabled control and a doubled near-field quadrature reference.
 
 ## Primary references and limits
 

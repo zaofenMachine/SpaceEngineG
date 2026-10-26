@@ -1,0 +1,85 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "511638c3aac64653b8f11a4f464a3621",
+    "status": "failed",
+    "mode": "EditMode",
+    "started_unix_ms": 1793043285331,
+    "finished_unix_ms": 1793043291970,
+    "last_update_unix_ms": 1793043291970,
+    "progress": {
+      "completed": 11,
+      "total": 11,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.ThresholdJitterKeepsExistingSplitCohortAndRoundTripRestoresSameSurface",
+      "last_finished_unix_ms": 1793043291843,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "run_in_background": true,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(3,5)",
+          "message": "  Expected: True\r\n  But was:  False\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(12,12)",
+          "message": "  Expected: True\r\n  But was:  False\r\n"
+        },
+        {
+          "full_name": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(19,8)",
+          "message": "  Expected: True\r\n  But was:  False\r\n"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 11,
+        "passed": 8,
+        "failed": 3,
+        "skipped": 0,
+        "durationSeconds": 2.2427251,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(3,5)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(3,5)",
+          "state": "Failed",
+          "durationSeconds": 0.006195,
+          "message": "  Expected: True\r\n  But was:  False\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs (System.Int32 level, System.Int32 requestedResolution) [0x001fa] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainLodContinuityTests.cs:41\r\n",
+          "output": ""
+        },
+        {
+          "name": "EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(12,12)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(12,12)",
+          "state": "Failed",
+          "durationSeconds": 0.0062218,
+          "message": "  Expected: True\r\n  But was:  False\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs (System.Int32 level, System.Int32 requestedResolution) [0x001fa] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainLodContinuityTests.cs:41\r\n",
+          "output": ""
+        },
+        {
+          "name": "EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(19,8)",
+          "fullName": "SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(19,8)",
+          "state": "Failed",
+          "durationSeconds": 0.0021169,
+          "message": "  Expected: True\r\n  But was:  False\r\n",
+          "stackTrace": "at SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs (System.Int32 level, System.Int32 requestedResolution) [0x001fa] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Terrain\\Tests\\TerrainLodContinuityTests.cs:41\r\n",
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

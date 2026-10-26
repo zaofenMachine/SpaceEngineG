@@ -6,7 +6,10 @@ Shader "SpaceEngine/GalaxyVolume"
         _DustStrength("Dust optical-depth multiplier",Range(0,5))=1.35
         _DustScaleHeightLy("Dust vertical scale height (ly)",Float)=220
         _DustAttenuationLengthLy("Dust attenuation length (ly)",Float)=1200
-        _SampleCount("Stellar volume quadrature budget",Int)=96
+        _SampleCount("Stellar volume quadrature budget",Int)=128
+        _DetailStrength("Physical fine dust and star-formation structure",Range(0,2))=1
+        _DetailScaleLy("Fine molecular-cloud cell scale (ly)",Float)=360
+        _NearDetailDistanceLy("Near-observer high-quality integration distance (ly)",Float)=8000
         _HaloRadiusLy("Finite stellar halo radius (ly)",Float)=160000
         _PopulationScale("Relative stellar number-density normalization",Float)=1
         _InteriorExposure("Inside-disk display exposure multiplier",Range(.01,2))=.22
@@ -33,6 +36,7 @@ Shader "SpaceEngine/GalaxyVolume"
                 float _Exposure,_DustStrength,_DustScaleHeightLy,_DustAttenuationLengthLy,_HaloRadiusLy,_PopulationScale;
                 float _InteriorExposure,_ExteriorExposure,_Contrast;
                 float _YoungArmStartBarFraction,_YoungArmFullBarFraction;
+                float _DetailStrength,_DetailScaleLy,_NearDetailDistanceLy;
                 int _SampleCount;
             CBUFFER_END
             struct Attributes { float3 positionOS:POSITION; float2 uv:TEXCOORD0; };
@@ -63,7 +67,7 @@ Shader "SpaceEngine/GalaxyVolume"
 
             // The six dimensionless component profiles mirror GalaxyModel.RawDensity.
             // Component colours and luminosity-per-star are display parameters, not a survey.
-            void Population(float3 p,out float3 emission,out float dust)
+            void Population(float3 p,float footprintLy,out float3 emission,out float dust)
             {
                 float radius=length(p.xz),height=abs(p.y),sphere=length(p);
                 emission=0;dust=0;
@@ -102,6 +106,26 @@ Shader "SpaceEngine/GalaxyVolume"
                     float armStart=_CentralScales.y*_YoungArmStartBarFraction;
                     float armFull=_CentralScales.y*max(_YoungArmFullBarFraction,_YoungArmStartBarFraction+.01);
                     arm*=smoothstep(armStart,armFull,radius);
+                    // Distinct physical frequency band: thin molecular filaments and
+                    // compact star-forming associations. These exist in galactic 3D
+                    // coordinates and reveal parallax as the observer approaches.
+                    // Pixel and integration footprints continuously remove frequencies
+                    // that cannot be resolved; no screen-space sharpening is applied.
+                    float detailScale=max(80,_DetailScaleLy);
+                    float resolved=saturate((detailScale-footprintLy)/(detailScale*.75))*_DetailStrength;
+                    if(resolved>.001)
+                    {
+                        float3 detailPoint=p/detailScale+_SeedOffset.xyz*2.17;
+                        detailPoint+=float3(.71,-.39,.93)*(clump-.5)*2.4;
+                        float fine=Noise(detailPoint);
+                        float filamentWidth=.025+min(.2,footprintLy/(detailScale*4));
+                        float filament=1-smoothstep(filamentWidth,filamentWidth+.075,abs(fine-.5));
+                        float association=smoothstep(.43,.78,Noise(detailPoint*.71+23.17));
+                        float fineDust=.3+2.65*filament*filament;
+                        float compactLight=.24+2.7*association*association;
+                        dust*=max(.05,lerp(1,fineDust,resolved));
+                        arm*=max(.05,lerp(1,compactLight,resolved));
+                    }
                     // Small warm hydrogen regions trace the same seeded three-dimensional field.
                     float nebula=smoothstep(.65,.82,clump)*arm;
                     emission+=float3(1,.25,.36)*nebula*.35;
@@ -136,7 +160,10 @@ Shader "SpaceEngine/GalaxyVolume"
                 [loop]for(int i=0;i<count;i++)
                 {
                     float3 emission;float density;
-                    Population(origin+direction*(start+(i+.5)*ds),emission,density);
+                    float distanceLy=start+(i+.5)*ds;
+                    float pixelFootprint=distanceLy*(_ViewShape.x*2/max(1,_ViewShape.w));
+                    float footprint=max(pixelFootprint,ds*.65);
+                    Population(origin+direction*distanceLy,footprint,emission,density);
                     float3 opticalDepth=float3(.58,.92,1.55)*density*_DustStrength*ds/max(1,_DustAttenuationLengthLy);
                     float3 segment=exp(-opticalDepth);
                     // Integrate constant emission/absorption analytically within each segment.
@@ -146,6 +173,21 @@ Shader "SpaceEngine/GalaxyVolume"
                     result+=transmittance*emission*ds*weight;
                     transmittance*=segment;
                 }
+            }
+            void MarchRange(float3 origin,float3 direction,float start,float end,int count,inout float3 result,inout float3 transmittance)
+            {
+                // Nearby dust dominates foreground extinction for an embedded
+                // observer. Resolve that finite physical region instead of wasting
+                // uniform samples over the entire far side of a 100 kly disk.
+                float split=clamp(_NearDetailDistanceLy,start,end);
+                if(count>=24&&start<_NearDetailDistanceLy&&split>start+1&&end>split+1)
+                {
+                    int nearCount=max(16,(int)(count*.65));
+                    nearCount=min(count-8,nearCount);
+                    March(origin,direction,start,split,nearCount,result,transmittance);
+                    March(origin,direction,split,end,count-nearCount,result,transmittance);
+                }
+                else March(origin,direction,start,end,count,result,transmittance);
             }
             float HaloDensity(float3 p)
             {
@@ -174,12 +216,12 @@ Shader "SpaceEngine/GalaxyVolume"
                         splitStart=clamp(min(a,b),start,end);splitEnd=clamp(max(a,b),start,end);
                     }
                     int outer=max(8,_SampleCount/5),inner=max(16,_SampleCount-outer*2);
-                    if(splitEnd-splitStart<.001||(splitStart==start&&splitEnd==end))March(origin,direction,start,end,_SampleCount,result,transmittance);
+                    if(splitEnd-splitStart<.001||(splitStart==start&&splitEnd==end))MarchRange(origin,direction,start,end,_SampleCount,result,transmittance);
                     else
                     {
-                        March(origin,direction,start,splitStart,outer,result,transmittance);
-                        March(origin,direction,splitStart,splitEnd,inner,result,transmittance);
-                        March(origin,direction,splitEnd,end,outer,result,transmittance);
+                        MarchRange(origin,direction,start,splitStart,outer,result,transmittance);
+                        MarchRange(origin,direction,splitStart,splitEnd,inner,result,transmittance);
+                        MarchRange(origin,direction,splitEnd,end,outer,result,transmittance);
                     }
                 }
                 // The very faint, optically thin outer stellar halo has a separate 16-step

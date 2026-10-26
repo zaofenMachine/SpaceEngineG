@@ -6,9 +6,9 @@ import subprocess
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 BUILD = ROOT / 'Builds' / ('Windows-v' + VERSION)
-OUT = ROOT / 'Artifacts' / 'V030'
+OUT = ROOT / 'Artifacts' / 'V040'
 ARCHIVE = ROOT / 'Builds' / ('SpaceEngineG-' + VERSION + '-windows-x64.zip')
 
 
@@ -38,13 +38,37 @@ def acceptance(folder, filename, collection, stage_key):
     return report
 
 
+def explorer_acceptance():
+    directory = OUT / 'PlayerExplorer'
+    report = load(directory / 'explorer-verification.json')
+    if not report['passed'] or report['errors'] or (directory / 'exit-code.txt').read_text().strip() != '0':
+        raise RuntimeError('Standalone explorer/continuous descent acceptance failed.')
+    if report['stationaryChanges'] or report['stationaryFrames'] < 100 or report['holdSeconds'] < 8:
+        raise RuntimeError('Both actual stationary holds must preserve settled terrain.')
+    if report['returnedPositionError'] >= .01 or len(report['frames']) < 100:
+        raise RuntimeError('Missing continuous return flight/position evidence.')
+    if len(report['screenshots']) < 9:
+        raise RuntimeError('Missing explorer and wall-time flight screenshots.')
+    for name in report['screenshots']:
+        screenshot = directory / name
+        if not screenshot.is_file() or screenshot.stat().st_size < 10000:
+            raise RuntimeError('Missing explorer rendered screenshot: ' + name)
+    capture = load(directory / 'capture-metadata.json')
+    if not capture['passed'] or capture['durationSeconds'] < 20 or not capture['capturedWindowTitle']:
+        raise RuntimeError('Missing actual player-window continuous video capture.')
+    if (directory / 'descent.mp4').stat().st_size < 1000000:
+        raise RuntimeError('Empty continuous flight video.')
+    return report, capture
+
+
 if __name__ == '__main__':
     flight = acceptance('PlayerFlight', 'runtime-verification.json', 'samples', 'stage')
     galaxy = acceptance('PlayerGalaxy', 'galaxy-verification.json', 'stages', 'name')
-    if flight['applicationVersion'] != VERSION or galaxy['version'] != VERSION:
+    explorer, capture = explorer_acceptance()
+    if flight['applicationVersion'] != VERSION or galaxy['version'] != VERSION or explorer['version'] != VERSION:
         raise RuntimeError('Evidence belongs to another player version.')
-    if flight['buildGuid'] != galaxy['buildGuid'] or not flight['buildGuid'].strip('0'):
-        raise RuntimeError('Both routes must use the same standalone build.')
+    if len({flight['buildGuid'],galaxy['buildGuid'],explorer['buildGuid']}) != 1 or not flight['buildGuid'].strip('0'):
+        raise RuntimeError('All three routes must use the same standalone build.')
     for mode in ('editmode', 'playmode'):
         if load(OUT / (mode + '-tests.json'))['data']['status'] != 'succeeded':
             raise RuntimeError('Unity tests must pass before packaging: ' + mode)
@@ -52,12 +76,14 @@ if __name__ == '__main__':
                  'TerrainPixels/terrain-pixels.json', 'CloudPixels/cloud-pixels.json',
                  'GroundPixels/ground-pixels.json', 'GasHorizonPixels/gas-horizon-pixels.json',
                  'GroundAtmospherePixels/ground-pixels.json',
-                 'GalaxyPixels/galaxy-pixels.json'):
+                 'GalaxyPixels/galaxy-pixels.json', 'GalaxyClarity/galaxy-clarity.json',
+                 'TerrainLodPixels/terrain-lod-pixels.json', 'ChineseGlyphPixels/glyph-pixels.json'):
         if not load(OUT / path)['passed']:
             raise RuntimeError('Graphics validation must pass: ' + path)
     if galaxy['movingViewFrames'] < 120 or galaxy['movingViewRecomputations'] < 118:
         raise RuntimeError('Galaxy performance evidence must include uncached moving-view frames.')
-    for name in ('SpaceEngineG.exe', 'UnityPlayer.dll', 'SpaceEngineG_Data/globalgamemanagers'):
+    for name in ('SpaceEngineG.exe', 'UnityPlayer.dll', 'SpaceEngineG_Data/globalgamemanagers',
+                 'ThirdPartyNotices/OFL-NotoSansCJK.txt', 'ThirdPartyNotices/NOTICE-NotoSansCJK.txt'):
         if not (BUILD / name).is_file():
             raise RuntimeError('Incomplete Unity player: ' + name)
     revision = (OUT / 'source-revision.txt').read_text().strip()
@@ -69,14 +95,17 @@ if __name__ == '__main__':
         for path in files:
             archive.write(path, 'SpaceEngineG/' + path.relative_to(BUILD).as_posix())
         archive.writestr('SpaceEngineG/START-HERE.txt',
-            'SpaceEngineG ' + VERSION + '\n\nRun SpaceEngineG.exe.\n'
-            'RMB: look; WASD: fly; Q/E: down/up; wheel: speed; Shift: boost.\n'
-            'G: continuous approach; R: ascent; F: frame body; Tab: next planet/moon.\n'
-            'T: frame star; N: nearby occupied system; M: galaxy overview; Home: home; B: central horizon.\n'
-            'F5/F9: save/restore generation-v2 flight; Esc: cancel navigation.\n'
-            'Gas/ice giants have no solid landing surface. Galaxy kernels represent 3D populations.\n'
-            'Legacy generation-v1 saves are retained for the 0.1.0 program.\n'
-            'Full controls are available in FLIGHT CONTROLS inside the program.\n')
+            'SpaceEngineG ' + VERSION + '\n\n运行 SpaceEngineG.exe。界面与帮助为中文。\n'
+            '右键拖动观察；WASD 飞行；Q/E 升降；Z/X 翻滚；滚轮或 +/- 调速；Shift 加速。\n'
+            '单击天体选择；F3 搜索/筛选；C 居中；Y 跟踪；Alt+右键环绕目标。\n'
+            'G 连续飞往并降落；R 连续上升；F 显式跳转观察；Tab 下一颗行星/卫星。\n'
+            'O 轨道开关；L 标签开关；V 恒星系总览；F2 天体详情。\n'
+            'F6 书签；Ctrl+B 保存书签；F7 截图。\n'
+            'T 恒星；N 跳转邻近恒星系；M 银河；Home 起点；B 中央视界参考面。\n'
+            'F5/F9 保存/恢复飞行；Esc 关闭面板或取消导航；Space 暂停时间；[ ] 调整时间倍率。\n'
+            '搜索涵盖当前恒星系和已解析邻域，可用单元地址扩展。\n'
+            '气态/冰巨行星没有固体降落面。生成版本仍为2，兼容原flight-v2存档。\n'
+            '第1代存档保留，请使用0.1.0读取。字体授权见ThirdPartyNotices。\n')
         archive.writestr('SpaceEngineG/SOURCE-REVISION.txt', revision + '\n')
     with zipfile.ZipFile(ARCHIVE) as archive:
         bad = archive.testzip()
@@ -91,7 +120,11 @@ if __name__ == '__main__':
         'unityPlayerSha256': digest(BUILD / 'UnityPlayer.dll'),
         'runtimeAssemblySha256': {name: digest(BUILD / 'SpaceEngineG_Data' / 'Managed' / (name + '.dll'))
             for name in ('SpaceEngine.Core', 'SpaceEngine.Terrain', 'SpaceEngine.Rendering', 'SpaceEngine.Runtime')},
-        'evidence': ['Artifacts/V030/PlayerFlight', 'Artifacts/V030/PlayerGalaxy'],
+        'evidence': ['Artifacts/V040/PlayerFlight', 'Artifacts/V040/PlayerGalaxy', 'Artifacts/V040/PlayerExplorer'],
+        'continuousVideo': {'path': 'Artifacts/V040/PlayerExplorer/descent.mp4',
+            'sha256': digest(OUT / 'PlayerExplorer/descent.mp4'), 'durationSeconds': capture['durationSeconds'],
+            'stationaryFrames': explorer['stationaryFrames'], 'stationaryChanges': explorer['stationaryChanges'],
+            'returnedPositionErrorMetres': explorer['returnedPositionError']},
         'notes': 'Source revision recorded before build. Screenshot review is documented separately. '
                  'Unity debug folders and PDBs remain locally but are excluded from this archive.'}
     (OUT / 'package-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

@@ -13,8 +13,12 @@ namespace SpaceEngine.Runtime
         [Range(0,8)] public float GalaxyExposure = .15f;
         [Range(.2f,5)] public float GalaxyKernelScale = .5f;
         [Range(0,8)] public float GalaxyVolumeExposure = 1;
-        [Range(.2f,1)] public float GalaxyResolutionScale = .5f;
-        [Range(32,192)] public int GalaxyVolumeSamples = 96;
+        [Range(.2f,1)] public float GalaxyResolutionScale = 1;
+        [Range(32,384)] public int GalaxyVolumeSamples = 128;
+        [Range(32,512)] public int GalaxyInteriorSamples = 224;
+        [Range(0,2)] public float GalaxyDetailStrength = 1;
+        [Range(80,1200)] public float GalaxyDetailScaleLy = 360;
+        [Range(1000,20000)] public float GalaxyNearDetailDistanceLy = 8000;
         [Range(.01f,2)] public float GalaxyInteriorExposure = .22f;
         [Range(.1f,4)] public float GalaxyExteriorExposure = 1.6f;
         [Range(1,3)] public float GalaxyContrast = 2;
@@ -23,6 +27,8 @@ namespace SpaceEngine.Runtime
         [Range(100,10000)] public float GalaxyDustAttenuationLengthLy = 1200;
         [Range(20,500)] public float GalaxyLocalFadeLy = 100;
         public double MaximumFlightSpeedLyPerSecond = 50000;
+        [Range(1.05f,3)] public float ScrollSpeedFactor=1.6f;
+        [Range(.01f,.5f)] public float MouseLookSensitivity=.12f;
         [Range(.1f,2)] public float GasBandContrast = .72f;
         [Range(0,1)] public float GasStormStrength = .85f;
         [Range(24,768)] public int GasLongitudeSegments = 384;
@@ -48,6 +54,8 @@ namespace SpaceEngine.Runtime
         [Range(1, 16)] public int MeshBuildsPerFrame = 6;
         [Range(1, 16)] public float MeshBuildBudgetMs = 5;
         [Range(.5f, 8)] public float TerrainRefinement = 2.5f;
+        [Range(0,.5f)] public float TerrainLodHysteresis=.2f;
+        [Range(.1f,1)] public float TerrainLodTransitionSeconds=.35f;
         [Range(0,5)] public int OrbitalMinimumLod = 3;
         [Range(1,45)] public float OrbitalDetailMinimumDegrees = 5;
         [Range(.005f,.2f)] public float SkirtDepthFactor = .08f;
@@ -67,5 +75,6 @@ namespace SpaceEngine.Runtime
         public Material TerrainMaterial, AtmosphereMaterial, StarMaterial, StarBillboardMaterial;
         public Material GalaxyMaterial,GasGiantMaterial,RingMaterial;
         public Material GalaxyVolumeMaterial,GalaxyVolumeCompositeMaterial,PlanetCloudMaterial;
+        public Material OrbitMaterial;
     }
 }

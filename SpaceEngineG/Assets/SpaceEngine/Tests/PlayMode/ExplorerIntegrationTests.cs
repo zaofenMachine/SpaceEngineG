@@ -21,7 +21,7 @@ namespace SpaceEngine.Tests.PlayMode
     /// Short engine integration checks. The separate rendered acceptance route owns
     /// the expensive full interstellar descent, screenshots and frame timing.
     /// </summary>
-    public sealed class ExplorerIntegrationTests
+    public sealed partial class ExplorerIntegrationTests
     {
         UniverseApp app;
         UniverseSettings settings;

@@ -88,8 +88,12 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
     // from the continuous 3D direction instead, avoiding a bright/blurred seam.
     float mapLod = max(0, log2(max(.0001, footprint / texelMetres)));
     float mapHeight = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, coordinates.xy, coordinates.z, mapLod).r;
+    // Material ownership follows the actual (morphed) mesh sample spacing.
+    // Camera altitude used to repaint the same stationary triangle while the
+    // observer descended. Coarse representations keep the seed-exact map;
+    // resolved geometry smoothly takes ownership together with its morph.
     float closeGeometry = (1 - smoothstep(.08, .4, footprint / texelMetres))
-        * (1 - smoothstep(texelMetres, texelMetres * 5, _CameraAltitudeMetres));
+        * (1 - smoothstep(texelMetres * .125, texelMetres * .75, _TerrainSampleMetres));
     float height = lerp(mapHeight, rawVertexHeight, closeGeometry);
     float normalizedHeight = height / max(1, _TerrainAmplitude);
     float latitude = abs(direction.y);

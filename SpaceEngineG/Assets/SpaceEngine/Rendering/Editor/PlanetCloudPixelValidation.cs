@@ -15,7 +15,7 @@ namespace SpaceEngine.Rendering.Editor
     {
         const int Size = 512, TestLayer = 29;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V030", "CloudPixels", "cloud-pixels.json"));
+            "Artifacts", "V040", "CloudPixels", "cloud-pixels.json"));
 
         [MenuItem("Space Engine/Validate Planet Cloud Pixels")]
         public static void ValidatePixels()

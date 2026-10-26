@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Globalization;
 using SpaceEngine.Core;
 using SpaceEngine.Rendering;
 using SpaceEngine.Terrain;
@@ -19,6 +20,9 @@ namespace SpaceEngine.Runtime
         public double TimeRate { get; set; } = 1;
         public double SpeedMultiplier { get; set; } = 1;
         public double Speed { get; private set; }
+        public double CruiseSpeed => Math.Min(PhysicalConstants.LightYear*Settings.MaximumFlightSpeedLyPerSecond,Math.Max(3,Math.Max(Altitude,0)*.5)*SpeedMultiplier);
+        public ExplorerTools Tools {get;private set;}
+        public bool RadialNavigationActive=>radialNavigation;
         public double Altitude { get; private set; }
         public double RenderScale { get; private set; }
         public int SelectedPlanet { get; private set; }
@@ -105,9 +109,11 @@ namespace SpaceEngine.Runtime
             nucleusObject.AddComponent<MeshFilter>().sharedMesh=starMesh;nucleusObject.AddComponent<MeshRenderer>().sharedMaterial=nucleusMaterial;
             LoadSystem(0,0,0);
             FramePlanet(0,Settings.InitialAltitude);
+            Tools=gameObject.AddComponent<ExplorerTools>();
             gameObject.AddComponent<ExplorerHud>();
             gameObject.AddComponent<FlightVerification>();
             gameObject.AddComponent<GalaxyVerification>();
+            gameObject.AddComponent<ExplorerVerification>();
         }
 
         Material Resolve(Material source,string shaderName)
@@ -144,6 +150,7 @@ namespace SpaceEngine.Runtime
                 terrain.MaximumVisiblePatches=Settings.TerrainPatchBudget;terrain.MaximumResidentPatches=Settings.TerrainPatchBudget*2;
                 terrain.BuildsPerFrame=Settings.MeshBuildsPerFrame;terrain.BuildBudgetMilliseconds=Settings.MeshBuildBudgetMs;
                 terrain.RefinementThreshold=Settings.TerrainRefinement;
+                terrain.LodHysteresis=Settings.TerrainLodHysteresis;terrain.LodTransitionSeconds=Settings.TerrainLodTransitionSeconds;
                 terrain.OrbitalMinimumLevel=Settings.OrbitalMinimumLod;terrain.OrbitalDetailMinimumDegrees=Settings.OrbitalDetailMinimumDegrees;
                 terrain.SkirtDepthFactor=Settings.SkirtDepthFactor;terrain.MinimumSkirtDepth=Settings.MinimumSkirtDepth;terrain.NormalSampleDistance=Settings.NormalSampleDistance;
                 terrain.Configure(System.Planets[i],terrainMaterial); Terrains[i]=terrain;
@@ -203,6 +210,22 @@ namespace SpaceEngine.Runtime
             ViewCamera.transform.rotation=orientation;
             radialNavigation=false;Speed=0;Navigation="FREE FLIGHT";
             UpdateTelemetry();
+            Tools?.SelectCurrentBody(SelectedPlanet);
+        }
+
+        public void SelectReferenceBody(int index)
+        {
+            SelectedPlanet=Math.Clamp(index,0,System.Planets.Length-1);GalaxyOverview=false;NucleusView=false;StellarView=false;StopNavigation();UpdateTelemetry();
+        }
+        public void MoveContinuously(UniversalPosition position,Quaternion rotation,double speed,string navigation)
+        {
+            GalaxyOverview=false;NucleusView=false;StellarView=false;
+            Observer=position;orientation=rotation;ViewCamera.transform.rotation=rotation;Speed=speed;Navigation=navigation;UpdateTelemetry();
+        }
+        public void AdjustSpeed(double notches)
+        {
+            SpeedMultiplier=FlightSpeedControl.Adjust(SpeedMultiplier,notches,Settings.ScrollSpeedFactor);
+            Notice="巡航速度："+ExplorerHud.Distance(CruiseSpeed)+"/秒（倍率 ×"+SpeedMultiplier.ToString("G3")+"）";
         }
 
         public double SurfaceHeight(Double3 direction)
@@ -229,9 +252,9 @@ namespace SpaceEngine.Runtime
             ViewCamera.transform.rotation=orientation;UpdateTelemetry();
         }
 
-        public void BeginDescent(){GalaxyOverview=false;NucleusView=false;StellarView=false;targetAltitude=FlightClearance;radialNavigation=true;Navigation=Planet.IsLandable?"CONTINUOUS DESCENT":"APPROACH CLOUD TOPS / NO SOLID SURFACE";}
-        public void BeginAscent(){GalaxyOverview=false;NucleusView=false;StellarView=false;targetAltitude=Planet.Radius*3;radialNavigation=true;Navigation="CONTINUOUS ASCENT";}
-        public void StopNavigation(){radialNavigation=false;Speed=0;Navigation="FREE FLIGHT";}
+        public void BeginDescent(){Tools?.StopTargetFlight();if(Tools!=null)Tools.TrackingTarget=false;GalaxyOverview=false;NucleusView=false;StellarView=false;targetAltitude=FlightClearance;radialNavigation=true;Navigation=Planet.IsLandable?"CONTINUOUS DESCENT":"APPROACH CLOUD TOPS / NO SOLID SURFACE";}
+        public void BeginAscent(){Tools?.StopTargetFlight();if(Tools!=null)Tools.TrackingTarget=false;GalaxyOverview=false;NucleusView=false;StellarView=false;targetAltitude=Planet.Radius*3;radialNavigation=true;Navigation="CONTINUOUS ASCENT";}
+        public void StopNavigation(){radialNavigation=false;Tools?.StopTargetFlight();Speed=0;Navigation="FREE FLIGHT";}
 
         public void AdvanceRadialFlight(double dt)
         {
@@ -267,6 +290,7 @@ namespace SpaceEngine.Runtime
                 if(Observer.RelativeTo(before).Length<Planet.Radius*50)
                     Observer=Observer.Add(PlanetPosition(SelectedPlanet).RelativeTo(before));
                 HandleInput(dt);
+                Tools?.TickMotion(dt);
                 AdvanceRadialFlight(dt);
                 ConstrainGround();
                 // Keep nearby navigation responsive. At extreme cruise speeds the galaxy field
@@ -283,40 +307,60 @@ namespace SpaceEngine.Runtime
         {
             var key=Keyboard.current;var mouse=Mouse.current;
             if(key==null)return;
-            if(key.escapeKey.wasPressedThisFrame){StopNavigation();Cursor.lockState=CursorLockMode.None;}
+            if(key.escapeKey.wasPressedThisFrame){StopNavigation();Tools?.StopTargetFlight();Tools?.ClosePanels();Cursor.lockState=CursorLockMode.None;}
             if(key.f1Key.wasPressedThisFrame)ShowHud=!ShowHud;
-            if(key.gKey.wasPressedThisFrame)BeginDescent();
+            if(key.f3Key.wasPressedThisFrame)Tools?.ToggleSearch();
+            if(key.f6Key.wasPressedThisFrame)Tools?.ToggleBookmarks();
+            var hud=GetComponent<ExplorerHud>();
+            if((Tools!=null&&Tools.CapturesInput)||(hud!=null&&hud.CapturesInput)){if(!radialNavigation)Speed=0;return;}
+            bool pointerUi=(Tools!=null&&Tools.PointerOverUI)||(hud!=null&&hud.PointerOverUI);
+            if(key.f2Key.wasPressedThisFrame&&Tools!=null)Tools.ShowDetails=!Tools.ShowDetails;
+            if(key.oKey.wasPressedThisFrame)Tools?.ToggleOrbits();
+            if(key.lKey.wasPressedThisFrame)Tools?.ToggleLabels();
+            if(key.cKey.wasPressedThisFrame&&!key.leftAltKey.isPressed&&!key.rightAltKey.isPressed)Tools?.CenterOnTarget();
+            if(key.yKey.wasPressedThisFrame)Tools?.ToggleTracking();
+            if(key.vKey.wasPressedThisFrame)Tools?.FrameSystem();
+            if(key.f7Key.wasPressedThisFrame)Tools?.CaptureScreenshot();
+            if(key.gKey.wasPressedThisFrame){if(Tools!=null&&Tools.Target!=null)Tools.StartTargetFlight();else BeginDescent();}
             if(key.rKey.wasPressedThisFrame)BeginAscent();
-            if(key.fKey.wasPressedThisFrame)FramePlanet(SelectedPlanet,Settings.InitialAltitude);
+            if(key.fKey.wasPressedThisFrame){if(Tools!=null&&Tools.Target!=null)Tools.FrameTarget();else FramePlanet(SelectedPlanet,Settings.InitialAltitude);}
             if(key.tabKey.wasPressedThisFrame)FramePlanet((SelectedPlanet+1)%System.Planets.Length,Settings.InitialAltitude);
             if(key.nKey.wasPressedThisFrame)JumpToNeighbour();
             if(key.mKey.wasPressedThisFrame)FrameGalaxy();
             if(key.homeKey.wasPressedThisFrame)ReturnHome();
-            if(key.bKey.wasPressedThisFrame)FrameNucleus();
+            if(key.bKey.wasPressedThisFrame){if(key.ctrlKey.isPressed)Tools?.AddBookmark();else FrameNucleus();}
             if(key.tKey.wasPressedThisFrame)FrameStar();
             if(key.f5Key.wasPressedThisFrame)SaveFlight();
             if(key.f9Key.wasPressedThisFrame)LoadFlight();
             if(key.spaceKey.wasPressedThisFrame)TimeRate=TimeRate==0?1:0;
+            if(key.numpadPlusKey.wasPressedThisFrame||key.equalsKey.wasPressedThisFrame)AdjustSpeed(1);
+            if(key.numpadMinusKey.wasPressedThisFrame||key.minusKey.wasPressedThisFrame)AdjustSpeed(-1);
+            if(key.rightBracketKey.wasPressedThisFrame)TimeRate=Math.Min(1e6,Math.Max(1,TimeRate)*10);
+            if(key.leftBracketKey.wasPressedThisFrame)TimeRate=Math.Max(.01,TimeRate/10);
             if(mouse!=null)
             {
-                SpeedMultiplier=Math.Clamp(SpeedMultiplier*Math.Pow(1.2,mouse.scroll.ReadValue().y/120),.0001,1e12);
-                if(mouse.rightButton.isPressed)
+                float wheel=mouse.scroll.ReadValue().y;
+                if(!pointerUi&&wheel!=0)AdjustSpeed(FlightSpeedControl.WheelNotches(wheel));
+                if(!pointerUi&&mouse.leftButton.wasPressedThisFrame)Tools?.PickAtScreen(mouse.position.ReadValue());
+                if(!pointerUi&&mouse.rightButton.isPressed)
                 {
                     Vector2 delta=mouse.delta.ReadValue();
-                    orientation=Quaternion.AngleAxis(delta.x*.12f,orientation*Vector3.up)*orientation*Quaternion.AngleAxis(-delta.y*.12f,Vector3.right);
+                    if(Tools!=null)Tools.TrackingTarget=false;
+                    if((key.leftAltKey.isPressed||key.rightAltKey.isPressed)&&Tools!=null)Tools.OrbitTarget(delta);
+                    else orientation=Quaternion.AngleAxis(delta.x*Settings.MouseLookSensitivity,orientation*Vector3.up)*orientation*Quaternion.AngleAxis(-delta.y*Settings.MouseLookSensitivity,Vector3.right);
                 }
             }
             float x=(key.dKey.isPressed?1:0)-(key.aKey.isPressed?1:0);
             float y=(key.eKey.isPressed?1:0)-(key.qKey.isPressed?1:0);
             float z=(key.wKey.isPressed?1:0)-(key.sKey.isPressed?1:0);
-            float roll=(key.cKey.isPressed?1:0)-(key.zKey.isPressed?1:0);
+            float roll=(key.xKey.isPressed?1:0)-(key.zKey.isPressed?1:0);
             orientation*=Quaternion.AngleAxis(-roll*(float)dt*45,Vector3.forward);
             if(x!=0||y!=0||z!=0)
             {
                 StopNavigation();
+                Tools?.StopTargetFlight();
                 Vector3 direction=orientation*new Vector3(x,y,z).normalized;
-                double baseSpeed=Math.Max(3,Math.Max(Altitude,0)*.5);
-                Speed=Math.Min(PhysicalConstants.LightYear*Settings.MaximumFlightSpeedLyPerSecond,baseSpeed*SpeedMultiplier*(key.leftShiftKey.isPressed?10:1));
+                Speed=Math.Min(PhysicalConstants.LightYear*Settings.MaximumFlightSpeedLyPerSecond,CruiseSpeed*(key.leftShiftKey.isPressed?10:1));
                 Observer=Observer.Add(Double3.FromVector3(direction)*Speed*dt);
             }
             else Speed=0;
@@ -333,6 +377,7 @@ namespace SpaceEngine.Runtime
 
         public void SelectNearestBody()
         {
+            if(Tools!=null&&Tools.IsFlyingToTarget)return;
             double best=CameraFromPlanet.Length;int selected=SelectedPlanet;
             for(int i=0;i<System.Planets.Length;i++)
             {
@@ -391,6 +436,7 @@ namespace SpaceEngine.Runtime
             StopNavigation();GalaxyOverview=false;NucleusView=false;StellarView=true;
             Double3 offset=new Double3(0,.3,1).Normalized*(System.StarRadius*6);
             SetObserver(System.Position.Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));
+            Tools?.Select(new CelestialTarget{X=CellX,Y=CellY,Z=CellZ,System=System});
             Notice="STELLAR REFERENCE / "+System.Kind+" / no relativistic lensing";
         }
         public void FrameGalaxy(bool edgeOn=false)
@@ -400,6 +446,13 @@ namespace SpaceEngine.Runtime
             var position=GalaxyModel.FromGalacticLy(viewpoint,Settings.Galaxy);
             SetObserver(position,Quaternion.LookRotation((-viewpoint).ToVector3(),Vector3.up));
             StreamNearestSystem();Notice=edgeOn?"GALACTIC EDGE / spatial disk thickness":"GALAXY OVERVIEW / M to frame / Home to return";
+        }
+        public void FrameSystem()
+        {
+            StopNavigation();Tools?.StopTargetFlight();GalaxyOverview=false;NucleusView=false;StellarView=false;
+            double extent=System.StarRadius*12;foreach(var body in System.Planets)if(!body.IsMoon)extent=Math.Max(extent,body.SemiMajorAxis*(1+body.Eccentricity));
+            Double3 offset=new Double3(0,.9,1).Normalized*extent*2.2;
+            SetObserver(System.Position.Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));Notice="恒星系轨道总览（快捷定位）";
         }
         public double NucleusRadius => 2*PhysicalConstants.GravitationalConstant*Settings.Galaxy.CentralMassSolarMasses*PhysicalConstants.SolarMass/(299792458d*299792458d);
         public void FrameNucleus()
@@ -461,6 +514,8 @@ namespace SpaceEngine.Runtime
             Galaxy.LocalFadeLy=Settings.GalaxyLocalFadeLy;Galaxy.Tick(Observer);
             GalacticLight.Exposure=Settings.GalaxyVolumeExposure;GalacticLight.ResolutionScale=Settings.GalaxyResolutionScale;
             GalacticLight.SampleCount=Settings.GalaxyVolumeSamples;GalacticLight.DustStrength=Settings.GalaxyDustStrength;
+            GalacticLight.InteriorSampleCount=Settings.GalaxyInteriorSamples;GalacticLight.DetailStrength=Settings.GalaxyDetailStrength;
+            GalacticLight.DetailScaleLy=Settings.GalaxyDetailScaleLy;GalacticLight.NearDetailDistanceLy=Settings.GalaxyNearDetailDistanceLy;
             GalacticLight.InteriorExposureMultiplier=Settings.GalaxyInteriorExposure;GalacticLight.ExteriorExposureMultiplier=Settings.GalaxyExteriorExposure;
             GalacticLight.Contrast=Settings.GalaxyContrast;
             GalacticLight.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;GalacticLight.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
@@ -482,12 +537,14 @@ namespace SpaceEngine.Runtime
         [Serializable] sealed class SaveData
         {
             public int Version=2,GenerationVersion=UniverseGenerator.GenerationVersion,Seed,PlanetIndex,ViewMode;public long CellX,CellY,CellZ;public UniversalPosition Position;public Quaternion Rotation;public double Time;public GalaxyDefinition Galaxy;
+            // JsonUtility's decimal double formatting need not round-trip every bit.
+            // Keep numeric Position for older v2 readers and exact local words for new saves.
+            public string[] ExactLocal;
         }
         public void SaveFlight()
         {
             string path=SavePath;
-            var save=new SaveData{Seed=Settings.UniverseSeed,CellX=CellX,CellY=CellY,CellZ=CellZ,PlanetIndex=SelectedPlanet,Position=Observer,Rotation=orientation,Time=SimulationTime,Galaxy=Settings.Galaxy,ViewMode=GalaxyOverview?1:NucleusView?2:StellarView?3:0};
-            string temporary=path+".tmp";File.WriteAllText(temporary,JsonUtility.ToJson(save,true));
+            string temporary=path+".tmp";File.WriteAllText(temporary,CaptureFlightState());
             if(File.Exists(path))File.Replace(temporary,path,path+".bak");else File.Move(temporary,path);
             Notice="Flight saved / F9 restore";
         }
@@ -495,13 +552,30 @@ namespace SpaceEngine.Runtime
         {
             string path=SavePath;
             if(!File.Exists(path)){Notice=File.Exists(Path.Combine(Application.persistentDataPath,"flight.json"))?"Generation v1 save retained; open it with the 0.1.0 build.":"No generation v2 saved flight";return;}
+            RestoreFlightState(File.ReadAllText(path));
+        }
+        public string CaptureFlightState()
+        {
+            return JsonUtility.ToJson(new SaveData{Seed=Settings.UniverseSeed,CellX=CellX,CellY=CellY,CellZ=CellZ,PlanetIndex=SelectedPlanet,Position=Observer,Rotation=orientation,Time=SimulationTime,Galaxy=Settings.Galaxy,
+                ExactLocal=new[]{Observer.local.x.ToString("R",CultureInfo.InvariantCulture),Observer.local.y.ToString("R",CultureInfo.InvariantCulture),Observer.local.z.ToString("R",CultureInfo.InvariantCulture)},ViewMode=GalaxyOverview?1:NucleusView?2:StellarView?3:0},true);
+        }
+        public bool RestoreFlightState(string state)
+        {
             try
             {
-                var save=JsonUtility.FromJson<SaveData>(File.ReadAllText(path));
+                var save=JsonUtility.FromJson<SaveData>(state);
                 if(save==null||save.Version!=2||save.GenerationVersion!=UniverseGenerator.GenerationVersion)throw new InvalidDataException("Unsupported save or world generation version");
                 if(save.ViewMode<0||save.ViewMode>3)throw new InvalidDataException("Unsupported reference view");
                 if(double.IsNaN(save.Time)||double.IsInfinity(save.Time))throw new InvalidDataException("Invalid simulation time");
-                var normalized=new UniversalPosition(save.Position.sectorX,save.Position.sectorY,save.Position.sectorZ,save.Position.local);
+                Double3 local=save.Position.local;
+                if(save.ExactLocal!=null)
+                {
+                    if(save.ExactLocal.Length!=3||!double.TryParse(save.ExactLocal[0],NumberStyles.Float,CultureInfo.InvariantCulture,out double lx)||
+                        !double.TryParse(save.ExactLocal[1],NumberStyles.Float,CultureInfo.InvariantCulture,out double ly)||
+                        !double.TryParse(save.ExactLocal[2],NumberStyles.Float,CultureInfo.InvariantCulture,out double lz))throw new InvalidDataException("Invalid exact local coordinate");
+                    local=new Double3(lx,ly,lz);
+                }
+                var normalized=new UniversalPosition(save.Position.sectorX,save.Position.sectorY,save.Position.sectorZ,local);
                 float qLength=save.Rotation.x*save.Rotation.x+save.Rotation.y*save.Rotation.y+save.Rotation.z*save.Rotation.z+save.Rotation.w*save.Rotation.w;
                 if(float.IsNaN(qLength)||float.IsInfinity(qLength)||qLength<.1f)throw new InvalidDataException("Invalid orientation");
                 if(save.Galaxy==null)throw new InvalidDataException("Missing galactic configuration");
@@ -512,9 +586,11 @@ namespace SpaceEngine.Runtime
                 SelectedPlanet=Math.Clamp(save.PlanetIndex,0,System.Planets.Length-1);
                 GalaxyOverview=save.ViewMode==1;NucleusView=save.ViewMode==2;StellarView=save.ViewMode==3;
                 SetObserver(normalized,save.Rotation.normalized);
+                Tools?.StopTargetFlight();if(Tools!=null)Tools.TrackingTarget=false;Tools?.SelectCurrentBody(SelectedPlanet);
                 Notice="Flight restored";
+                return true;
             }
-            catch(Exception ex){Notice="Restore failed: "+ex.Message;Debug.LogException(ex);}
+            catch(Exception ex){Notice="Restore failed: "+ex.Message;Debug.LogException(ex);return false;}
         }
 
         static Mesh CreateStarMesh()

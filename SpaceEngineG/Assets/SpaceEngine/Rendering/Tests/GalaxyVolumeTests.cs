@@ -37,6 +37,14 @@ namespace SpaceEngine.Rendering.Tests
                     "A 0.02 degree rotation is visible under slow movement and must not inherit Quaternion.operator== tolerance.");
                 volume.Tick(observer, camera);
                 Assert.That(volume.RenderRevision, Is.EqualTo(initialRevision + 1), "The resulting stationary view remains cacheable.");
+                volume.DetailStrength = .4f;
+                volume.Tick(observer, camera);
+                Assert.That(volume.RenderRevision, Is.EqualTo(initialRevision + 2), "Physical dust-detail controls must invalidate cached radiance.");
+                volume.Tick(observer, camera);
+                Assert.That(volume.RenderRevision, Is.EqualTo(initialRevision + 2));
+                volume.Invalidate();
+                volume.Tick(observer, camera);
+                Assert.That(volume.RenderRevision, Is.EqualTo(initialRevision + 3), "Profiling must be able to force a real integration at an unchanged viewpoint.");
             }
             finally
             {

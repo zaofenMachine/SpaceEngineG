@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "48098f953595401e993384229038fd75",
+    "status": "failed",
+    "mode": "PlayMode",
+    "started_unix_ms": 1793044163322,
+    "finished_unix_ms": 1793044170911,
+    "last_update_unix_ms": 1793044170911,
+    "progress": {
+      "completed": 22,
+      "total": 22,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup",
+      "last_finished_unix_ms": 1793044170906,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "run_in_background": true,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup",
+          "message": "  Expected: True\r\n  But was:  False\r\n"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "PlayMode",
+      "summary": {
+        "total": 22,
+        "passed": 21,
+        "failed": 1,
+        "skipped": 0,
+        "durationSeconds": 2.5539414,
+        "resultState": "Failed(Child)"
+      },
+      "results": [
+        {
+          "name": "ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup",
+          "fullName": "SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup",
+          "state": "Failed",
+          "durationSeconds": 0.082902,
+          "message": "  Expected: True\r\n  But was:  False\r\n",
+          "stackTrace": "at SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests+<ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup>d__4.MoveNext () [0x0012f] in F:\\Project\\SpaceEngineG\\SpaceEngineG\\Assets\\SpaceEngine\\Tests\\PlayMode\\ExplorerFeatureIntegrationTests.cs:96\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@1405238725ab\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\r\n",
+          "output": ""
+        }
+      ]
+    }
+  },
+  "hint": null
+}

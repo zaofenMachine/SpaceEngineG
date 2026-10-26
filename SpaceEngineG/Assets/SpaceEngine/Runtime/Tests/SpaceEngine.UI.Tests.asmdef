@@ -1,0 +1,8 @@
+{
+  "name": "SpaceEngine.UI.Tests",
+  "references": ["SpaceEngine.Core", "SpaceEngine.Runtime"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "autoReferenced": false
+}

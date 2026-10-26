@@ -33,7 +33,7 @@ namespace SpaceEngine.Runtime
             app=GetComponent<UniverseApp>();
             var args=Environment.GetCommandLineArgs();requested=Array.IndexOf(args,"--verify-flight")>=0;quit=Array.IndexOf(args,"--quit-after-verification")>=0;
             int index=Array.IndexOf(args,"--evidence-path");
-            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V030/Flight"));
+            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V040/Flight"));
 #if UNITY_EDITOR
             if(UnityEditor.SessionState.GetBool("SpaceEngine.VerifyFlight",false))
             {requested=true;UnityEditor.SessionState.SetBool("SpaceEngine.VerifyFlight",false);}
@@ -79,12 +79,13 @@ namespace SpaceEngine.Runtime
                 frameTimes.Add(Time.unscaledDeltaTime*1000);
             }
             Check(app.Navigation.StartsWith("LANDED")&&app.Speed==0,"Descent completes its landed navigation state and stops reported motion");
-            yield return Settle(180);
+            yield return SettleTerrain();
             yield return Capture("05-surface");
             Check(app.Altitude>=app.Settings.MinimumClearance-.001&&app.Altitude<app.Settings.MinimumClearance+.1,"Continuous route reaches terrain clearance without penetration");
             Check(orbit&&approach&&low,"All interstellar / orbit / atmosphere / low-altitude milestones were crossed");
             Check(app.MaxLod>=17,"Surface terrain refines to LOD >=17 on an Earth-size planet");
             Check(app.ActiveTriangles>1000,"Procedural terrain geometry is rendered");
+            Check(app.Terrains[app.SelectedPlanet].IsSettled,"Surface geometry and LOD morphs converge before the final capture");
             Check(app.ActivePatches<=app.Settings.TerrainPatchBudget*app.System.Planets.Length+24,"Terrain active patches stay within aggregate streaming budgets");
             var basePosition=app.Observer;
             app.SetObserver(basePosition.Add(new Double3(.01,0,0)),app.ViewCamera.transform.rotation);
@@ -106,6 +107,12 @@ namespace SpaceEngine.Runtime
             if(quit){yield return new WaitForSecondsRealtime(1);Application.Quit(report.passed?0:2);}
         }
         IEnumerator Settle(int frames){for(int i=0;i<frames;i++)yield return null;}
+        IEnumerator SettleTerrain()
+        {
+            double deadline=Time.realtimeSinceStartupAsDouble+18;
+            for(int i=0;i<30;i++)yield return null;
+            while(!app.Terrains[app.SelectedPlanet].IsSettled&&Time.realtimeSinceStartupAsDouble<deadline)yield return null;
+        }
         IEnumerator Capture(string name)
         {
             yield return new WaitForEndOfFrame();

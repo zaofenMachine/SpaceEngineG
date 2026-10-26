@@ -19,8 +19,12 @@ namespace SpaceEngine.Rendering
         [Range(.1f, 4)] public float ExteriorExposureMultiplier = 1.6f;
         [Range(1, 3)] public float Contrast = 2;
         [Range(0, 5)] public float DustStrength = 1.35f;
-        [Range(.2f, 1)] public float ResolutionScale = .5f;
-        [Range(32, 192)] public int SampleCount = 96;
+        [Range(.2f, 1)] public float ResolutionScale = 1;
+        [Range(32, 384)] public int SampleCount = 128;
+        [Range(32, 512)] public int InteriorSampleCount = 224;
+        [Range(0, 2)] public float DetailStrength = 1;
+        [Range(80, 1500)] public float DetailScaleLy = 360;
+        [Range(1000, 20000)] public float NearDetailDistanceLy = 8000;
         [Min(10)] public float DustScaleHeightLy = 220;
         [Min(1)] public float DustAttenuationLengthLy = 1200;
         public bool ShowVolume = true;
@@ -29,6 +33,7 @@ namespace SpaceEngine.Rendering
         public int RenderRevision { get; private set; }
         public RenderTexture RadianceTexture => radiance;
         public float LastSubmissionMilliseconds { get; private set; }
+        public int EffectiveSampleCount { get; private set; }
 
         Material integration, composite;
         RenderTexture radiance;
@@ -38,9 +43,13 @@ namespace SpaceEngine.Rendering
         Quaternion previousRotation;
         float previousFov, previousAspect, previousExposure, previousDust, previousDustHeight, previousDustLength;
         float previousInteriorExposure, previousExteriorExposure, previousContrast;
+        float previousDetailStrength, previousDetailScale, previousNearDistance;
         int previousSamples;
         int previousDefinitionHash;
         bool dirty;
+
+        /// <summary>Explicitly refresh after caller-owned material edits, or for a non-cached profiling sample.</summary>
+        public void Invalidate() { dirty = true; }
 
         public void Configure(GalaxyDefinition definition, Material source = null, Material compositeSource = null)
         {
@@ -93,7 +102,10 @@ namespace SpaceEngine.Rendering
             }
             Vector3 galacticObserver = GalaxyModel.ToGalacticLy(observer, Definition).ToVector3();
             Quaternion rotation = camera.transform.rotation;
-            int samples = Mathf.Clamp(SampleCount, 32, 192);
+            bool embedded = Math.Abs(galacticObserver.y) < Definition.ThickDiskHeightLy * 2 &&
+                Math.Sqrt((double)galacticObserver.x * galacticObserver.x + (double)galacticObserver.z * galacticObserver.z) < Definition.RadiusLy * 1.1;
+            int samples = Mathf.Clamp(embedded ? Math.Max(SampleCount, InteriorSampleCount) : SampleCount, 32, 512);
+            EffectiveSampleCount = samples;
             int definitionHash = DefinitionFingerprint(Definition);
             // Quaternion.operator== deliberately treats rotations within about 0.16 degrees
             // as equal. That is several display pixels and stalls a slowly moving sky.
@@ -103,6 +115,7 @@ namespace SpaceEngine.Rendering
                 Exposure == previousExposure && DustStrength == previousDust && samples == previousSamples &&
                 InteriorExposureMultiplier == previousInteriorExposure && ExteriorExposureMultiplier == previousExteriorExposure &&
                 Contrast == previousContrast &&
+                DetailStrength == previousDetailStrength && DetailScaleLy == previousDetailScale && NearDetailDistanceLy == previousNearDistance &&
                 DustScaleHeightLy == previousDustHeight && DustAttenuationLengthLy == previousDustLength &&
                 definitionHash == previousDefinitionHash) return;
 
@@ -121,6 +134,9 @@ namespace SpaceEngine.Rendering
             integration.SetFloat("_DustScaleHeightLy", Mathf.Max(10, DustScaleHeightLy));
             integration.SetFloat("_DustAttenuationLengthLy", Mathf.Max(1, DustAttenuationLengthLy));
             integration.SetInt("_SampleCount", samples);
+            integration.SetFloat("_DetailStrength", Mathf.Clamp(DetailStrength, 0, 2));
+            integration.SetFloat("_DetailScaleLy", Mathf.Max(80, DetailScaleLy));
+            integration.SetFloat("_NearDetailDistanceLy", Mathf.Max(1000, NearDetailDistanceLy));
             RenderTexture previousTarget = RenderTexture.active;
             Graphics.Blit(Texture2D.blackTexture, radiance, integration, 0);
             RenderTexture.active = previousTarget;
@@ -131,6 +147,7 @@ namespace SpaceEngine.Rendering
             previousExposure = Exposure; previousDust = DustStrength; previousSamples = samples;
             previousInteriorExposure = InteriorExposureMultiplier; previousExteriorExposure = ExteriorExposureMultiplier;
             previousContrast = Contrast;
+            previousDetailStrength = DetailStrength; previousDetailScale = DetailScaleLy; previousNearDistance = NearDetailDistanceLy;
             previousDustHeight = DustScaleHeightLy; previousDustLength = DustAttenuationLengthLy;
             previousDefinitionHash = definitionHash;
             dirty = false;

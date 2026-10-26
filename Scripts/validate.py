@@ -9,7 +9,7 @@ import time
 from unity_rpc import rpc
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUT = ROOT / 'Artifacts' / 'V030'
+OUT = ROOT / 'Artifacts' / 'V040'
 
 def call(name, arguments):
     envelope = rpc('tools/call', {'name': name, 'arguments': arguments})
@@ -48,7 +48,10 @@ def graphics():
                           ('Space Engine/Validate Ground Atmosphere Pixels','GroundAtmospherePixels/ground-pixels.json'),
                           ('Space Engine/Validate Planet Cloud Pixels','CloudPixels/cloud-pixels.json'),
                           ('Space Engine/Validate Gas Horizon Pixels','GasHorizonPixels/gas-horizon-pixels.json'),
-                          ('Space Engine/Validate Galaxy Pixels','GalaxyPixels/galaxy-pixels.json')]:
+                          ('Space Engine/Validate Galaxy Pixels','GalaxyPixels/galaxy-pixels.json'),
+                          ('Space Engine/Validate Galaxy Clarity','GalaxyClarity/galaxy-clarity.json'),
+                          ('Space Engine/Validate Terrain LOD Pixels','TerrainLodPixels/terrain-lod-pixels.json'),
+                          ('Space Engine/Validate Chinese Glyph Pixels','ChineseGlyphPixels/glyph-pixels.json')]:
         call('execute_menu_item', {'menu_path':menu})
         result=json.loads((OUT/filename).read_text(encoding='utf-8-sig'))
         print(filename,'PASS' if result['passed'] else 'FAIL',flush=True)
@@ -84,16 +87,33 @@ def galaxy():
         time.sleep(2)
     raise TimeoutError('Galaxy expedition did not finish.')
 
+def explorer():
+    path=OUT/'Explorer'/'explorer-verification.json'
+    old=path.stat().st_mtime_ns if path.exists() else 0
+    call('manage_editor', {'action':'stop'})
+    call('execute_menu_item', {'menu_path':'Space Engine/Run Explorer Feature Acceptance'})
+    deadline=time.monotonic()+240
+    while time.monotonic()<deadline:
+        if path.exists() and path.stat().st_mtime_ns>old:
+            result=json.loads(path.read_text(encoding='utf-8-sig'))
+            print('Explorer features','PASS' if result['passed'] else 'FAIL',flush=True)
+            if not result['passed']:raise RuntimeError('Explorer feature route failed; inspect report.')
+            return
+        time.sleep(2)
+    raise TimeoutError('Explorer feature route did not finish.')
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tests',action='store_true')
     parser.add_argument('--graphics',action='store_true')
     parser.add_argument('--flight',action='store_true')
     parser.add_argument('--galaxy',action='store_true')
+    parser.add_argument('--explorer',action='store_true')
     args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     if args.tests: tests('EditMode');tests('PlayMode')
     if args.graphics:graphics()
     if args.flight:flight()
     if args.galaxy:galaxy()
+    if args.explorer:explorer()
     if not any(vars(args).values()):parser.print_help()

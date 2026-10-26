@@ -7,6 +7,13 @@ using UnityEngine.Rendering;
 
 namespace SpaceEngine.Terrain
 {
+    public readonly struct TerrainPatchState
+    {
+        public readonly TerrainPatchKey Key;
+        public readonly float Morph;
+        public TerrainPatchState(TerrainPatchKey key, float morph) { Key = key; Morph = morph; }
+    }
+
     /// <summary>
     /// Budgeted cube-sphere quadtree. A complete parent remains visible until
     /// every visible child has a mesh. All positions are camera relative in
@@ -23,6 +30,10 @@ namespace SpaceEngine.Terrain
         [Range(.2f, 30)] public float BuildBudgetMilliseconds = 6;
         [Tooltip("Refine when patch width divided by closest surface distance exceeds this value.")]
         [Range(.5f, 12)] public float RefinementThreshold = 2.5f;
+        [Tooltip("A split tile merges only below this fractional distance margin. Preserves the selected tree near thresholds and leaf-budget ties.")]
+        [Range(0, .45f)] public float LodHysteresis = .2f;
+        [Tooltip("Seconds for a reversible parent-triangle to child-detail transition. Zero is an explicit diagnostic control.")]
+        [Range(0, 2)] public float LodTransitionSeconds = .25f;
         [Range(.005f, .2f)] public float SkirtDepthFactor = .08f;
         [Range(.25f, 100)] public float MinimumSkirtDepth = 4f;
         [Tooltip("Normal finite-difference probe distance in physical metres, independent of LOD and planet radius.")]
@@ -54,6 +65,9 @@ namespace SpaceEngine.Terrain
         public double LastBuildMilliseconds { get; private set; }
         public double LastSelectionMilliseconds { get; private set; }
         public int DesiredPatchCount { get; private set; }
+        public int TransitioningPatchCount { get; private set; }
+        public int LodSwitchesThisFrame { get; private set; }
+        public bool IsSettled => PendingBuildCount == 0 && TransitioningPatchCount == 0;
         public PlanetDefinition Definition => definition;
 
         sealed class Patch
@@ -64,8 +78,10 @@ namespace SpaceEngine.Terrain
             public GameObject Object;
             public Mesh Mesh;
             public MeshRenderer Renderer;
+            public TerrainPatchMesh Payload;
             public int Triangles;
-            public bool Desired, Split;
+            public bool Desired, Split, WasSplit, ChildrenVisible;
+            public float ChildrenMorph, RenderMorph;
             public int LastNeeded;
         }
 
@@ -86,6 +102,7 @@ namespace SpaceEngine.Terrain
         bool orbitalDetail;
         TerrainMaterialMap surfaceMap;
         bool materialBakeAttempted;
+        float transitionDeltaTime;
 
         public void Configure(PlanetDefinition planetDefinition, Material terrainMaterial)
         {
@@ -108,10 +125,13 @@ namespace SpaceEngine.Terrain
             gameObject.name = $"Terrain - {definition.Name}";
         }
 
-        public void Tick(Double3 cameraFromPlanetMeters, double renderScale, Vector3 planetCenterRender, Vector3 sunDirection)
+        public void Tick(Double3 cameraFromPlanetMeters, double renderScale, Vector3 planetCenterRender, Vector3 sunDirection,
+            float elapsedSeconds = -1)
         {
             if (!configured || material == null || renderScale <= 0 || double.IsNaN(renderScale)) return;
             tick++;
+            transitionDeltaTime = elapsedSeconds >= 0 ? elapsedSeconds : Application.isPlaying ? Time.unscaledDeltaTime : 1f / 60;
+            transitionDeltaTime = Mathf.Clamp(transitionDeltaTime, 0, .1f);
             cameraPosition = cameraFromPlanetMeters;
             // Lazy allocation: distant/unloaded bodies never reserve high-resolution
             // material memory. Dispatch precedes drawing on the same graphics queue.
@@ -130,12 +150,23 @@ namespace SpaceEngine.Terrain
             stopwatch.Restart();
             foreach (Patch patch in patches.Values)
             {
-                patch.Desired = false; patch.Split = false;
+                patch.Desired = false; patch.WasSplit = patch.Split; patch.Split = false;
                 if (patch.Renderer != null) patch.Renderer.enabled = false;
             }
             SelectDesired();
             LastSelectionMilliseconds = stopwatch.Elapsed.TotalMilliseconds;
             BuildPending();
+            LodSwitchesThisFrame = 0;
+            for (int face = 0; face < 6; face++)
+            {
+                if (!patches.TryGetValue(new TerrainPatchKey(face, 0, 0, 0), out Patch root)) continue;
+                if (root.Desired) UpdateTransitions(root, true);
+                else ResetTransitions(root);
+            }
+            TransitioningPatchCount = 0;
+            foreach (Patch patch in patches.Values)
+                if ((patch.Desired && patch.Split && (!patch.ChildrenVisible || patch.ChildrenMorph < 1))
+                    || (patch.ChildrenVisible && !patch.Split)) TransitioningPatchCount++;
             properties.SetVector(sunDirectionId, sunDirection.normalized);
             properties.SetFloat("_SunIntensity",SunIntensity);
             properties.SetColor("_SunColor",SunColor);
@@ -152,7 +183,7 @@ namespace SpaceEngine.Terrain
             {
                 var key = new TerrainPatchKey(face, 0, 0, 0);
                 if (patches.TryGetValue(key, out Patch root) && root.Desired)
-                    RenderReady(root, renderScale);
+                    RenderReady(root, renderScale, 1);
             }
             EvictUnused();
         }
@@ -160,8 +191,10 @@ namespace SpaceEngine.Terrain
         void SelectDesired()
         {
             double cameraDistance = cameraPosition.Length;
-            orbitalDetail = cameraDistance > definition.Radius * 1.1 &&
-                2 * Math.Asin(Math.Min(1, definition.Radius / cameraDistance)) >= OrbitalDetailMinimumDegrees * Math.PI / 180;
+            // The orbital floor is also useful during approach. The former
+            // altitude>0.1R hard gate collapsed an entire cohort at that height.
+            double angularDegrees = 2 * Math.Asin(Math.Min(1, definition.Radius / Math.Max(1, cameraDistance))) * 180 / Math.PI;
+            orbitalDetail = angularDegrees >= OrbitalDetailMinimumDegrees * (orbitalDetail ? 1 - LodHysteresis : 1);
             frontier.Clear();
             for (int face = 0; face < 6; face++)
             {
@@ -182,8 +215,10 @@ namespace SpaceEngine.Terrain
                 for (int i = 0; i < frontier.Count; i++)
                 {
                     Patch candidate = frontier[i];
-                    if (candidate.Key.Level >= MaximumLevel || candidate.Priority <= RefinementThreshold) continue;
-                    if (best == null || candidate.Priority > best.Priority)
+                    double retainedPriority = candidate.Priority / (candidate.WasSplit ? 1 - Mathf.Clamp(LodHysteresis, 0, .45f) : 1);
+                    if (candidate.Key.Level >= MaximumLevel || retainedPriority <= RefinementThreshold) continue;
+                    double bestPriority = best == null ? 0 : best.Priority / (best.WasSplit ? 1 - Mathf.Clamp(LodHysteresis, 0, .45f) : 1);
+                    if (best == null || retainedPriority > bestPriority)
                     {
                         best = candidate; bestIndex = i;
                     }
@@ -194,9 +229,10 @@ namespace SpaceEngine.Terrain
                 for (int childIndex = 0; childIndex < 4; childIndex++)
                 {
                     Patch child = GetPatch(best.Key.Child(childIndex));
-                    if (!Visible(child)) continue;
+                    // Build a complete sibling cohort, including the culled
+                    // siblings, so a reversible transition always has coverage.
                     Require(child);
-                    frontier.Add(child);
+                    if (Visible(child)) frontier.Add(child);
                 }
             }
             DesiredPatchCount = frontier.Count;
@@ -265,6 +301,9 @@ namespace SpaceEngine.Terrain
                 if (BuiltThisFrame > 0 && stopwatch.Elapsed.TotalMilliseconds >= BuildBudgetMilliseconds) break;
                 Patch patch = pending[i];
                 TerrainPatchMesh payload = TerrainPatchMesh.Build(patch.Key, definition, PatchResolution, SkirtDepthFactor, NormalSampleDistance, MinimumSkirtDepth);
+                if (patch.Key.Level > 0 && patches.TryGetValue(new TerrainPatchKey(patch.Key.Face, patch.Key.Level - 1,
+                    patch.Key.X / 2, patch.Key.Y / 2), out Patch parent)) payload.SetParent(patch.Key, parent.Payload);
+                patch.Payload = payload;
                 patch.Anchor = payload.Anchor;
                 patch.Mesh = new Mesh { name = $"{definition.Name} {patch.Key}", indexFormat = IndexFormat.UInt16 };
                 patch.Mesh.vertices = payload.Vertices;
@@ -272,9 +311,12 @@ namespace SpaceEngine.Terrain
                 patch.Mesh.colors = payload.Colors;
                 patch.Mesh.uv = payload.UV;
                 patch.Mesh.uv2 = payload.SurfaceData;
+                patch.Mesh.SetUVs(2, new List<Vector4>(payload.ParentData));
+                patch.Mesh.SetUVs(3, new List<Vector3>(payload.ParentNormals));
+                patch.Mesh.SetUVs(4, new List<Vector4>(payload.ParentColors));
                 patch.Mesh.triangles = payload.Triangles;
                 patch.Triangles = payload.Triangles.Length / 3;
-                patch.Mesh.RecalculateBounds();
+                patch.Mesh.bounds = payload.MorphBounds;
                 patch.Object = new GameObject(patch.Mesh.name);
                 patch.Object.transform.SetParent(transform, false);
                 var filter = patch.Object.AddComponent<MeshFilter>();
@@ -290,21 +332,63 @@ namespace SpaceEngine.Terrain
             LastBuildMilliseconds = stopwatch.Elapsed.TotalMilliseconds;
         }
 
-        void RenderReady(Patch patch, double scale)
+        void UpdateTransitions(Patch patch, bool allowRefinement)
         {
-            bool childrenReady = patch.Split;
-            if (childrenReady)
+            bool wantChildren = patch.Desired && patch.Split && allowRefinement;
+            bool started = false;
+            bool ready = true;
+            for (int i = 0; i < 4; i++)
+                if (!patches.TryGetValue(patch.Key.Child(i), out Patch child) || child.Mesh == null) { ready = false; break; }
+            if (!patch.ChildrenVisible)
             {
-                for (int i = 0; i < 4; i++)
+                if (wantChildren && ready)
                 {
-                    if (!patches.TryGetValue(patch.Key.Child(i), out Patch child) || !child.Desired) continue;
-                    if (child.Mesh == null) { childrenReady = false; break; }
+                    patch.ChildrenVisible = true;
+                    patch.ChildrenMorph = LodTransitionSeconds <= 0 ? 1 : 0;
+                    started = LodTransitionSeconds > 0;
+                    LodSwitchesThisFrame++;
                 }
+                else return;
             }
-            if (childrenReady)
+            // Refine top-down; merge bottom-up. No child starts from a parent
+            // whose own geometry is still moving toward an ancestor.
+            bool descendantsCollapsed = true;
+            for (int i = 0; i < 4; i++)
             {
+                if (!patches.TryGetValue(patch.Key.Child(i), out Patch child)) continue;
+                child.LastNeeded = tick;
+                UpdateTransitions(child, wantChildren && patch.ChildrenMorph >= 1);
+                if (child.ChildrenVisible) descendantsCollapsed = false;
+            }
+            if (!started && (wantChildren || descendantsCollapsed))
+            {
+                float step = LodTransitionSeconds <= 0 ? 1 : transitionDeltaTime / LodTransitionSeconds;
+                patch.ChildrenMorph = Mathf.MoveTowards(patch.ChildrenMorph, wantChildren ? 1 : 0, step);
+            }
+            if (!wantChildren && patch.ChildrenMorph <= 0)
+            {
+                patch.ChildrenVisible = false;
+                LodSwitchesThisFrame++;
+            }
+        }
+
+        void ResetTransitions(Patch patch)
+        {
+            if (!patch.ChildrenVisible) return;
+            patch.ChildrenVisible = false; patch.ChildrenMorph = 0;
+            for (int i = 0; i < 4; i++)
+                if (patches.TryGetValue(patch.Key.Child(i), out Patch child)) ResetTransitions(child);
+        }
+
+        void RenderReady(Patch patch, double scale, float morph)
+        {
+            patch.LastNeeded = tick;
+            if (patch.ChildrenVisible)
+            {
+                float visibleMorph = Mathf.SmoothStep(0, 1, patch.ChildrenMorph);
                 for (int i = 0; i < 4; i++)
-                    if (patches.TryGetValue(patch.Key.Child(i), out Patch child) && child.Desired) RenderReady(child, scale);
+                    if (patches.TryGetValue(patch.Key.Child(i), out Patch child) && Visible(child))
+                        RenderReady(child, scale, visibleMorph);
                 return;
             }
             if (patch.Mesh == null) return;
@@ -317,6 +401,11 @@ namespace SpaceEngine.Terrain
             properties.SetVector("_PatchAnchor", new Vector4((float)anchorUnits.x, (float)anchorUnits.y, (float)anchorUnits.z, (float)(1 / definition.Radius)));
             properties.SetVector("_PatchDetailAnchor", new Vector4((float)(patch.Anchor.x % 16384),
                 (float)(patch.Anchor.y % 16384), (float)(patch.Anchor.z % 16384), 0));
+            patch.RenderMorph = morph;
+            properties.SetFloat("_LodMorph", morph);
+            CubeSphere.Bounds(patch.Key, out _, out _, out double span);
+            float spacing = (float)(definition.Radius * span / patch.Payload.Resolution);
+            properties.SetFloat("_TerrainSampleMetres", spacing * (2 - morph));
             patch.Renderer.SetPropertyBlock(properties);
             patch.Renderer.enabled = true;
             ActivePatchCount++;
@@ -328,7 +417,8 @@ namespace SpaceEngine.Terrain
         {
             if (patches.Count <= MaximumResidentPatches) return;
             eviction.Clear();
-            foreach (Patch patch in patches.Values) if (!patch.Desired) eviction.Add(patch);
+            foreach (Patch patch in patches.Values)
+                if (!patch.Desired && patch.LastNeeded != tick) eviction.Add(patch);
             eviction.Sort((a, b) => a.LastNeeded.CompareTo(b.LastNeeded));
             int remove = Math.Min(eviction.Count, patches.Count - MaximumResidentPatches);
             for (int i = 0; i < remove; i++)
@@ -339,6 +429,40 @@ namespace SpaceEngine.Terrain
             }
         }
 
+        /// <summary>Stable address order, independent of dictionary/cache insertion order.</summary>
+        public void CopyActivePatchStates(List<TerrainPatchState> destination)
+        {
+            destination.Clear();
+            foreach (Patch patch in patches.Values)
+                if (patch.Renderer != null && patch.Renderer.enabled) destination.Add(new TerrainPatchState(patch.Key, patch.RenderMorph));
+            destination.Sort((a,b) => a.Key.Face != b.Key.Face ? a.Key.Face.CompareTo(b.Key.Face)
+                : a.Key.Level != b.Key.Level ? a.Key.Level.CompareTo(b.Key.Level)
+                : a.Key.X != b.Key.X ? a.Key.X.CompareTo(b.Key.X) : a.Key.Y.CompareTo(b.Key.Y));
+        }
+
+        /// <summary>
+        /// Samples the actual visible triangle representation, including its
+        /// parent endpoint. Used to compare stop/return paths with the fixed
+        /// authoritative Height field; it is not substituted for collision.
+        /// </summary>
+        public bool TrySampleRenderedSurface(Double3 direction, out Double3 position, out Vector3 normal, out float rawHeight)
+        {
+            position = Double3.Zero; normal = Vector3.zero; rawHeight = 0;
+            double ax = Math.Abs(direction.x), ay = Math.Abs(direction.y), az = Math.Abs(direction.z);
+            int face = ax >= ay && ax >= az ? direction.x >= 0 ? 0 : 1 : ay >= az ? direction.y >= 0 ? 2 : 3 : direction.z >= 0 ? 4 : 5;
+            foreach (Patch patch in patches.Values)
+            {
+                if (patch.Key.Face != face || patch.Renderer == null || !patch.Renderer.enabled) continue;
+                CubeSphere.ProjectToFace(patch.Key.Face, direction, out double u, out double v);
+                CubeSphere.Bounds(patch.Key, out double u0, out double v0, out double span);
+                if (u < u0 - 1e-12 || v < v0 - 1e-12 || u > u0 + span + 1e-12 || v > v0 + span + 1e-12) continue;
+                patch.Payload.Sample((u-u0)/span*patch.Payload.Resolution, (v-v0)/span*patch.Payload.Resolution,
+                    patch.RenderMorph, out position, out normal, out _, out rawHeight);
+                return true;
+            }
+            return false;
+        }
+
         public void Clear()
         {
             surfaceMap?.Dispose(); surfaceMap = null; materialBakeAttempted = false;
@@ -346,6 +470,8 @@ namespace SpaceEngine.Terrain
             foreach (Patch patch in patches.Values) Release(patch);
             patches.Clear(); pending.Clear(); frontier.Clear();
             ActivePatchCount = TriangleCount = MaxActiveLevel = PendingBuildCount = 0;
+            TransitioningPatchCount = LodSwitchesThisFrame = 0;
+            orbitalDetail = false;
         }
 
         static void Release(Patch patch)

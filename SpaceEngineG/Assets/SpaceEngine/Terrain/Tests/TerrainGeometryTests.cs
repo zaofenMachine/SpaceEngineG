@@ -176,15 +176,19 @@ namespace SpaceEngine.Terrain.Tests
                 terrain.Configure(definition, material);
                 Double3 direction = new Double3(1, .123, .456).Normalized;
                 Double3 camera = TerrainPatchMesh.SurfacePoint(direction, definition) + direction * 2;
-                for (int i = 0; i < 16 && (i == 0 || terrain.PendingBuildCount > 0); i++)
-                    terrain.Tick(camera, 1, Vector3.zero, Vector3.one.normalized);
+                for (int i = 0; i < 300 && (i == 0 || !terrain.IsSettled); i++)
+                    terrain.Tick(camera, 1, Vector3.zero, Vector3.one.normalized, .1f);
                 Assert.That(terrain.PendingBuildCount, Is.EqualTo(0));
                 Assert.That(terrain.ActivePatchCount, Is.InRange(1, 128));
                 Assert.That(terrain.MaxActiveLevel, Is.GreaterThanOrEqualTo(18));
                 Assert.That(terrain.ResidentPatchCount, Is.LessThanOrEqualTo(256));
                 Assert.That(terrain.BuiltThisFrame, Is.LessThanOrEqualTo(32));
                 Assert.That(terrain.TriangleCount, Is.GreaterThan(0));
-                terrain.Tick(direction * definition.Radius * 1000, .000001, Vector3.zero, Vector3.up);
+                for (int i = 0; i < 300; i++)
+                {
+                    terrain.Tick(direction * definition.Radius * 1000, .000001, Vector3.zero, Vector3.up, .1f);
+                    if (terrain.IsSettled) break;
+                }
                 Assert.That(terrain.ActivePatchCount, Is.LessThan(16));
             }
             finally
@@ -209,8 +213,8 @@ namespace SpaceEngine.Terrain.Tests
                 terrain.MaximumResidentPatches = 512;
                 terrain.Configure(Earth, material);
                 Double3 camera = new Double3(1, .123, .456).Normalized * Earth.Radius * 3;
-                for (int i = 0; i < 16 && (i == 0 || terrain.PendingBuildCount > 0); i++)
-                    terrain.Tick(camera, .0001, Vector3.zero, Vector3.one.normalized);
+                for (int i = 0; i < 300 && (i == 0 || !terrain.IsSettled); i++)
+                    terrain.Tick(camera, .0001, Vector3.zero, Vector3.one.normalized, .1f);
                 Assert.That(terrain.PendingBuildCount, Is.EqualTo(0));
                 Assert.That(terrain.MaxActiveLevel, Is.EqualTo(3));
                 Assert.That(terrain.ActivePatchCount, Is.InRange(100, 256));

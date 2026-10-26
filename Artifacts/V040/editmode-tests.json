@@ -1,0 +1,44 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "error": null,
+  "data": {
+    "job_id": "04da0430ea4f46bda25379af4e9cc36f",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1793045116607,
+    "finished_unix_ms": 1793045119320,
+    "last_update_unix_ms": 1793045119320,
+    "progress": {
+      "completed": 130,
+      "total": 130,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": null,
+      "last_finished_test_full_name": "SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(\"CENTRAL BLACK HOLE / geometric horizon; no relativistic lensing\")",
+      "last_finished_unix_ms": 1793045119284,
+      "stuck_suspected": false,
+      "editor_is_focused": true,
+      "run_in_background": true,
+      "focus_nudge_attempts": null,
+      "focus_nudge_limit": null,
+      "focus_nudge_status": null,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 130,
+        "passed": 130,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 1.9898358,
+        "resultState": "Passed"
+      },
+      "results": []
+    }
+  },
+  "hint": null
+}

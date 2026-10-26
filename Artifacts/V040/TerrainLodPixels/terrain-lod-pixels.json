@@ -1,0 +1,65 @@
+{
+    "passed": true,
+    "utc": "2026-10-26T19:54:09.8361655Z",
+    "gpu": "NVIDIA GeForce RTX 4070",
+    "graphicsApi": "Direct3D12",
+    "error": "",
+    "scope": "Actual Earth-scale CPU terrain, one L14 parent and four L15 children, production surface map/material/Forward+ depth-normal pass. Fixed camera checks morph endpoints, tiny morph steps, stable hold, reversal and depth. Full continuous player descent video remains a separate acceptance.",
+    "checks": [
+        {
+            "name": "Fixture renders nonempty finite real terrain",
+            "passed": true,
+            "value": 104551.0,
+            "limit": 39321.6
+        },
+        {
+            "name": "Child t0 reproduces parent surface and material",
+            "passed": true,
+            "value": 0.0000018696765705286308,
+            "limit": 0.002
+        },
+        {
+            "name": "Tiny morph step is continuous rather than full-detail replacement",
+            "passed": true,
+            "value": 0.000011014334694546527,
+            "limit": 0.0005102803214763602
+        },
+        {
+            "name": "Full child endpoint retains additional visible geometry and shading",
+            "passed": true,
+            "value": 0.015514016073818008,
+            "limit": 0.00001
+        },
+        {
+            "name": "Stopped representation gives identical repeated GPU frames",
+            "passed": true,
+            "value": 0.0,
+            "limit": 1e-7
+        },
+        {
+            "name": "Reversing morph returns the identical representation",
+            "passed": true,
+            "value": 0.0,
+            "limit": 1e-7
+        },
+        {
+            "name": "Depth-normal prepass uses identical parent endpoint",
+            "passed": true,
+            "value": 3.032397848269171e-7,
+            "limit": 0.00002
+        },
+        {
+            "name": "Depth texture follows geometric morph instead of fixed child shape",
+            "passed": true,
+            "value": 0.013185540002356373,
+            "limit": 1e-7
+        }
+    ],
+    "parentChildColorDifference": 0.0000018696765705286308,
+    "fullDetailDifference": 0.015514016073818008,
+    "tinyStepDifference": 0.000011014334694546527,
+    "holdDifference": 0.0,
+    "returnDifference": 0.0,
+    "parentChildDepthDifference": 3.032397848269171e-7,
+    "morphDepthDifference": 0.013185540002356373
+}

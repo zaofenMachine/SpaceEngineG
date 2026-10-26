@@ -19,11 +19,11 @@ namespace SpaceEngine.Rendering.Editor
             "SpaceEngine/Terrain", "SpaceEngine/Atmosphere",
             "SpaceEngine/StarBillboard", "SpaceEngine/Star",
             "SpaceEngine/GasGiant", "SpaceEngine/PlanetRing", "SpaceEngine/GalaxyField",
-            "SpaceEngine/GalaxyVolume", "SpaceEngine/GalaxyVolumeComposite", "SpaceEngine/PlanetCloud"
+            "SpaceEngine/GalaxyVolume", "SpaceEngine/GalaxyVolumeComposite", "SpaceEngine/PlanetCloud", "SpaceEngine/OrbitOverlay"
         };
 
         public static string ReportPath => Path.GetFullPath(Path.Combine(
-            Application.dataPath, "..", "..", "Artifacts", "V030", "shaders.json"));
+            Application.dataPath, "..", "..", "Artifacts", "V040", "shaders.json"));
 
         [MenuItem("Space Engine/Validate Shaders")]
         public static void ValidateShaders()
