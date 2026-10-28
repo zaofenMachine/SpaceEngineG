@@ -14,7 +14,7 @@ namespace SpaceEngine.Terrain.Editor
     {
         const int Size=512,Layer=28;
         public static string ReportPath=>Path.GetFullPath(Path.Combine(Application.dataPath,"../..",
-            "Artifacts/V040/TerrainLodPixels/terrain-lod-pixels.json"));
+            "Artifacts/V050/TerrainLodPixels/terrain-lod-pixels.json"));
         [Serializable] public sealed class Check {public string name;public bool passed;public double value,limit;
             public Check(string n,bool p,double v,double l){name=n;passed=p;value=v;limit=l;}}
         [Serializable] public sealed class Report

@@ -7,9 +7,9 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-VERSION = '0.4.0'
+VERSION = '0.5.0'
 BUILD = ROOT / 'Builds' / ('Windows-v' + VERSION)
-OUT = ROOT / 'Artifacts' / 'V040'
+OUT = ROOT / 'Artifacts' / 'V050'
 ARCHIVE = ROOT / 'Builds' / ('SpaceEngineG-' + VERSION + '-windows-x64.zip')
 
 
@@ -71,10 +71,15 @@ if __name__ == '__main__':
     flight = acceptance('PlayerFlight', 'runtime-verification.json', 'samples', 'stage')
     galaxy = acceptance('PlayerGalaxy', 'galaxy-verification.json', 'stages', 'name')
     explorer, capture = explorer_acceptance()
-    if flight['applicationVersion'] != VERSION or galaxy['version'] != VERSION or explorer['version'] != VERSION:
+    details=load(OUT / 'PlayerDetails/details-verification.json')
+    if not details['passed'] or details['errors'] or (OUT / 'PlayerDetails/exit-code.txt').read_text().strip() != '0':
+        raise RuntimeError('Details acceptance must pass.')
+    if len(details['screenshots'])<19 or not all((OUT / 'PlayerDetails' / name).is_file() for name in details['screenshots']):
+        raise RuntimeError('Details screenshot coverage is incomplete.')
+    if flight['applicationVersion'] != VERSION or galaxy['version'] != VERSION or explorer['version'] != VERSION or details['version'] != VERSION:
         raise RuntimeError('Evidence belongs to another player version.')
-    if len({flight['buildGuid'],galaxy['buildGuid'],explorer['buildGuid']}) != 1 or not flight['buildGuid'].strip('0'):
-        raise RuntimeError('All three routes must use the same standalone build.')
+    if len({flight['buildGuid'],galaxy['buildGuid'],explorer['buildGuid'],details['buildGuid']}) != 1 or not flight['buildGuid'].strip('0'):
+        raise RuntimeError('All four routes must use the same standalone build.')
     for mode in ('editmode', 'playmode'):
         if load(OUT / (mode + '-tests.json'))['data']['status'] != 'succeeded':
             raise RuntimeError('Unity tests must pass before packaging: ' + mode)
@@ -86,7 +91,7 @@ if __name__ == '__main__':
                  'GroundPixels/ground-pixels.json', 'GasHorizonPixels/gas-horizon-pixels.json',
                  'GroundAtmospherePixels/ground-pixels.json',
                  'GalaxyPixels/galaxy-pixels.json', 'GalaxyClarity/galaxy-clarity.json',
-                 'TerrainLodPixels/terrain-lod-pixels.json', 'ChineseGlyphPixels/glyph-pixels.json'):
+                 'TerrainLodPixels/terrain-lod-pixels.json', 'ChineseGlyphPixels/glyph-pixels.json', 'LoadingPixels/loading-pixels.json'):
         if not load(OUT / path)['passed']:
             raise RuntimeError('Graphics validation must pass: ' + path)
     if galaxy['movingViewFrames'] < 120 or galaxy['movingViewRecomputations'] < 118:
@@ -108,12 +113,12 @@ if __name__ == '__main__':
             '右键拖动观察；WASD 飞行；Q/E 升降；Z/X 翻滚；滚轮或 +/- 调速；Shift 加速。\n'
             '单击天体选择；F3 搜索/筛选；C 居中；Y 跟踪；Alt+右键环绕目标。\n'
             'G 连续飞往并降落；R 连续上升；F 显式跳转观察；Tab 下一颗行星/卫星。\n'
-            'O 轨道开关；L 标签开关；V 恒星系总览；F2 天体详情。\n'
+            'O 轨道开关；L 标签开关；V 恒星系总览；F2/I 天体详情（概览、轨道、环境、系统与来源）。\n'
             'F6 书签；Ctrl+B 保存书签；F7 截图。\n'
             'T 恒星；N 跳转邻近恒星系；M 银河；Home 起点；B 中央视界参考面。\n'
             'F5/F9 保存/恢复飞行；Esc 关闭面板或取消导航；Space 暂停时间；[ ] 调整时间倍率。\n'
             '搜索涵盖当前恒星系和已解析邻域，可用单元地址扩展。\n'
-            '气态/冰巨行星没有固体降落面。生成版本仍为2，兼容原flight-v2存档。\n'
+            '气态/冰巨行星没有固体降落面。新世界使用生成版本3；原flight-v2存档按旧生成器恢复，新存档写flight-v3。\n'
             '第1代存档保留，请使用0.1.0读取。字体授权见ThirdPartyNotices。\n')
         archive.writestr('SpaceEngineG/SOURCE-REVISION.txt', revision + '\n')
     with zipfile.ZipFile(ARCHIVE) as archive:
@@ -129,8 +134,8 @@ if __name__ == '__main__':
         'unityPlayerSha256': digest(BUILD / 'UnityPlayer.dll'),
         'runtimeAssemblySha256': {name: digest(BUILD / 'SpaceEngineG_Data' / 'Managed' / (name + '.dll'))
             for name in ('SpaceEngine.Core', 'SpaceEngine.Terrain', 'SpaceEngine.Rendering', 'SpaceEngine.Runtime')},
-        'evidence': ['Artifacts/V040/PlayerFlight', 'Artifacts/V040/PlayerGalaxy', 'Artifacts/V040/PlayerExplorer'],
-        'continuousVideo': {'path': 'Artifacts/V040/PlayerExplorer/descent.mp4',
+        'evidence': ['Artifacts/V050/PlayerFlight', 'Artifacts/V050/PlayerGalaxy', 'Artifacts/V050/PlayerExplorer', 'Artifacts/V050/PlayerDetails'],
+        'continuousVideo': {'path': 'Artifacts/V050/PlayerExplorer/descent.mp4',
             'sha256': digest(OUT / 'PlayerExplorer/descent.mp4'), 'durationSeconds': capture['durationSeconds'],
             'stationaryFrames': explorer['stationaryFrames'], 'stationaryChanges': explorer['stationaryChanges'],
             'returnedPositionErrorMetres': explorer['returnedPositionError']},

@@ -24,8 +24,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parent.parent
-PLAYER = ROOT / 'Artifacts/V040/PlayerExplorer'
-DEFAULT_OUTPUT = ROOT / 'Artifacts/V040/VideoReview'
+PLAYER = ROOT / 'Artifacts/V050/PlayerExplorer'
+DEFAULT_OUTPUT = ROOT / 'Artifacts/V050/VideoReview'
 DEFAULT_FRAMES = ROOT / 'Artifacts/Local/VideoFrames'
 # At 1600x900 this is x=512..1040, y=504..774: below the crosshair,
 # between the side panels, and above the footer. The descent hides world labels.

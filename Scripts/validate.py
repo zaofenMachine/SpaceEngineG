@@ -9,7 +9,7 @@ import time
 from unity_rpc import rpc
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUT = ROOT / 'Artifacts' / 'V040'
+OUT = ROOT / 'Artifacts' / 'V050'
 
 def call(name, arguments):
     envelope = rpc('tools/call', {'name': name, 'arguments': arguments})
@@ -51,7 +51,8 @@ def graphics():
                           ('Space Engine/Validate Galaxy Pixels','GalaxyPixels/galaxy-pixels.json'),
                           ('Space Engine/Validate Galaxy Clarity','GalaxyClarity/galaxy-clarity.json'),
                           ('Space Engine/Validate Terrain LOD Pixels','TerrainLodPixels/terrain-lod-pixels.json'),
-                          ('Space Engine/Validate Chinese Glyph Pixels','ChineseGlyphPixels/glyph-pixels.json')]:
+                          ('Space Engine/Validate Chinese Glyph Pixels','ChineseGlyphPixels/glyph-pixels.json'),
+                          ('Space Engine/Validate Terrain Loading Pixels','LoadingPixels/loading-pixels.json')]:
         call('execute_menu_item', {'menu_path':menu})
         result=json.loads((OUT/filename).read_text(encoding='utf-8-sig'))
         print(filename,'PASS' if result['passed'] else 'FAIL',flush=True)

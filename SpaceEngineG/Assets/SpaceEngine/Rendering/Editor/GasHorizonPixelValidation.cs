@@ -19,7 +19,7 @@ namespace SpaceEngine.Rendering.Editor
         const double Radius = 68849000, Altitude = 10000;
         const float Fov = 6, Near = .000001f, Far = .1f;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V040", "GasHorizonPixels", "gas-horizon-pixels.json"));
+            "Artifacts", "V050", "GasHorizonPixels", "gas-horizon-pixels.json"));
 
         [MenuItem("Space Engine/Validate Gas Horizon Pixels")]
         public static void ValidatePixels()

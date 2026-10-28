@@ -17,7 +17,7 @@ namespace SpaceEngine.Terrain.Editor
     {
         const int Size = 512, Layer = 28;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V040", "TerrainPixels", "terrain-pixels.json"));
+            "Artifacts", "V050", "TerrainPixels", "terrain-pixels.json"));
 
         [MenuItem("Space Engine/Validate Ground Terrain Pixels")]
         public static void ValidateGroundPixels() => ValidateGroundPixels(false);
@@ -43,7 +43,7 @@ namespace SpaceEngine.Terrain.Editor
                 material = new Material(Shader.Find("SpaceEngine/Terrain"));
                 string phase = material.HasProperty("_RenderUnitsPerMetre") ? "CameraRelativeGradients" : "OriginalDirectionNormals";
                 if(includeAtmosphere) phase=material.FindPass("DepthNormalsOnly")>=0?"DepthNormalsPresent":"MissingDepthNormals";
-                directory = Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V040",
+                directory = Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V050",
                     includeAtmosphere?"GroundAtmospherePixels":"GroundPixels",phase));
                 Directory.CreateDirectory(directory);
                 root = new GameObject("Temporary actual planetary ground fixture") { hideFlags = HideFlags.HideAndDontSave };
@@ -149,7 +149,7 @@ namespace SpaceEngine.Terrain.Editor
                 if (depthMesh!=null) Object.DestroyImmediate(depthMesh);
                 if (target!=null) { target.Release();Object.DestroyImmediate(target); }
             }
-            if (directory==null) directory=Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V040","GroundPixels","Error"));
+            if (directory==null) directory=Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V050","GroundPixels","Error"));
             Directory.CreateDirectory(directory);report.checks=checks.ToArray();
             report.passed=string.IsNullOrEmpty(report.error)&&checks.Count==(includeAtmosphere?7:5)&&checks.TrueForAll(c=>c.passed);
             string path=Path.Combine(directory,"ground-pixels.json");string json=JsonUtility.ToJson(report,true);File.WriteAllText(path,json);

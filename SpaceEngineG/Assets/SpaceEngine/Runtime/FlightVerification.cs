@@ -33,7 +33,7 @@ namespace SpaceEngine.Runtime
             app=GetComponent<UniverseApp>();
             var args=Environment.GetCommandLineArgs();requested=Array.IndexOf(args,"--verify-flight")>=0;quit=Array.IndexOf(args,"--quit-after-verification")>=0;
             int index=Array.IndexOf(args,"--evidence-path");
-            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V040/Flight"));
+            output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V050/Flight"));
 #if UNITY_EDITOR
             if(UnityEditor.SessionState.GetBool("SpaceEngine.VerifyFlight",false))
             {requested=true;UnityEditor.SessionState.SetBool("SpaceEngine.VerifyFlight",false);}

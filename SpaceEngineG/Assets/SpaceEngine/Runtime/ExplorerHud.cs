@@ -55,6 +55,7 @@ namespace SpaceEngine.Runtime
             bool clicked=GUI.Button(new UnityEngine.Rect(x,y,w,30),label,button);GUI.backgroundColor=previous;return clicked;
         }
         void ClearTextFocus(){GUI.FocusControl(null);seedFocused=false;}
+        public void CloseTransientPanels(){settingsOpen=helpOpen=seedFocused=false;}
         void OnGUI()
         {
             if(app==null||app.System==null||!app.ShowHud){seedFocused=false;return;}
@@ -70,7 +71,7 @@ namespace SpaceEngine.Runtime
             Rect(0,0,1600,78,new Color(.016f,.027f,.041f,.94f));Rect(0,77,1600,1,new Color(.18f,.32f,.38f,.75f));
             Text(30,12,350,"SPACE ENGINE  G",title);Text(32,45,430,"程序化宇宙 / 自由探索 04",small);
             Text(475,14,460,app.GalaxyOverview?"棒旋银河 / 直径 "+(app.Settings.Galaxy.RadiusLy*2).ToString("N0")+" 光年":app.NucleusView?"银河中央核心":app.System.Name);
-            Text(475,45,460,"种子 "+app.Settings.UniverseSeed+" · 第 "+UniverseGenerator.GenerationVersion+" 代生成器 · "+app.Settings.Galaxy.ArmCount+" 条旋臂",small);
+            Text(475,45,460,"种子 "+app.Settings.UniverseSeed+" · 第 "+app.Settings.WorldGenerationVersion+" 代生成器 · "+app.Settings.Galaxy.ArmCount+" 条旋臂",small);
             if(Button(950,7,145,"搜索 [F3]"))tools?.ToggleSearch();
             if(Button(1103,7,145,"轨道 [O]"))tools?.ToggleOrbits();
             if(Button(1256,7,145,"标签 [L]"))tools?.ToggleLabels();
@@ -143,7 +144,7 @@ namespace SpaceEngine.Runtime
             Text(1030,650,130,"宇宙种子");GUI.SetNextControlName(SeedControl);seedText=GUI.TextField(new UnityEngine.Rect(1160,649,190,28),seedText,input);
             seedFocused=GUI.GetNameOfFocusedControl()==SeedControl;
             if(Button(1370,648,164,"重新生成")&&int.TryParse(seedText,out int seed))
-            {ClearTextFocus();app.Settings.UniverseSeed=seed;app.LoadSystem(app.CellX,app.CellY,app.CellZ);app.FramePlanet(0,app.Settings.InitialAltitude);}
+            {ClearTextFocus();app.Settings.WorldGenerationVersion=UniverseGenerator.GenerationVersion;app.Settings.UniverseSeed=seed;app.LoadSystem(app.CellX,app.CellY,app.CellZ);app.FramePlanet(0,app.Settings.InitialAltitude);}
             if(Button(1030,711,240,"保存飞行 [F5]"))app.SaveFlight();
             if(Button(1290,711,264,"恢复飞行 [F9]"))app.LoadFlight();
             if(Button(1030,755,240,"银河侧视"))app.FrameGalaxy(true);
@@ -155,7 +156,7 @@ namespace SpaceEngine.Runtime
             string[] lines={"右键拖动：自由观察；Alt + 右键拖动：绕目标观察", "W A S D：前后左右；Q / E：升降；Z / X：滚转",
                 "滚轮或 + / -：设置巡航速度；Shift：加速 10 倍", "G：连续飞向选中目标并下降；R：持续上升",
                 "F / Tab：跳转观察 / 切换天体；T：观察恒星", "F3：搜索；O：轨道；L：标签；F6：书签",
-                "F2：详细信息；C：目标居中；Y：跟踪；V：恒星系总览", "M：银河总览；Home：返回起始恒星系；B：银河核心",
+                "F2 / I：天体详情页；C：居中；Y：跟踪；V：恒星系总览", "M：银河总览；Home：返回起始恒星系；B：银河核心",
                 "N：显式跳转到邻近的已生成恒星系", "Esc：取消导航；空格：暂停时间；F1：隐藏界面",
                 "F5 / F9：保存 / 恢复；F7：截图；Ctrl + B：添加书签", "[ / ]：减慢 / 加快模拟时间",
                 "气态巨行星和冰巨行星没有可供降落的固体表面。",

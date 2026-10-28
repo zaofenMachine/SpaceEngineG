@@ -20,7 +20,7 @@ namespace SpaceEngine.Runtime
         public int Count => Entries.Count;
         public long CenterX {get;private set;}public long CenterY {get;private set;}public long CenterZ {get;private set;}
 
-        public void Generate(int seed, long cx, long cy, long cz, int radius, Material material,GalaxyDefinition galaxy=null)
+        public void Generate(int seed, long cx, long cy, long cz, int radius, Material material,GalaxyDefinition galaxy=null,int generationVersion=UniverseGenerator.GenerationVersion)
         {
             CenterX=cx;CenterY=cy;CenterZ=cz;
             galaxy=galaxy??GalaxyModel.Default(seed);
@@ -29,7 +29,7 @@ namespace SpaceEngine.Runtime
             for (int y=-radius; y<=radius; y++)
             for (int z=-radius; z<=radius; z++)
                 if(UniverseGenerator.IsCellOccupied(seed,cx+x,cy+y,cz+z,galaxy))
-                    Entries.Add(new Entry { X=cx+x, Y=cy+y, Z=cz+z, System=UniverseGenerator.GenerateSystem(seed,cx+x,cy+y,cz+z,galaxy) });
+                    Entries.Add(new Entry { X=cx+x, Y=cy+y, Z=cz+z, System=UniverseGenerator.GenerateSystem(seed,cx+x,cy+y,cz+z,galaxy,generationVersion) });
             if (mesh != null) Destroy(mesh);
             mesh = new Mesh { name="Seeded spatial star catalogue", indexFormat=IndexFormat.UInt32 };
             mesh.MarkDynamic();

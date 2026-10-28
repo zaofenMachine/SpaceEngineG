@@ -16,7 +16,7 @@ namespace SpaceEngine.Rendering.Editor
         const int Size = 256;
         const int TestLayer = 29;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V040", "GalaxyPixels", "galaxy-pixels.json"));
+            "Artifacts", "V050", "GalaxyPixels", "galaxy-pixels.json"));
 
         [MenuItem("Space Engine/Validate Galaxy Pixels")]
         public static void ValidatePixels()

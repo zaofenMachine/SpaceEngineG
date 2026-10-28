@@ -23,7 +23,7 @@ namespace SpaceEngine.Rendering.Editor
         };
 
         public static string ReportPath => Path.GetFullPath(Path.Combine(
-            Application.dataPath, "..", "..", "Artifacts", "V040", "shaders.json"));
+            Application.dataPath, "..", "..", "Artifacts", "V050", "shaders.json"));
 
         [MenuItem("Space Engine/Validate Shaders")]
         public static void ValidateShaders()

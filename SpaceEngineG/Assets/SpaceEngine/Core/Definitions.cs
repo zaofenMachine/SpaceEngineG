@@ -9,6 +9,7 @@ namespace SpaceEngine.Core
     [Serializable]
     public sealed class StarSystemDefinition
     {
+        public int GenerationVersion = 2;
         public string Name;
         public int Seed;
         public UniversalPosition Position;

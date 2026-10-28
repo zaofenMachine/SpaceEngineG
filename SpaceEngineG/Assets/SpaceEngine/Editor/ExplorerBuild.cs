@@ -35,7 +35,7 @@ namespace SpaceEngine.Editor
             EditorSceneManager.SaveScene(scene,ScenePath);
             EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene(ScenePath,true)};
             PlayerSettings.companyName="SpaceEngineG";PlayerSettings.productName="SpaceEngineG Explorer";
-            PlayerSettings.bundleVersion="0.4.0";
+            PlayerSettings.bundleVersion="0.5.0";
             PlayerSettings.defaultScreenWidth=1600;PlayerSettings.defaultScreenHeight=900;
             PlayerSettings.fullScreenMode=FullScreenMode.Windowed;PlayerSettings.runInBackground=true;
             AssetDatabase.SaveAssets();
@@ -81,10 +81,10 @@ namespace SpaceEngine.Editor
         public static void BuildWindows()
         {
             string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../.."));
-            string output=Path.Combine(root,"Builds/Windows-v0.4.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
+            string output=Path.Combine(root,"Builds/Windows-v0.5.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
             var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
-            Directory.CreateDirectory(Path.Combine(root,"Artifacts/V040"));
-            File.WriteAllText(Path.Combine(root,"Artifacts/V040/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.4.0/SpaceEngineG.exe\n");
+            Directory.CreateDirectory(Path.Combine(root,"Artifacts/V050"));
+            File.WriteAllText(Path.Combine(root,"Artifacts/V050/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.5.0/SpaceEngineG.exe\n");
             if(result.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Player build failed");
             string notices=Path.Combine(Path.GetDirectoryName(output),"ThirdPartyNotices");Directory.CreateDirectory(notices);
             foreach(string name in new[]{"OFL-NotoSansCJK.txt","NOTICE-NotoSansCJK.txt"})

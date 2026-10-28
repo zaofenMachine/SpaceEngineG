@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: UniverseSettings
   m_EditorClassIdentifier: SpaceEngine.Runtime::SpaceEngine.Runtime.UniverseSettings
   UniverseSeed: 20261026
+  WorldGenerationVersion: 3
   Galaxy:
     Seed: 0
     RadiusLy: 52000

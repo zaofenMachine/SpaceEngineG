@@ -13,7 +13,7 @@ namespace SpaceEngine.Editor
     {
         const int Width=1024,Height=320,Layer=27,Size=40,Columns=14;
         const string FontPath="Assets/SpaceEngine/Resources/Fonts/NotoSansCJKsc-Regular.otf";
-        public static string ReportPath=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V040","ChineseGlyphPixels","glyph-pixels.json"));
+        public static string ReportPath=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","..","Artifacts","V050","ChineseGlyphPixels","glyph-pixels.json"));
         [MenuItem("Space Engine/Validate Chinese Glyph Pixels")]
         public static void ValidateGlyphs()
         {

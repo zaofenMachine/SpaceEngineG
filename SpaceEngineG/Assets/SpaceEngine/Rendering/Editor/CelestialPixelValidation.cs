@@ -16,7 +16,7 @@ namespace SpaceEngine.Rendering.Editor
         const int TestLayer = 30;
         const int Size = 512;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V040", "CelestialPixels", "celestial-pixels.json"));
+            "Artifacts", "V050", "CelestialPixels", "celestial-pixels.json"));
 
         [MenuItem("Space Engine/Validate Celestial Pixels")]
         public static void ValidatePixels()

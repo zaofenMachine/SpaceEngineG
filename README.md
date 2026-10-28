@@ -4,9 +4,9 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 这是可运行的早期探索版本；基础系统与图形验证证据随源码维护，尚未达到 SpaceEngine 的天体种类、画面质量和科学完整度。
 
-当前迭代 **0.4.0**：中文界面、天体搜索与筛选、目标选择/跟踪、真实轨道、标签、详情和书签；修复不同设备的滚轮调速，增加截图和时间倍率快捷键。银河使用原生视口分辨率及更细的空间尘埃结构；地形以父子三角形渐变与迟滞抑制 LOD 突变和阈值附近反复切换。
+当前迭代 **0.5.0**：增加完整中文天体详情页，`F2 / I` 打开概览、轨道、环境、系统与来源四个页签；行星、卫星、巨行星和恒星共用物理报告，区分生成参数、公式推导、模型假设、模型估计与未建模数据。新世界按光照与简化温压模型布局参考海洋行星，无光黑洞周围不再生成暖海洋。保留旧版世界与存档，修复协程切换世界时的一帧空场。
 
-**130 项 EditMode、22 项 PlayMode 与全部 87 项 GPU 断言通过**，包含实际中文字形、银河清晰度、父子 LOD 图像连续性和真实行星尺度的近地深度/大气检查。当前证据位于 [Artifacts/V040](Artifacts/V040/)；同一构建的三条独立 Windows 路线均通过，零运行时错误，已保存35张截图和51.8秒原生帧缓冲录像。[0.4实测记录](Docs/VALIDATION-V040.md)分别登记自动断言、截图、录像抽样与已知缺陷。
+首轮 **183 项 EditMode、26 项 PlayMode 与全部 102 项 GPU 断言通过**；新增地球参考数据、卫星母体/受光距离、能量收支、2,048 个恒星系海洋温压筛选、旧世界恢复和同帧地形覆盖检查。本轮独立程序及截图/视频验收尚在进行，最终结果填写于 [0.5 实测记录](Docs/VALIDATION-V050.md)和 [Artifacts/V050](Artifacts/V050/)，不能用历史通过数替代。
 
 ![0.4 Windows实际中文探索界面](Artifacts/V040/PlayerExplorer/01-chinese-home.png)
 
@@ -16,11 +16,11 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 使用 Unity Hub 打开仓库中的 **`SpaceEngineG/`** 子目录，版本 **6000.5.7f1**。载入 `Assets/Scenes/Universe.unity` 后按 Play。项目已包含入口场景、资源材质和默认配置，无需下载美术包。
 
-若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.4.0/SpaceEngineG.exe`。
+若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.5.0/SpaceEngineG.exe`。
 
-本地交付包为 `Builds/SpaceEngineG-0.4.0-windows-x64.zip`，解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
+0.5 本地交付包目标为 `Builds/SpaceEngineG-0.5.0-windows-x64.zip`，完整验收后才打包。解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
 
-| 0.4.0 最终交付项 | 状态 |
+| 0.4.0 历史交付项（0.5 见上方实测记录） | 状态 |
 | --- | --- |
 | 独立程序三条路线、退出码及运行时错误 | 全部通过，退出码0、错误0；构建GUID见[清单](Artifacts/V040/package-manifest.json) |
 | 连续下降/静止/上升/原路返回视频及实际复核结果 | [51.8秒原生录像](Artifacts/V040/PlayerExplorer/descent.mp4)，1554帧全流解码；两次静止951帧无几何切换，返回误差0.46毫米；逐秒抽样记录见实测文档 |
@@ -37,7 +37,7 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 | 转动视角 / 绕选中目标观察 | 右键拖动 / Alt + 右键拖动 |
 | 设置待命巡航速度 / 加速 | 滚轮或 +、- / Shift |
 | 选择天体 | 左键点天体，或点击列表/搜索结果 |
-| 搜索与筛选 / 目标详情 | F3 / F2 |
+| 搜索与筛选 / 目标详情 | F3 / F2 或 I |
 | 目标居中 / 开关目标跟踪 | C / Y |
 | 连续飞往目标并下降或接近云顶 / 连续上升 | G / R |
 | 显式跳转至目标观察位置 | F |
@@ -54,17 +54,19 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 **选择只更换目标**；C 只转动视线、保持观察者位置，Y 持续跟踪目标方向。G/R 连续更新同一高精度观察者坐标，F、Tab、N、T、V、M、Home、B 及恢复书签属于显式位置跳转。右侧高度遥测注明实际参考天体；选中目标可以与参考天体不同。轨道默认关闭，O 开关、V 总览自动开启。气态/冰巨星没有固体降落面，接近停在可配置的云顶安全净空。探索器允许超光速移动，未实现相对论飞行动力学。
 
-F3 搜索覆盖**当前恒星系及实际已解析邻域**，可按中文名称/种类、可降落、海洋、大气、卫星及距离筛选，并通过单元地址 `x,y,z` 加入确定性生成的恒星系；结果最多显示最近 256 项。这不是对整个银河全部恒星的索引搜索。滚轮兼容每格 **1 unit** 与 Windows **120 unit** 输入，默认每格倍率 1.6；遥测分别显示待命巡航速度和实际速度。鼠标位于面板时滚轮用于界面，搜索/书签或种子输入期间屏蔽飞行按键。F7 截图保存至程序数据目录的 `Screenshots`，界面提示实际路径。
+F3 搜索覆盖**当前恒星系及实际已解析邻域**，可按中文名称/种类、可降落、海洋、大气、卫星及距离筛选，并通过单元地址 `x,y,z` 加入确定性生成的恒星系；结果最多显示最近 256 项。这不是对整个银河全部恒星的索引搜索。滚轮兼容每格 **1 unit** 与 Windows **120 unit** 输入，默认每格倍率 1.6；遥测分别显示待命巡航速度和实际速度。鼠标位于面板时滚轮用于界面，搜索/书签/详情或种子输入期间屏蔽飞行按键。F7 在详情页内也能截图，保存至程序数据目录的 `Screenshots`，界面提示实际路径。
+
+详情页可查看质量、半径、密度、重力、逃逸速度、自转、平均太阳日、完整轨道根数和实时母体/恒星距离；环境页分开显示辐照、平衡温度、内部/潮汐热、灰大气参考温度、压强、组分、密度和标高。气态天体显示 **1 bar 参考层**，没有固体地温；无大气、未建模生命/磁场/天气均明确注明。系统页可选择母体或直属卫星，选择保持相机位置。温度是注明假设的零维模型估计，不等于完整气候或宜居性判断。
 
 银河拥有薄盘、厚盘、旋臂、核球、棒和恒星晕，默认盘直径 104,000 光年。在实际观察者位置积分空间发光及尘埃透射，默认采用**原生视口分辨率、银河外部 128 步、盘内 224 步**；近观察者 8,000 光年优先分配积分预算，以米制世界中的空间结构生成约 360 光年尺度的细尘埃、暗带及恒星形成区。60,000 个三维小光核补充未解析恒星人口细节，局部目录按同一个密度模型准入。视角真正静止时复用结果，位置或旋转改变时重算；运动性能单独记录。它们具有空间位置和视差，尚未逐颗实例化银河全部恒星。黑洞目前显示几何参考面，尚无透镜或吸积盘。
 
-固体星球保留 **1024² × 6 面 GPU 高度材料图**及逐像素海岸/地质/米制细节，可配置到每面 2048²；海洋星球使用薄云层，气态巨星以解析球面命中重建近景轮廓。地形细化从父三角形插值位置、法线和外观连续渐变到子网格，合并可反向过渡；默认 20% 迟滞、0.35 秒过渡，防止阈值抖动反复切换。CPU 高度、碰撞和可降落几何仍保留；完整生成版本保持 2，兼容原地形及存档。
+固体星球保留 **1024² × 6 面 GPU 高度材料图**及逐像素海岸/地质/米制细节，可配置到每面 2048²；海洋星球使用薄云层，气态巨星以解析球面命中重建近景轮廓。地形细化从父三角形插值位置、法线和外观连续渐变到子网格，合并可反向过渡；默认 20% 迟滞、0.35 秒过渡，防止阈值抖动反复切换。CPU 高度、碰撞和可降落几何仍保留；生成版本 3 调整新世界的轨道布局及冷暗宿主分类，保留原始种子、质量、半径和地形参数。
 
 游戏内右上角“设置”支持调整曝光、视场、恒星亮度、地形预算及宇宙种子。银河采样/分辨率/细节/内外曝光、LOD 迟滞/过渡、材料图分辨率/法线/海洋反射、云覆盖/厚度/风、大气及安全净空参数位于 `SpaceEngineG/Assets/SpaceEngine/Resources/UniverseSettings.asset`；细环、裂隙和 Shader 参数位于同目录材质。银河总览有单独视场控制。参数在启动时复制，游戏内调整不会覆盖源配置；材料图分辨率在首次烘焙时应用。
 
 中文使用随项目捆绑的 **Noto Sans CJK SC Regular** 静态字体；字体和 [SIL OFL 许可证](SpaceEngineG/Assets/SpaceEngine/Resources/Fonts/OFL-NotoSansCJK.txt)可再分发，Windows 包中保留 `ThirdPartyNotices`。中文字形通过动态字库及实际 GPU 像素验证，不依赖操作系统安装字体。
 
-生成版本 2 使用 `flight-v2.json`，保存银河参数与当前参考视角。旧 `flight.json` 保留，使用 0.1.0 程序打开；不会把新世界地形套在旧存档上。
+默认生成版本 3 使用 `flight-v3.json`。若不存在该文件，可恢复 `flight-v2.json` 并按原生成版本保留轨道、地形和精确位置；详情页提示旧外观可能与热环境不一致。之后仍保存到对应版本路径并保留原子备份。旧 `flight.json` 保留，使用 0.1.0 程序打开。
 
 ## 验证
 
@@ -80,11 +82,12 @@ Unity Test Runner 包含 EditMode 数学/网格测试和 PlayMode 集成测试�
 - `Space Engine > Validate Galaxy Clarity`：原生/半分辨率及关闭细节控制图、两倍积分参考、实际近旋臂与盘内细节。
 - `Space Engine > Validate Terrain LOD Pixels`：父子三角形端点一致、微小过渡连续、静止及往返图像不变，覆盖真实场景深度。
 - `Space Engine > Validate Chinese Glyph Pixels`：捆绑字体的 45 个不同中文字形实际 GPU 像素、独立图形及透明轮廓。
+- `Space Engine > Validate Terrain Loading Pixels`：600 km 冷加载的起始方向、立方球面边缘和极区，分别读取首次预算提交及稳定后的颜色/深度，保留未提交空场负控制。
 - `Space Engine > Run Rendered Flight Acceptance`：真实渲染从 0.03 光年连续下降至约 2 米地表，保存六个高度/星系截图、运行时断言和性能 JSON。
 - `Space Engine > Run Galaxy And Body Acceptance`：银河三个视角、全部行星/恒星类别、卫星、云顶接近、中央参考面及 120 帧持续转动性能，默认 Seed 共 20 张实际截图。
 - `Space Engine > Run Explorer Feature Acceptance`：实际中文界面、搜索筛选、选择不跳转、居中、轨道、书签及两种滚轮输入。
 
-0.4 证据输出到 `Artifacts/V040/`；Editor 路线分别位于 `Flight/`、`Galaxy/`、`Explorer/`，独立程序验收使用 `PlayerFlight/`、`PlayerGalaxy/`、`PlayerExplorer/`。失败迭代及各 GPU fixture 的控制图保留；截图审查不能由 Shader 编译或网格计数代替。
+0.5 证据输出到 `Artifacts/V050/`；独立程序验收使用 `PlayerFlight/`、`PlayerGalaxy/`、`PlayerDetails/`、`PlayerExplorer/`。失败迭代及各 GPU fixture 的控制图保留；截图审查不能由 Shader 编译或网格计数代替。0.4 证据仍在 `Artifacts/V040/`。
 
 如果已在 Unity 启动项目附带的 Unity MCP，可以通过 Python 标准库脚本复现测试：
 
@@ -96,16 +99,17 @@ python Scripts/validate.py --tests --graphics --flight --galaxy --explorer
 Windows 程序也能独立运行验证航线：
 
 ```powershell
-.\Builds\Windows-v0.4.0\SpaceEngineG.exe --verify-flight --quit-after-verification --evidence-path C:\Temp\SpaceEngineFlight
-.\Builds\Windows-v0.4.0\SpaceEngineG.exe --verify-galaxy --quit-after-verification --evidence-path C:\Temp\SpaceEngineGalaxy
-.\Builds\Windows-v0.4.0\SpaceEngineG.exe --verify-explorer --record-descent --quit-after-verification --evidence-path C:\Temp\SpaceEngineExplorer
+.\Builds\Windows-v0.5.0\SpaceEngineG.exe --verify-flight --quit-after-verification --evidence-path C:\Temp\SpaceEngineFlight
+.\Builds\Windows-v0.5.0\SpaceEngineG.exe --verify-galaxy --quit-after-verification --evidence-path C:\Temp\SpaceEngineGalaxy
+.\Builds\Windows-v0.5.0\SpaceEngineG.exe --verify-details --quit-after-verification --evidence-path C:\Temp\SpaceEngineDetails
+.\Builds\Windows-v0.5.0\SpaceEngineG.exe --verify-explorer --record-descent --quit-after-verification --evidence-path C:\Temp\SpaceEngineExplorer
 ```
 
 前两条路线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。第三条在功能验收后按实际经过时间连续下降、静止、上升并原路返回，记录观察者、LOD、过渡、静止几何及帧耗时；`--record-descent` 启用这段路线，本身不编码视频。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。
 
-`python Scripts/verify_windows.py` 负责运行独立程序三条路线、记录退出码及报告，并从 Unity 最终游戏帧缓冲直接录为 `Artifacts/V040/PlayerExplorer/descent.mp4`；使用游戏内 ReadPixels 和后台编码管道，不抓取桌面或窗口合成图；录像按实际时间采样30帧/秒，停顿时重复最近帧，并记录重复数。截图和录制要求程序窗口实际可见。[录像复核](Artifacts/V040/VideoReview/video-review.json)包含逐秒联系表、静止区域图差和同帧截图比较；不等同人工逐帧验收。初始化跳转短暂黑场、近地材质对比低及规则银河尘纹仍列为未解决问题。
+`python Scripts/verify_windows.py` 负责运行独立程序四条路线、记录退出码及报告，并从 Unity 最终游戏帧缓冲直接录为 `Artifacts/V050/PlayerExplorer/descent.mp4`；使用游戏内 ReadPixels 和后台编码管道，不抓取桌面或窗口合成图；录像按实际时间采样30帧/秒，停顿时重复最近帧，并记录重复数。截图和录制要求程序窗口实际可见。录像复核包含逐秒联系表、静止区域图差和同帧截图比较；不等同人工逐帧验收。近地材质对比低及规则银河尘纹仍有改进空间，初始化空场修复必须由本轮实际视频验证。
 
-全部独立程序验证通过后，运行 `python Scripts/package_windows.py` 生成分发 ZIP、完整性检查和哈希清单；三条路线必须使用相同构建 GUID，并保留实际游戏帧缓冲录制证据和字体许可证。`Artifacts/V040/source-revision.txt` 记录构建前的源码提交。
+全部独立程序验证通过后，运行 `python Scripts/package_windows.py` 生成分发 ZIP、完整性检查和哈希清单；四条路线必须使用相同构建 GUID，并保留实际游戏帧缓冲录制证据和字体许可证。`Artifacts/V050/source-revision.txt` 记录构建前的源码提交。
 
 ## 实现说明
 

@@ -10,7 +10,8 @@ namespace SpaceEngine.Tests
         [Test]
         public void PopulationVersionSeparatesNewHierarchyFromOldSaves()
         {
-            Assert.That(UniverseGenerator.GenerationVersion, Is.EqualTo(2));
+            Assert.That(UniverseGenerator.GenerationVersion, Is.EqualTo(3));
+            Assert.That(UniverseGenerator.LegacyGenerationVersion, Is.EqualTo(2));
         }
 
         [Test]

@@ -32,6 +32,7 @@ namespace SpaceEngine.Tests.PlayMode
         Material previousSkybox;
         string savePath;
         string legacySavePath;
+        string saveDirectory;
         readonly Dictionary<string, byte[]> previousSaveFiles = new Dictionary<string, byte[]>();
         readonly List<UniverseApp> suspendedApps = new List<UniverseApp>();
         readonly List<Camera> suspendedCameras = new List<Camera>();
@@ -49,9 +50,12 @@ namespace SpaceEngine.Tests.PlayMode
             previousScene = SceneManager.GetActiveScene();
             previousVsync = QualitySettings.vSyncCount; previousTargetFrameRate = Application.targetFrameRate;
             previousFog = RenderSettings.fog; previousAmbient = RenderSettings.ambientLight; previousSkybox = RenderSettings.skybox;
-            savePath = Path.Combine(Application.persistentDataPath, "flight-v2.json");
-            legacySavePath = Path.Combine(Application.persistentDataPath, "flight.json");
-            foreach (string path in new[] { savePath, savePath + ".bak", savePath + ".tmp", legacySavePath, legacySavePath + ".bak", legacySavePath + ".tmp" })
+            saveDirectory = Path.Combine(Application.temporaryCachePath,"ExplorerTests-"+Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(saveDirectory);
+            savePath = Path.Combine(saveDirectory, "flight-v3.json");
+            legacySavePath = Path.Combine(saveDirectory, "flight.json");
+            string versionTwoPath=Path.Combine(saveDirectory,"flight-v2.json");
+            foreach (string path in new[] { savePath, savePath + ".bak", savePath + ".tmp", legacySavePath, legacySavePath + ".bak", legacySavePath + ".tmp",versionTwoPath,versionTwoPath+".bak",versionTwoPath+".tmp" })
                 previousSaveFiles[path] = File.Exists(path) ? File.ReadAllBytes(path) : null;
 
             // Unity Test Runner normally supplies an empty scene. If an explorer
@@ -84,6 +88,7 @@ namespace SpaceEngine.Tests.PlayMode
             root.SetActive(false);
             app = root.AddComponent<UniverseApp>();
             app.Settings = settings;
+            app.SaveDirectoryOverride=saveDirectory;
             app.VerificationOwnsFlight = true;
             app.TimeRate = 0;
             root.SetActive(true);
@@ -101,6 +106,7 @@ namespace SpaceEngine.Tests.PlayMode
                 else if (File.Exists(snapshot.Key)) File.Delete(snapshot.Key);
             }
             previousSaveFiles.Clear();
+            if(Directory.Exists(saveDirectory)&&Directory.GetFileSystemEntries(saveDirectory).Length==0)Directory.Delete(saveDirectory);
             if (app != null) Object.Destroy(app.gameObject);
             yield return null;
             if (previousScene.IsValid() && previousScene.isLoaded) SceneManager.SetActiveScene(previousScene);

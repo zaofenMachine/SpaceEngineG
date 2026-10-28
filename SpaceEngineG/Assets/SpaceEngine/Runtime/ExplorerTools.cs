@@ -23,7 +23,9 @@ namespace SpaceEngine.Runtime
         public string BookmarkPathOverride;
         public string BookmarkPath=>string.IsNullOrEmpty(BookmarkPathOverride)?Path.Combine(Application.persistentDataPath,"bookmarks-v2.json"):BookmarkPathOverride;
         public IReadOnlyList<ViewBookmark> Bookmarks=>bookmarks;
-        public bool CapturesInput=>app!=null&&app.ShowHud&&(SearchOpen||BookmarksOpen);
+        public bool CapturesInput=>app!=null&&app.ShowHud&&(SearchOpen||BookmarksOpen||ShowDetails);
+        readonly CelestialDetailsPage detailsPage=new CelestialDetailsPage();
+        public CelestialDetailsPage DetailsPage=>detailsPage;
         public bool PointerOverUI
         {
             get
@@ -62,8 +64,9 @@ namespace SpaceEngine.Runtime
             IsFlyingToTarget=false;Target=target;
             app.Notice="已选中 "+Target.Name+"；C 居中，G 连续飞往，F 跳转观察";
         }
-        public void ToggleSearch(){SearchOpen=!SearchOpen;BookmarksOpen=false;if(SearchOpen){app.ShowHud=true;RefreshCatalogue();}}
-        public void ToggleBookmarks(){BookmarksOpen=!BookmarksOpen;SearchOpen=false;app.ShowHud=true;}
+        public void ToggleSearch(){SearchOpen=!SearchOpen;BookmarksOpen=false;ShowDetails=false;if(SearchOpen){app.ShowHud=true;GetComponent<ExplorerHud>()?.CloseTransientPanels();RefreshCatalogue();}}
+        public void ToggleBookmarks(){BookmarksOpen=!BookmarksOpen;SearchOpen=false;ShowDetails=false;app.ShowHud=true;GetComponent<ExplorerHud>()?.CloseTransientPanels();}
+        public void ToggleDetails(){ShowDetails=!ShowDetails;SearchOpen=BookmarksOpen=false;if(ShowDetails){app.ShowHud=true;GetComponent<ExplorerHud>()?.CloseTransientPanels();}}
         public void ToggleOrbits(){ShowOrbits=!ShowOrbits;app.Notice=ShowOrbits?"已显示真实轨道；V 可查看恒星系总览":"轨道已隐藏";}
         public void ToggleLabels(){ShowLabels=!ShowLabels;}
         public void ToggleTracking(){TrackingTarget=!TrackingTarget;if(TrackingTarget)CenterOnTarget();}
@@ -169,7 +172,7 @@ namespace SpaceEngine.Runtime
             try
             {
             if(!UniverseGenerator.IsCellOccupied(app.Settings.UniverseSeed,x,y,z,app.Settings.Galaxy)){app.Notice="该单元没有已解析恒星系";return false;}
-            var system=UniverseGenerator.GenerateSystem(app.Settings.UniverseSeed,x,y,z,app.Settings.Galaxy);
+            var system=UniverseGenerator.GenerateSystem(app.Settings.UniverseSeed,x,y,z,app.Settings.Galaxy,app.Settings.WorldGenerationVersion);
             string key=x+"/"+y+"/"+z+":";
             catalogue.RemoveAll(t=>t.Id.StartsWith(key,StringComparison.Ordinal));
             for(int body=-1;body<system.Planets.Length;body++)catalogue.Add(new CelestialTarget{X=x,Y=y,Z=z,System=system,BodyIndex=body});
@@ -255,7 +258,7 @@ namespace SpaceEngine.Runtime
             {
                 Panel(new Rect(330,96,900,90));Text(345,104,850,"目标："+Target.Name+"  /  "+(Target.IsStar?CatalogueFilter.StellarName(Target.System.Kind):CatalogueFilter.PlanetName(Target.Body.Kind))+"  /  距离 "+ExplorerHud.Distance(Target.Position(app.SimulationTime).RelativeTo(app.Observer).Length));
                 if(Button(345,143,105,"居中 C"))CenterOnTarget();if(Button(460,143,140,"连续飞往 G"))StartTargetFlight();if(Button(610,143,130,"跳转观察 F"))FrameTarget();
-                if(Button(750,143,130,TrackingTarget?"停止跟踪 Y":"跟踪目标 Y"))ToggleTracking();if(Button(890,143,125,ShowDetails?"关闭信息 F2":"详细信息 F2"))ShowDetails=!ShowDetails;if(Button(1025,143,185,"恒星系总览 V"))FrameSystem();
+                if(Button(750,143,130,TrackingTarget?"停止跟踪 Y":"跟踪目标 Y"))ToggleTracking();if(Button(890,143,125,ShowDetails?"关闭详情 F2":"天体详情 F2"))ToggleDetails();if(Button(1025,143,185,"恒星系总览 V"))FrameSystem();
             }
             if(SearchOpen)DrawSearch();else if(BookmarksOpen)DrawBookmarks();else if(ShowDetails&&Target!=null)DrawDetails();
         }
@@ -348,16 +351,8 @@ namespace SpaceEngine.Runtime
         }
         void DrawDetails()
         {
-            Panel(new Rect(330,198,900,360));double mass=Target.IsStar?Target.System.StarMass:Target.Body.Mass;
-            double gravity=PhysicalConstants.GravitationalConstant*mass/(Target.Radius*Target.Radius);
-            string[] lines={"目标："+Target.Name,"类型："+(Target.IsStar?CatalogueFilter.StellarName(Target.System.Kind):CatalogueFilter.PlanetName(Target.Body.Kind)),
-                "半径："+ExplorerHud.Distance(Target.Radius)+"     质量："+mass.ToString("E3")+" 千克",
-                "引力（牛顿近似）："+gravity.ToString("F2")+" 米/秒²     距离："+ExplorerHud.Distance(Target.Position(app.SimulationTime).RelativeTo(app.Observer).Length),
-                Target.IsStar?"有效温度："+Target.System.StarTemperature.ToString("F0")+" K":"自转周期："+(Target.Body.RotationPeriod/3600).ToString("F2")+" 小时",
-                Target.IsStar?"光度："+Target.System.StarLuminosity.ToString("E3")+" 瓦":"轨道周期："+(Orbit.Period(Target.Body,Target.Body.ParentIndex<0?Target.System.StarMass:Target.System.Planets[Target.Body.ParentIndex].Mass)/86400).ToString("F2")+" 天",
-                Target.IsStar?"恒星系内天体："+Target.System.Planets.Length:"大气高度："+ExplorerHud.Distance(Target.Body.AtmosphereHeight)+"    "+(Target.Body.IsLandable?"可降落":"无固体地表"),
-                "程序化地址："+Target.Id+"     天体种子："+(Target.IsStar?Target.System.Seed:Target.Body.Seed)};
-            for(int i=0;i<lines.Length;i++)Text(348,212+i*37,850,lines[i]);
+            detailsPage.Draw(new Rect(330,198,900,600),Target,app.SimulationTime,
+                Select,ClosePanels,()=>{ShowDetails=false;ToggleSearch();});
         }
         void OnDestroy(){if(orbits!=null)Destroy(orbits.gameObject);}
     }

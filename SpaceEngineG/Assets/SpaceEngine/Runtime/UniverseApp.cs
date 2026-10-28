@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 namespace SpaceEngine.Runtime
 {
     /// <summary>Simulation coordinates stay in SI. The Unity camera is always at the render origin.</summary>
+    [DefaultExecutionOrder(-100)]
     public sealed class UniverseApp : MonoBehaviour
     {
         public UniverseSettings Settings;
@@ -39,7 +40,9 @@ namespace SpaceEngine.Runtime
         public bool GalaxyOverview {get;private set;}
         public bool NucleusView {get;private set;}
         public bool StellarView {get;private set;}
-        public string SavePath => Path.Combine(Application.persistentDataPath,"flight-v2.json");
+        [HideInInspector] public string SaveDirectoryOverride;
+        public string SaveDirectory=>string.IsNullOrEmpty(SaveDirectoryOverride)?Application.persistentDataPath:SaveDirectoryOverride;
+        public string SavePath => Path.Combine(SaveDirectory,"flight-v"+Settings.WorldGenerationVersion+".json");
         public double LocalStellarDensity => GalaxyModel.SampleDensity(GalaxyModel.ToGalacticLy(Observer,Settings.Galaxy),Settings.Galaxy);
         public int BodyTriangles {get{int total=0;if(Celestials!=null)foreach(var c in Celestials)total+=c.TriangleCount;if(Clouds!=null)foreach(var c in Clouds)total+=c.TriangleCount;return total;}}
         public string Navigation { get; private set; } = "FREE FLIGHT";
@@ -114,6 +117,7 @@ namespace SpaceEngine.Runtime
             gameObject.AddComponent<FlightVerification>();
             gameObject.AddComponent<GalaxyVerification>();
             gameObject.AddComponent<ExplorerVerification>();
+            gameObject.AddComponent<DetailsVerification>();
         }
 
         Material Resolve(Material source,string shaderName)
@@ -135,7 +139,7 @@ namespace SpaceEngine.Runtime
             if(GalacticLight!=null&&!ReferenceEquals(GalacticLight.Definition,Settings.Galaxy))
                 GalacticLight.Configure(Settings.Galaxy,galaxyVolumeMaterial,galaxyCompositeMaterial);
             CellX=x;CellY=y;CellZ=z;
-            System=UniverseGenerator.GenerateSystem(Settings.UniverseSeed,x,y,z,Settings.Galaxy);
+            System=UniverseGenerator.GenerateSystem(Settings.UniverseSeed,x,y,z,Settings.Galaxy,Settings.WorldGenerationVersion);
             SelectedPlanet=0; radialNavigation=false;
             Terrains=new PlanetTerrain[System.Planets.Length];
             Celestials=new CelestialBodyRenderer[Terrains.Length];
@@ -163,7 +167,7 @@ namespace SpaceEngine.Runtime
                 cloud.WeatherScale=Settings.CloudWeatherScale;cloud.DetailStrength=Settings.CloudDetailStrength;cloud.WindRate=Settings.CloudWindRate;
                 cloud.Configure(System.Planets[i],cloudMaterial);Clouds[i]=cloud;
             }
-            Stars.Generate(Settings.UniverseSeed,x,y,z,Settings.StarCellRadius,starBillboard,Settings.Galaxy);
+            Stars.Generate(Settings.UniverseSeed,x,y,z,Settings.StarCellRadius,starBillboard,Settings.Galaxy,Settings.WorldGenerationVersion);
             starMaterial.SetColor("_BaseColor",System.Kind==StellarKind.BlackHole?Color.black:StarCatalogueRenderer.TemperatureColor(System.StarTemperature));
             starMaterial.SetFloat("_Seed",System.Seed);
         }
@@ -298,29 +302,36 @@ namespace SpaceEngine.Runtime
                 if(Time.unscaledTimeAsDouble>=nextStreamTime)
                 {nextStreamTime=Time.unscaledTimeAsDouble+.25;StreamNearestSystem();}
             }
-            ViewCamera.transform.SetPositionAndRotation(Vector3.zero,orientation);
             UpdateTelemetry();
-            RenderUniverse();
+        }
+
+        // Navigation and UI coroutines may replace the reference after Update.
+        // Submit the current world after those changes, before the camera renders.
+        void LateUpdate()
+        {
+            ViewCamera.transform.SetPositionAndRotation(Vector3.zero,orientation);
+            UpdateTelemetry();RenderUniverse();
         }
 
         void HandleInput(double dt)
         {
             var key=Keyboard.current;var mouse=Mouse.current;
             if(key==null)return;
-            if(key.escapeKey.wasPressedThisFrame){StopNavigation();Tools?.StopTargetFlight();Tools?.ClosePanels();Cursor.lockState=CursorLockMode.None;}
+            var hud=GetComponent<ExplorerHud>();
+            if(key.escapeKey.wasPressedThisFrame){StopNavigation();Tools?.StopTargetFlight();Tools?.ClosePanels();hud?.CloseTransientPanels();Cursor.lockState=CursorLockMode.None;}
             if(key.f1Key.wasPressedThisFrame)ShowHud=!ShowHud;
             if(key.f3Key.wasPressedThisFrame)Tools?.ToggleSearch();
             if(key.f6Key.wasPressedThisFrame)Tools?.ToggleBookmarks();
-            var hud=GetComponent<ExplorerHud>();
+            if(key.f7Key.wasPressedThisFrame)Tools?.CaptureScreenshot();
+            bool modal=(Tools!=null&&Tools.CapturesInput)||(hud!=null&&hud.CapturesInput);
+            if(key.f2Key.wasPressedThisFrame||(key.iKey.wasPressedThisFrame&&(!modal||(Tools!=null&&Tools.ShowDetails))))Tools?.ToggleDetails();
             if((Tools!=null&&Tools.CapturesInput)||(hud!=null&&hud.CapturesInput)){if(!radialNavigation)Speed=0;return;}
             bool pointerUi=(Tools!=null&&Tools.PointerOverUI)||(hud!=null&&hud.PointerOverUI);
-            if(key.f2Key.wasPressedThisFrame&&Tools!=null)Tools.ShowDetails=!Tools.ShowDetails;
             if(key.oKey.wasPressedThisFrame)Tools?.ToggleOrbits();
             if(key.lKey.wasPressedThisFrame)Tools?.ToggleLabels();
             if(key.cKey.wasPressedThisFrame&&!key.leftAltKey.isPressed&&!key.rightAltKey.isPressed)Tools?.CenterOnTarget();
             if(key.yKey.wasPressedThisFrame)Tools?.ToggleTracking();
             if(key.vKey.wasPressedThisFrame)Tools?.FrameSystem();
-            if(key.f7Key.wasPressedThisFrame)Tools?.CaptureScreenshot();
             if(key.gKey.wasPressedThisFrame){if(Tools!=null&&Tools.Target!=null)Tools.StartTargetFlight();else BeginDescent();}
             if(key.rKey.wasPressedThisFrame)BeginAscent();
             if(key.fKey.wasPressedThisFrame){if(Tools!=null&&Tools.Target!=null)Tools.FrameTarget();else FramePlanet(SelectedPlanet,Settings.InitialAltitude);}
@@ -394,7 +405,7 @@ namespace SpaceEngine.Runtime
             long cy=(long)Math.Round(Observer.sectorY*(UniversalPosition.SectorSize/UniverseGenerator.CellSize)+Observer.local.y/UniverseGenerator.CellSize);
             long cz=(long)Math.Round(Observer.sectorZ*(UniversalPosition.SectorSize/UniverseGenerator.CellSize)+Observer.local.z/UniverseGenerator.CellSize);
             if(Stars.CenterX!=cx||Stars.CenterY!=cy||Stars.CenterZ!=cz)
-                Stars.Generate(Settings.UniverseSeed,cx,cy,cz,Settings.StarCellRadius,starBillboard,Settings.Galaxy);
+                Stars.Generate(Settings.UniverseSeed,cx,cy,cz,Settings.StarCellRadius,starBillboard,Settings.Galaxy,Settings.WorldGenerationVersion);
             if(current<UniverseGenerator.CellSize*.2)return;
             StarCatalogueRenderer.Entry best=default;double nearest=current;
             foreach(var entry in Stars.Entries)
@@ -543,6 +554,7 @@ namespace SpaceEngine.Runtime
         }
         public void SaveFlight()
         {
+            Directory.CreateDirectory(SaveDirectory);
             string path=SavePath;
             string temporary=path+".tmp";File.WriteAllText(temporary,CaptureFlightState());
             if(File.Exists(path))File.Replace(temporary,path,path+".bak");else File.Move(temporary,path);
@@ -551,12 +563,19 @@ namespace SpaceEngine.Runtime
         public void LoadFlight()
         {
             string path=SavePath;
-            if(!File.Exists(path)){Notice=File.Exists(Path.Combine(Application.persistentDataPath,"flight.json"))?"Generation v1 save retained; open it with the 0.1.0 build.":"No generation v2 saved flight";return;}
+            // New worlds write v3; a previous v2 flight is restored under its
+            // own generator, never silently projected onto different orbits.
+            if(!File.Exists(path)&&Settings.WorldGenerationVersion==3)
+            {
+                string legacy=Path.Combine(SaveDirectory,"flight-v2.json");
+                if(File.Exists(legacy))path=legacy;
+            }
+            if(!File.Exists(path)){Notice=File.Exists(Path.Combine(SaveDirectory,"flight.json"))?"Generation v1 save retained; open it with the 0.1.0 build.":"尚无当前生成版本的飞行存档";return;}
             RestoreFlightState(File.ReadAllText(path));
         }
         public string CaptureFlightState()
         {
-            return JsonUtility.ToJson(new SaveData{Seed=Settings.UniverseSeed,CellX=CellX,CellY=CellY,CellZ=CellZ,PlanetIndex=SelectedPlanet,Position=Observer,Rotation=orientation,Time=SimulationTime,Galaxy=Settings.Galaxy,
+            return JsonUtility.ToJson(new SaveData{GenerationVersion=Settings.WorldGenerationVersion,Seed=Settings.UniverseSeed,CellX=CellX,CellY=CellY,CellZ=CellZ,PlanetIndex=SelectedPlanet,Position=Observer,Rotation=orientation,Time=SimulationTime,Galaxy=Settings.Galaxy,
                 ExactLocal=new[]{Observer.local.x.ToString("R",CultureInfo.InvariantCulture),Observer.local.y.ToString("R",CultureInfo.InvariantCulture),Observer.local.z.ToString("R",CultureInfo.InvariantCulture)},ViewMode=GalaxyOverview?1:NucleusView?2:StellarView?3:0},true);
         }
         public bool RestoreFlightState(string state)
@@ -564,7 +583,7 @@ namespace SpaceEngine.Runtime
             try
             {
                 var save=JsonUtility.FromJson<SaveData>(state);
-                if(save==null||save.Version!=2||save.GenerationVersion!=UniverseGenerator.GenerationVersion)throw new InvalidDataException("Unsupported save or world generation version");
+                if(save==null||save.Version!=2||(save.GenerationVersion!=2&&save.GenerationVersion!=3))throw new InvalidDataException("Unsupported save or world generation version");
                 if(save.ViewMode<0||save.ViewMode>3)throw new InvalidDataException("Unsupported reference view");
                 if(double.IsNaN(save.Time)||double.IsInfinity(save.Time))throw new InvalidDataException("Invalid simulation time");
                 Double3 local=save.Position.local;
@@ -579,10 +598,10 @@ namespace SpaceEngine.Runtime
                 float qLength=save.Rotation.x*save.Rotation.x+save.Rotation.y*save.Rotation.y+save.Rotation.z*save.Rotation.z+save.Rotation.w*save.Rotation.w;
                 if(float.IsNaN(qLength)||float.IsInfinity(qLength)||qLength<.1f)throw new InvalidDataException("Invalid orientation");
                 if(save.Galaxy==null)throw new InvalidDataException("Missing galactic configuration");
-                UniverseGenerator.GenerateSystem(save.Seed,save.CellX,save.CellY,save.CellZ,save.Galaxy);
+                UniverseGenerator.GenerateSystem(save.Seed,save.CellX,save.CellY,save.CellZ,save.Galaxy,save.GenerationVersion);
                 GalaxyModel.SampleDensity(Double3.Zero,save.Galaxy);
                 Settings.Galaxy=save.Galaxy;
-                Settings.UniverseSeed=save.Seed;SimulationTime=save.Time;LoadSystem(save.CellX,save.CellY,save.CellZ);
+                Settings.WorldGenerationVersion=save.GenerationVersion;Settings.UniverseSeed=save.Seed;SimulationTime=save.Time;LoadSystem(save.CellX,save.CellY,save.CellZ);
                 SelectedPlanet=Math.Clamp(save.PlanetIndex,0,System.Planets.Length-1);
                 GalaxyOverview=save.ViewMode==1;NucleusView=save.ViewMode==2;StellarView=save.ViewMode==3;
                 SetObserver(normalized,save.Rotation.normalized);

@@ -8,6 +8,7 @@ namespace SpaceEngine.Runtime
     public sealed class UniverseSettings : ScriptableObject
     {
         public int UniverseSeed = 20261026;
+        [Range(2,3)] public int WorldGenerationVersion = UniverseGenerator.GenerationVersion;
         public GalaxyDefinition Galaxy = new GalaxyDefinition();
         [Range(10000,150000)] public int GalaxyParticleCount = 60000;
         [Range(0,8)] public float GalaxyExposure = .15f;

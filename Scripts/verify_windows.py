@@ -1,4 +1,4 @@
-"""Run the visible v0.4 Windows player and record its real exploration route.
+"""Run the visible v0.5 Windows player and record its real exploration route.
 
     python Scripts/verify_windows.py --route all
     python Scripts/verify_windows.py --route explorer --timeout 240
@@ -23,13 +23,14 @@ import uuid
 
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-DEFAULT_PLAYER = ROOT / 'Builds/Windows-v0.4.0/SpaceEngineG.exe'
-DEFAULT_OUTPUT = ROOT / 'Artifacts/V040'
+DEFAULT_PLAYER = ROOT / 'Builds/Windows-v0.5.0/SpaceEngineG.exe'
+DEFAULT_OUTPUT = ROOT / 'Artifacts/V050'
 DEFAULT_FFMPEG = pathlib.Path(
     'C:/Environment/python/Lib/site-packages/imageio_ffmpeg/binaries/ffmpeg-win-x86_64-v7.1.exe')
 ROUTES = {
     'flight': ('PlayerFlight', 'runtime-verification.json', ['--verify-flight']),
     'galaxy': ('PlayerGalaxy', 'galaxy-verification.json', ['--verify-galaxy']),
+    'details': ('PlayerDetails', 'details-verification.json', ['--verify-details']),
     'explorer': ('PlayerExplorer', 'explorer-verification.json',
                  ['--verify-explorer', '--record-descent']),
 }
@@ -188,13 +189,17 @@ def validate_report(directory, route, report_name):
     if not report.get('passed') or report.get('errors') != 0:
         raise RuntimeError('Player acceptance reported failure: ' + str(path))
     version = report.get('applicationVersion', report.get('version'))
-    if version != '0.4.0' or not report.get('buildGuid', '').strip('0'):
-        raise RuntimeError('Report does not identify the v0.4.0 standalone build.')
+    if version != '0.5.0' or not report.get('buildGuid', '').strip('0'):
+        raise RuntimeError('Report does not identify the v0.5.0 standalone build.')
     if route == 'explorer':
         names = report['screenshots']
         if not {'06-descent-start.png', '07-first-surface-hold.png', '08-continuous-ascent.png',
                 '09-return-surface-hold.png'}.issubset(names):
             raise RuntimeError('Explorer report is missing complete descent/return milestones.')
+    elif route == 'details':
+        names = report['screenshots']
+        if len(names) < 19:
+            raise RuntimeError('Missing full details page/category/legacy captures.')
     elif route == 'flight':
         names = [entry['stage'] + '.png' for entry in report['samples']]
     else:
@@ -329,7 +334,7 @@ def main():
         parser.error('--timeout must be positive.')
     args.player, args.output, args.ffmpeg = args.player.resolve(), args.output.resolve(), args.ffmpeg.resolve()
     if not args.player.is_file():
-        parser.error('Build the v0.4.0 player first; executable missing: ' + str(args.player))
+        parser.error('Build the v0.5.0 player first; executable missing: ' + str(args.player))
     if args.route in ('all', 'explorer') and not args.ffmpeg.is_file():
         parser.error('FFmpeg executable missing: ' + str(args.ffmpeg))
     ffprobe = args.ffprobe.resolve() if args.ffprobe else args.ffmpeg.with_name('ffprobe.exe')

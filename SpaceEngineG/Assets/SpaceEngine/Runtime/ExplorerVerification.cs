@@ -37,7 +37,7 @@ namespace SpaceEngine.Runtime
 #endif
             if(!requested&&!record)yield break;
             app=GetComponent<UniverseApp>();app.VerificationOwnsFlight=true;app.TimeRate=0;app.ShowHud=true;
-            int index=Array.IndexOf(args,"--evidence-path");output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V040/Explorer"));
+            int index=Array.IndexOf(args,"--evidence-path");output=index>=0&&index+1<args.Length?args[index+1]:Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V050/Explorer"));
             Directory.CreateDirectory(output);report=new Report{utc=DateTime.UtcNow.ToString("O"),version=Application.version,buildGuid=Application.buildGUID,gpu=SystemInfo.graphicsDeviceName,api=SystemInfo.graphicsDeviceType.ToString()};
             Application.logMessageReceived+=Log;start=Time.realtimeSinceStartupAsDouble;
             int encoderIndex=Array.IndexOf(args,"--video-encoder"),videoIndex=Array.IndexOf(args,"--video-output");

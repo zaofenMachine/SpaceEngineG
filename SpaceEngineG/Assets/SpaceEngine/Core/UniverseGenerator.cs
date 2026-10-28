@@ -11,7 +11,8 @@ namespace SpaceEngine.Core
     public static class UniverseGenerator
     {
         public const double CellSize = 4 * PhysicalConstants.LightYear;
-        public const int GenerationVersion = 2;
+        public const int GenerationVersion = 3;
+        public const int LegacyGenerationVersion = 2;
         private const double SolarLuminosity = 3.828e26;
         private const double StefanBoltzmann = 5.670374419e-8;
         private const double ParsecInLightYears = 3.2615637771674336;
@@ -68,9 +69,10 @@ namespace SpaceEngine.Core
             => GenerateSystem(universeSeed, cellX, cellY, cellZ, DefaultGalaxy(universeSeed));
 
         /// <summary>Candidate generation and admission metadata use the same authoritative galaxy settings.</summary>
-        public static StarSystemDefinition GenerateSystem(int universeSeed, long cellX, long cellY, long cellZ, GalaxyDefinition galaxy)
+        public static StarSystemDefinition GenerateSystem(int universeSeed, long cellX, long cellY, long cellZ, GalaxyDefinition galaxy, int generationVersion = GenerationVersion)
         {
             if (galaxy == null) throw new ArgumentNullException(nameof(galaxy));
+            if (generationVersion != GenerationVersion && generationVersion != LegacyGenerationVersion) throw new ArgumentOutOfRangeException(nameof(generationVersion));
             ulong hash = DeterministicRandom.Hash(universeSeed, cellX, cellY, cellZ);
             var random = new DeterministicRandom(hash);
             int seed;
@@ -79,7 +81,7 @@ namespace SpaceEngine.Core
             double density = GalaxyModel.SampleDensity(GalaxyModel.ToGalacticLy(position, galaxy), galaxy);
             var system = new StarSystemDefinition
             {
-                Name = $"SEG-{hash & 0xffffff:X6}", Seed = seed, Position = position,
+                Name = $"SEG-{hash & 0xffffff:X6}", Seed = seed, Position = position, GenerationVersion = generationVersion,
                 GalacticDensity = density, IsOccupied = home || Admit(hash, density)
             };
             GenerateStar(system, ref random, home);
@@ -125,6 +127,7 @@ namespace SpaceEngine.Core
                 system.Planets[primaryCount + i] = moon;
                 if (parentIndex == 3) previousGasApoapsis = moon.SemiMajorAxis * (1 + moon.Eccentricity);
             }
+            if (generationVersion == GenerationVersion) PlanetGenerationRules.Apply(system);
             return system;
         }
 

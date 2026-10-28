@@ -52,3 +52,11 @@ GPU 实现额外使用解析频段的像素导数过滤，解决实际截图中�
 | [SpaceEngine User manual 0.980：Camera control / Selecting Objects / Autopilot](https://spaceengine.org/manual/user-manual-0980/) | 手册将“选择”“居中”和“飞往”区分。采用 F3 搜索、C 居中、G 连续飞往；选中目标保持观察者位置，F 跳转和书签恢复明确标作位置跳转。其他快捷键按本项目界面列示，没有承诺逐键兼容旧版 SpaceEngine。 |
 
 本轮银河继续基于前节的有限三维发光/消光积分。先用同观察者的原生/半分辨率及积分收敛控制区分重建模糊与密度频谱不足，再加入可过滤的 Seed 三维细尘/年轻星团频段；不是对官方 SpaceEngine 内部银河算法的复现。高频指标、双质量参考、实际近臂和盘内图共同验证，闭合泡状尘纹与规则旋臂仍作为已知局限保留。数值和实际图见 [0.4 验收记录](VALIDATION-V040.md)。
+
+## 2026-10-28：天体详情与温度模型
+
+- [SpaceEngine：Creating a planet](https://spaceengine.org/manual/making-addons/creating-a-planet/)：参考其质量/半径、轨道、反照率、大气与温室参数的组织关系；不复制其代码、资产或完整模型。
+- [SpaceEngine：The Climate Model](https://spaceengine.org/articles/the-climate-model/)：明确辐照、Bond反照率、再分配因子和平衡温度之间的关系；其正式实现还包含昼夜/纬度、内部热和垂直廓线。本项目只实现注明假设的单层灰模型，不声称复现这些完整系统。
+- [NASA Exoplanet Archive：参数定义](https://exoplanetarchive.ipac.caltech.edu/docs/API_PS_columns.html)：对照质量、半径、密度、入射通量与黑体平衡温度的字段语义。项目中的天体仍由Seed合成，没有把生成数据标成观测值，也未导入NASA真实星表。
+
+本轮质量与几何量共享同一数据源；卫星的环绕周期以母行星质量求值，恒星受热距离则递归回到恒星。大气组分/压力与内部热是显式的生成假设，气态行星的1bar层没有伪装成可降落的固体表面。

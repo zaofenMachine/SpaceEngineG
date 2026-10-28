@@ -18,7 +18,7 @@ namespace SpaceEngine.Rendering.Editor
     {
         const int Size = 512;
         public static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "..",
-            "Artifacts", "V040", "GalaxyClarity", "galaxy-clarity.json"));
+            "Artifacts", "V050", "GalaxyClarity", "galaxy-clarity.json"));
 
         [MenuItem("Space Engine/Validate Galaxy Clarity")]
         public static void ValidateClarity()
