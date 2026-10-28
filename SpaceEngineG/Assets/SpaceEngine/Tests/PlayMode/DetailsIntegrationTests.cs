@@ -76,5 +76,26 @@ namespace SpaceEngine.Tests.PlayMode
                 input.backgroundBehavior=background;input.editorInputBehaviorInPlayMode=routing;app.VerificationOwnsFlight=true;
             }
         }
+        [UnityTest] public IEnumerator VariableFrameStepsReachTheSameExactLandingClearance()
+        {
+            var cadences=new[]{1.0/240,1.0/60,.013,.049,.0167};
+            for(int route=0;route<3;route++)
+            {
+                app.FramePlanet(0,600000);app.BeginDescent();int steps=0;
+                while(app.RadialNavigationActive&&steps<30000)
+                {app.AdvanceRadialFlight(cadences[(steps+route)%cadences.Length]);app.ConstrainGround();steps++;}
+                Assert.That(app.RadialNavigationActive,Is.False,"The speed-limited descent must finish.");
+                Assert.That(app.CameraFromPlanet.Length-app.Planet.Radius-app.SurfaceHeight(app.CameraFromPlanet.Normalized),Is.EqualTo(app.Settings.MinimumClearance).Within(.001));
+                var first=app.Observer;app.BeginAscent();steps=0;
+                while(app.CameraFromPlanet.Length-app.Planet.Radius-app.SurfaceHeight(app.CameraFromPlanet.Normalized)<2000&&steps<30000)
+                {app.AdvanceRadialFlight(cadences[(steps+route+2)%cadences.Length]);app.ConstrainGround();steps++;}
+                app.StopNavigation();app.BeginDescent();steps=0;
+                while(app.RadialNavigationActive&&steps<30000)
+                {app.AdvanceRadialFlight(cadences[(steps+route+1)%cadences.Length]);app.ConstrainGround();steps++;}
+                Assert.That(app.RadialNavigationActive,Is.False);
+                Assert.That(app.Observer.RelativeTo(first).Length,Is.LessThan(.002),"Changing frame cadence must not select a different landing height.");
+                yield return null;
+            }
+        }
     }
 }

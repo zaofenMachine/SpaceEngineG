@@ -278,7 +278,9 @@ namespace SpaceEngine.Runtime
                 if(tangent.sqrMagnitude<.1)tangent=Vector3.Cross(up,Vector3.forward).normalized;
                 orientation=Quaternion.Slerp(orientation,Quaternion.LookRotation((tangent-up*.12f).normalized,up),(float)Math.Min(1,dt*1.5));
             }
-            if(Math.Abs(remaining)<.05){radialNavigation=false;Speed=0;Navigation=!Planet.IsLandable?"HOLDING ABOVE CLOUDS / NON-LANDABLE":targetAltitude<10?"LANDED / TERRAIN FOLLOW":"FREE FLIGHT";}
+            // Declare arrival only when this speed-limited step actually reaches
+            // the target. A 5 cm early-out leaves a frame-rate-dependent landing height.
+            if(step>=Math.Abs(remaining)){radialNavigation=false;Speed=0;Navigation=!Planet.IsLandable?"HOLDING ABOVE CLOUDS / NON-LANDABLE":targetAltitude<10?"LANDED / TERRAIN FOLLOW":"FREE FLIGHT";}
         }
 
         void Update()
