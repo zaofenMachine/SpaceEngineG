@@ -1,0 +1,144 @@
+{
+    "passed": true,
+    "utc": "2026-10-28T05:49:11.3107400Z",
+    "gpu": "NVIDIA GeForce RTX 4070",
+    "api": "Direct3D12",
+    "error": "",
+    "scope": "Actual seed20261026 origin planet and production terrain shader, cold Configure versus first Tick at600km, fixed camera, real URP color/depth readbacks. No atmosphere/cloud/HUD/static-sphere fallback. An unsubmitted-frame empty control diagnoses caller timing; it is expected to be empty. Tests origin landing direction, cube-chart edge and polar viewpoints using the default build/time budgets. This does not replace same-frame Runtime navigation or native video validation.",
+    "checks": [
+        {
+            "name": "origin-landing: Configure alone is the empty timing control",
+            "passed": true,
+            "value": 0.0,
+            "limit": 1e-7
+        },
+        {
+            "name": "origin-landing: First submitted frame contains visible generated terrain",
+            "passed": true,
+            "value": 0.27116173041999255,
+            "limit": 0.01
+        },
+        {
+            "name": "origin-landing: First submitted center writes opaque camera depth",
+            "passed": true,
+            "value": 1.0,
+            "limit": 0.98
+        },
+        {
+            "name": "origin-landing: First build obeys configured count budget",
+            "passed": true,
+            "value": 4.0,
+            "limit": 6.0
+        },
+        {
+            "name": "origin-landing: Loading converges to finer real geometry",
+            "passed": true,
+            "value": 3.0,
+            "limit": 3.0
+        },
+        {
+            "name": "cube-edge: Configure alone is the empty timing control",
+            "passed": true,
+            "value": 0.0,
+            "limit": 1e-7
+        },
+        {
+            "name": "cube-edge: First submitted frame contains visible generated terrain",
+            "passed": true,
+            "value": 0.3514851500679874,
+            "limit": 0.01
+        },
+        {
+            "name": "cube-edge: First submitted center writes opaque camera depth",
+            "passed": true,
+            "value": 1.0,
+            "limit": 0.98
+        },
+        {
+            "name": "cube-edge: First build obeys configured count budget",
+            "passed": true,
+            "value": 4.0,
+            "limit": 6.0
+        },
+        {
+            "name": "cube-edge: Loading converges to finer real geometry",
+            "passed": true,
+            "value": 3.0,
+            "limit": 3.0
+        },
+        {
+            "name": "polar: Configure alone is the empty timing control",
+            "passed": true,
+            "value": 0.0,
+            "limit": 1e-7
+        },
+        {
+            "name": "polar: First submitted frame contains visible generated terrain",
+            "passed": true,
+            "value": 0.41117226879916549,
+            "limit": 0.01
+        },
+        {
+            "name": "polar: First submitted center writes opaque camera depth",
+            "passed": true,
+            "value": 1.0,
+            "limit": 0.98
+        },
+        {
+            "name": "polar: First build obeys configured count budget",
+            "passed": true,
+            "value": 4.0,
+            "limit": 6.0
+        },
+        {
+            "name": "polar: Loading converges to finer real geometry",
+            "passed": true,
+            "value": 3.0,
+            "limit": 3.0
+        }
+    ],
+    "samples": [
+        {
+            "name": "origin-landing",
+            "direction": "(0.17100489083290515, 0.11161857128660201, 0.97892728118852823)",
+            "built": 4,
+            "active": 3,
+            "lod": 0,
+            "pending": 95,
+            "settledLod": 3,
+            "firstBuildMilliseconds": 7.4401,
+            "firstSelectionMilliseconds": 0.40040000000000006,
+            "firstCenterLuminance": 0.27116173041999255,
+            "firstCenterDepthCoverage": 1.0,
+            "settledCenterLuminance": 0.2699940046054381
+        },
+        {
+            "name": "cube-edge",
+            "direction": "(0.70205264342545382, 0.70205264342545382, 0.11934894938232715)",
+            "built": 4,
+            "active": 3,
+            "lod": 0,
+            "pending": 91,
+            "settledLod": 3,
+            "firstBuildMilliseconds": 7.4430000000000009,
+            "firstSelectionMilliseconds": 0.3627,
+            "firstCenterLuminance": 0.3514851500679874,
+            "firstCenterDepthCoverage": 1.0,
+            "settledCenterLuminance": 0.350119288428856
+        },
+        {
+            "name": "polar",
+            "direction": "(0, 1, 0)",
+            "built": 4,
+            "active": 1,
+            "lod": 0,
+            "pending": 65,
+            "settledLod": 3,
+            "firstBuildMilliseconds": 7.860200000000001,
+            "firstSelectionMilliseconds": 0.2534,
+            "firstCenterLuminance": 0.41117226879916549,
+            "firstCenterDepthCoverage": 1.0,
+            "settledCenterLuminance": 0.41138812396821869
+        }
+    ]
+}

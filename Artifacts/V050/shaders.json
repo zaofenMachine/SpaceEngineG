@@ -1,0 +1,289 @@
+{
+    "utcTimestamp": "2026-10-28T05:49:06.9686093Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "graphicsShaderLevel": 50,
+    "graphicsAvailable": true,
+    "renderPipeline": "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset",
+    "scope": "Active graphics API support, synchronous compilation of all material passes, and ShaderUtil diagnostics. Does not verify rendered pixel appearance.",
+    "passed": true,
+    "shaders": [
+        {
+            "name": "SpaceEngine/Terrain",
+            "assetPath": "Assets/SpaceEngine/Rendering/Terrain.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "TerrainLighting",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthNormalsOnly",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 2,
+                    "name": "DepthOnly",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 0,
+                    "name": "TerrainLighting",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthNormalsOnly",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                },
+                {
+                    "index": 2,
+                    "name": "DepthOnly",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/Atmosphere",
+            "assetPath": "Assets/SpaceEngine/Rendering/Atmosphere.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "PhysicalAtmosphere",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 0,
+                    "name": "PhysicalAtmosphere",
+                    "variant": "_ATMOSPHERE_EXTINCTION",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/StarBillboard",
+            "assetPath": "Assets/SpaceEngine/Rendering/StarBillboard.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/Star",
+            "assetPath": "Assets/SpaceEngine/Rendering/Star.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthOnly",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/GasGiant",
+            "assetPath": "Assets/SpaceEngine/Rendering/GasGiant.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "CloudLighting",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthOnly",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 2,
+                    "name": "DepthNormalsOnly",
+                    "variant": "default",
+                    "compiled": true
+                },
+                {
+                    "index": 0,
+                    "name": "CloudLighting",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                },
+                {
+                    "index": 1,
+                    "name": "DepthOnly",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                },
+                {
+                    "index": 2,
+                    "name": "DepthNormalsOnly",
+                    "variant": "_GBUFFER_NORMALS_OCT",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/PlanetRing",
+            "assetPath": "Assets/SpaceEngine/Rendering/PlanetRing.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "RingScattering",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/GalaxyField",
+            "assetPath": "Assets/SpaceEngine/Rendering/GalaxyField.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/GalaxyVolume",
+            "assetPath": "Assets/SpaceEngine/Rendering/GalaxyVolume.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "StellarVolumeIntegration",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": [
+                {
+                    "severity": "Warning",
+                    "message": "integer divides may be much slower, try using uints if possible.",
+                    "details": "Compiling Subshader: 0, Pass: StellarVolumeIntegration, Fragment program with <no keywords>\nPlatform defines: SHADER_API_DESKTOP UNITY_ENABLE_DETAIL_NORMALMAP UNITY_ENABLE_REFLECTION_BUFFERS UNITY_LIGHTMAP_FULL_HDR UNITY_LIGHT_PROBE_PROXY_VOLUME UNITY_PBS_USE_BRDF1 UNITY_PLATFORM_SUPPORTS_DEPTH_FETCH UNITY_SPECCUBE_BLENDING UNITY_SPECCUBE_BOX_PROJECTION UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS\nDisabled keywords: SHADER_API_GLES30 SHADER_API_GLES31 SHADER_API_GLES32 UNITY_ASTC_NORMALMAP_ENCODING UNITY_COLORSPACE_GAMMA UNITY_FRAMEBUFFER_FETCH_AVAILABLE UNITY_HARDWARE_TIER1 UNITY_HARDWARE_TIER2 UNITY_HARDWARE_TIER3 UNITY_LIGHTMAP_DLDR_ENCODING UNITY_LIGHTMAP_RGBM_ENCODING UNITY_METAL_SHADOWS_USE_POINT_FILTERING UNITY_NO_DXT5nm UNITY_NO_SCREENSPACE_SHADOWS UNITY_PBS_USE_BRDF2 UNITY_PBS_USE_BRDF3 UNITY_PRETRANSFORM_TO_DISPLAY_ORIENTATION UNITY_UNIFIED_SHADER_PRECISION_MODEL UNITY_VIRTUAL_TEXTURING",
+                    "platform": "D3D",
+                    "file": "Assets/SpaceEngine/Rendering/GalaxyVolume.shader",
+                    "line": 218
+                },
+                {
+                    "severity": "Warning",
+                    "message": "pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them",
+                    "details": "Compiling Subshader: 0, Pass: StellarVolumeIntegration, Fragment program with <no keywords>\nPlatform defines: SHADER_API_DESKTOP UNITY_ENABLE_DETAIL_NORMALMAP UNITY_ENABLE_REFLECTION_BUFFERS UNITY_LIGHTMAP_FULL_HDR UNITY_LIGHT_PROBE_PROXY_VOLUME UNITY_PBS_USE_BRDF1 UNITY_PLATFORM_SUPPORTS_DEPTH_FETCH UNITY_SPECCUBE_BLENDING UNITY_SPECCUBE_BOX_PROJECTION UNITY_USE_DITHER_MASK_FOR_ALPHABLENDED_SHADOWS\nDisabled keywords: SHADER_API_GLES30 SHADER_API_GLES31 SHADER_API_GLES32 UNITY_ASTC_NORMALMAP_ENCODING UNITY_COLORSPACE_GAMMA UNITY_FRAMEBUFFER_FETCH_AVAILABLE UNITY_HARDWARE_TIER1 UNITY_HARDWARE_TIER2 UNITY_HARDWARE_TIER3 UNITY_LIGHTMAP_DLDR_ENCODING UNITY_LIGHTMAP_RGBM_ENCODING UNITY_METAL_SHADOWS_USE_POINT_FILTERING UNITY_NO_DXT5nm UNITY_NO_SCREENSPACE_SHADOWS UNITY_PBS_USE_BRDF2 UNITY_PBS_USE_BRDF3 UNITY_PRETRANSFORM_TO_DISPLAY_ORIENTATION UNITY_UNIFIED_SHADER_PRECISION_MODEL UNITY_VIRTUAL_TEXTURING",
+                    "platform": "D3D",
+                    "file": "Assets/SpaceEngine/Rendering/GalaxyVolume.shader",
+                    "line": 255
+                }
+            ]
+        },
+        {
+            "name": "SpaceEngine/GalaxyVolumeComposite",
+            "assetPath": "Assets/SpaceEngine/Rendering/GalaxyVolumeComposite.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/PlanetCloud",
+            "assetPath": "Assets/SpaceEngine/Rendering/PlanetCloud.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "SeededThinWeather",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        },
+        {
+            "name": "SpaceEngine/OrbitOverlay",
+            "assetPath": "Assets/SpaceEngine/Rendering/OrbitOverlay.shader",
+            "found": true,
+            "supported": true,
+            "passed": true,
+            "exception": "",
+            "passes": [
+                {
+                    "index": 0,
+                    "name": "<Unnamed Pass 0>",
+                    "variant": "default",
+                    "compiled": true
+                }
+            ],
+            "messages": []
+        }
+    ]
+}

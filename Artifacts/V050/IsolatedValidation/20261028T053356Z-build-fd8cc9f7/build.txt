@@ -1,0 +1,6 @@
+Result: Succeeded
+Bytes: 124591961
+Seconds: 22.13
+Errors: 0
+Warnings: 2
+Output: Builds/Windows-v0.5.0/SpaceEngineG.exe

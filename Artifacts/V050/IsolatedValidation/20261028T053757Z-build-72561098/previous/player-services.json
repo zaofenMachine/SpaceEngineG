@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "utc": "2026-10-28T05:34:28.226250+00:00",
+  "buildStartedUtc": "2026-10-28T05:33:56.693534+00:00",
+  "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+  "expectedDestinationPath": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+  "before": {
+    "utc": "2026-10-28T05:33:56.691738+00:00",
+    "files": [
+      {
+        "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+        "bytes": 71785,
+        "sha256": "e0eadc6f020f220c9fc3f325142aed66540654d04d6b5dfe5c00a4076bcd404c",
+        "mtimeNs": 1793164858489141300,
+        "modifiedUtc": "2026-10-28T05:20:58.489141+00:00"
+      }
+    ]
+  },
+  "after": {
+    "utc": "2026-10-28T05:34:28.226031+00:00",
+    "files": [
+      {
+        "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+        "bytes": 71788,
+        "sha256": "d3f6d90ae5e79257985d1831dafcecd07fc2aea82969a8d1822473401c8075d0",
+        "mtimeNs": 1793165656777812000,
+        "modifiedUtc": "2026-10-28T05:34:16.777812+00:00",
+        "destinationPath": "F:/Project/SpaceEngineG/Builds/Windows-v0.5.0/SpaceEngineG.exe",
+        "resolvedDestinationPath": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+        "architecture": "x64"
+      }
+    ]
+  },
+  "requiredServiceKeys": [
+    "EnableUnityConnect",
+    "EnablePerformanceReporting",
+    "EnableAnalytics",
+    "EnableCrashReporting",
+    "EnableInsights"
+  ],
+  "matches": [
+    {
+      "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+      "bytes": 71788,
+      "sha256": "d3f6d90ae5e79257985d1831dafcecd07fc2aea82969a8d1822473401c8075d0",
+      "mtimeNs": 1793165656777812000,
+      "modifiedUtc": "2026-10-28T05:34:16.777812+00:00",
+      "destinationPath": "F:/Project/SpaceEngineG/Builds/Windows-v0.5.0/SpaceEngineG.exe",
+      "resolvedDestinationPath": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+      "architecture": "x64"
+    }
+  ],
+  "services": {
+    "EnableUnityConnect": false,
+    "EnablePerformanceReporting": false,
+    "EnableAnalytics": false,
+    "EnableCrashReporting": false,
+    "EnableInsights": false
+  },
+  "errors": [],
+  "serviceFlagsPassed": true,
+  "missingServiceKeys": [],
+  "unexpectedServiceKeys": [],
+  "matchedBeeInput": {
+    "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+    "bytes": 71788,
+    "sha256": "d3f6d90ae5e79257985d1831dafcecd07fc2aea82969a8d1822473401c8075d0",
+    "mtimeNs": 1793165656777812000,
+    "modifiedUtc": "2026-10-28T05:34:16.777812+00:00",
+    "destinationPath": "F:/Project/SpaceEngineG/Builds/Windows-v0.5.0/SpaceEngineG.exe",
+    "resolvedDestinationPath": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+    "architecture": "x64"
+  },
+  "architecture": "x64",
+  "matchedInputBefore": {
+    "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+    "bytes": 71785,
+    "sha256": "e0eadc6f020f220c9fc3f325142aed66540654d04d6b5dfe5c00a4076bcd404c",
+    "mtimeNs": 1793164858489141300,
+    "modifiedUtc": "2026-10-28T05:20:58.489141+00:00"
+  },
+  "matchedInputAfter": {
+    "path": "F:\\Project\\SpaceEngineG\\.validation-unity-v050\\Library\\Bee\\Playerf6b3845a-inputdata.json",
+    "bytes": 71788,
+    "sha256": "d3f6d90ae5e79257985d1831dafcecd07fc2aea82969a8d1822473401c8075d0",
+    "mtimeNs": 1793165656777812000,
+    "modifiedUtc": "2026-10-28T05:34:16.777812+00:00",
+    "destinationPath": "F:/Project/SpaceEngineG/Builds/Windows-v0.5.0/SpaceEngineG.exe",
+    "resolvedDestinationPath": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+    "architecture": "x64"
+  },
+  "inputContentReused": false,
+  "buildReportSha256": "04b4d5af83179bc3d787ff0ec0fbe6d4da66aee341054cc1d6de7f136dc17334",
+  "buildReport": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\build.txt",
+  "buildReportPassed": true,
+  "completePlayerFiles": true
+}

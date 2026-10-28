@@ -1,0 +1,16 @@
+{
+  "passed": false,
+  "durationSeconds": null,
+  "capturedWindowTitle": "",
+  "playerPid": 81960,
+  "backend": "Unity framebuffer ReadPixels + rawvideo pipe",
+  "captureBackend": "Unity framebuffer ReadPixels + rawvideo pipe",
+  "windowTitleScope": "Application.productName identifier only; no Windows window or desktop capture",
+  "desktopCaptureAllowed": false,
+  "requestedFramesPerSecond": 30,
+  "requestedWidth": 1600,
+  "requestedHeight": 900,
+  "failures": [
+    "Player exited with code 2"
+  ]
+}

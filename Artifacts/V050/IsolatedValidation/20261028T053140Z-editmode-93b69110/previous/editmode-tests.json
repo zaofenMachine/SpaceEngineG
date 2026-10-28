@@ -1,0 +1,40 @@
+{
+  "success": true,
+  "message": "Isolated Unity validation passed",
+  "data": {
+    "status": "succeeded",
+    "mode": "EditMode",
+    "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+    "manifest": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\isolated-editmode-manifest.json",
+    "processExitCode": 0,
+    "errors": [],
+    "result": {
+      "passed": true,
+      "summary": {
+        "total": 183,
+        "passed": 183,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0,
+        "durationSeconds": 2.642423,
+        "resultState": "Passed"
+      },
+      "results": [],
+      "xml": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\final-editmode.xml",
+      "xmlSha256": "21ddec94a1d14ca2376e8184d74a47b373e4cf44e57b869e0acfb4ce66d385ae",
+      "assemblyPaths": [
+        "F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Core.Tests.dll",
+        "F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Rendering.Tests.dll",
+        "F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Terrain.Tests.dll",
+        "F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.UI.Tests.dll"
+      ],
+      "assemblyPathsMatchIsolatedProject": true,
+      "recordedPids": [
+        "95292"
+      ],
+      "recordedPlatforms": [
+        "EditMode"
+      ]
+    }
+  }
+}

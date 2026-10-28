@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "message": "Isolated Unity validation passed",
+  "data": {
+    "status": "succeeded",
+    "mode": "build",
+    "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+    "manifest": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\isolated-build-manifest.json",
+    "processExitCode": 0,
+    "errors": [],
+    "result": {
+      "passed": true,
+      "buildReport": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\build.txt",
+      "buildReportSha256": "04b4d5af83179bc3d787ff0ec0fbe6d4da66aee341054cc1d6de7f136dc17334",
+      "executable": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+      "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+      "completePlayerFiles": true,
+      "playerServicesReport": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\player-services.json",
+      "playerServicesReportSha256": "80d1b5510443b2ece99f3983c4b8962930a6cd8e1aeb39cb84a4a04bb16b6c1b",
+      "servicesPassed": true,
+      "services": {
+        "EnableUnityConnect": false,
+        "EnablePerformanceReporting": false,
+        "EnableAnalytics": false,
+        "EnableCrashReporting": false,
+        "EnableInsights": false
+      },
+      "errors": []
+    }
+  }
+}

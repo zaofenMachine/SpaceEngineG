@@ -1,0 +1,37 @@
+{
+  "passed": false,
+  "route": "explorer",
+  "startedAtUtc": "2026-10-28T05:40:16.830418+00:00",
+  "playerExecutable": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+  "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+  "playerCommand": [
+    "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+    "--verify-explorer",
+    "--record-descent",
+    "--quit-after-verification",
+    "--evidence-path",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer",
+    "-screen-fullscreen",
+    "0",
+    "-screen-width",
+    "1600",
+    "-screen-height",
+    "900",
+    "-logFile",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer\\Player.log",
+    "--video-encoder",
+    "C:\\Environment\\python\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v7.1.exe",
+    "--video-output",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer\\descent.mp4"
+  ],
+  "timeoutSeconds": 300.0,
+  "evidenceDirectory": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer",
+  "previousEvidenceDirectory": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PreviousRuns\\20261028T054016Z-dec19527\\PlayerExplorer",
+  "playerPid": 81960,
+  "playerExitCode": 2,
+  "failures": [
+    "Player exited with code 2"
+  ],
+  "finishedAtUtc": "2026-10-28T05:41:14.491355+00:00",
+  "elapsedSeconds": 57.659989800071344
+}

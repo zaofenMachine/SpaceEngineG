@@ -1,0 +1,171 @@
+{
+    "utcTimestamp": "2026-10-28T05:49:10.3731186Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "Production volume shader GPU readbacks at 512 and 1024 pixels. Native/half-resolution and fine-field-disabled controls share camera, seed, exposure and geometry. A 2x image/2x quadrature reference tests convergence; near-arm and interior observers test real spatial detail. Timings include texture allocation/submission and synchronized readback, not GPU timestamp queries or gameplay FPS. Shader caches may already be warm from previous menus.",
+    "exception": "",
+    "passed": true,
+    "checks": [
+        {
+            "name": "Default native target retains actual camera pixel dimensions",
+            "passed": true,
+            "measured": 512.0,
+            "threshold": 512.0
+        },
+        {
+            "name": "Native pixels converge more closely to the 2x reference than half-resolution reconstruction",
+            "passed": true,
+            "measured": 0.3354659974575043,
+            "threshold": 0.9399999976158142
+        },
+        {
+            "name": "Fine physical field supplies resolved structure beyond the coarse-density control",
+            "passed": true,
+            "measured": 1.5876888036727906,
+            "threshold": 1.0499999523162842
+        },
+        {
+            "name": "Native fine structure remains close to the higher-quality spatial reference",
+            "passed": true,
+            "measured": 0.002323181601241231,
+            "threshold": 0.02500000037252903
+        },
+        {
+            "name": "No isolated bright noise speckles replace continuous galactic structure",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 20.0
+        },
+        {
+            "name": "Approaching a real arm resolves filament structure rather than magnifying the broad cloudy field",
+            "passed": true,
+            "measured": 6.003973007202148,
+            "threshold": 1.0800000429153443
+        },
+        {
+            "name": "Nearby physical fine field converges as the ray budget doubles",
+            "passed": true,
+            "measured": 0.0006309763994067907,
+            "threshold": 0.03500000014901161
+        },
+        {
+            "name": "Embedded observer uses the increased near-dust sampling budget",
+            "passed": true,
+            "measured": 224.0,
+            "threshold": 224.0
+        },
+        {
+            "name": "Interior dust contains spatial filaments beyond the old coarse cloud bands",
+            "passed": true,
+            "measured": 1.4476795196533204,
+            "threshold": 1.0399999618530274
+        },
+        {
+            "name": "Embedded fine-dust view converges under doubled near-field quadrature",
+            "passed": true,
+            "measured": 0.0027959002181887628,
+            "threshold": 0.03500000014901161
+        }
+    ],
+    "timings": [
+        {
+            "name": "first-native-allocation-integration-readback",
+            "milliseconds": 10.411199569702149,
+            "width": 512,
+            "height": 512,
+            "samples": 128
+        },
+        {
+            "name": "half-resolution-integration",
+            "milliseconds": 4.761199951171875,
+            "width": 256,
+            "height": 256,
+            "samples": 128
+        },
+        {
+            "name": "native-no-fine-field",
+            "milliseconds": 10.012999534606934,
+            "width": 512,
+            "height": 512,
+            "samples": 128
+        },
+        {
+            "name": "v030-style-resolution-field-control",
+            "milliseconds": 5.100900173187256,
+            "width": 256,
+            "height": 256,
+            "samples": 96
+        },
+        {
+            "name": "1024-image-256-step-reference",
+            "milliseconds": 60.67570114135742,
+            "width": 1024,
+            "height": 1024,
+            "samples": 256
+        },
+        {
+            "name": "forced-native-reintegration-0",
+            "milliseconds": 11.534099578857422,
+            "width": 512,
+            "height": 512,
+            "samples": 128
+        },
+        {
+            "name": "forced-native-reintegration-1",
+            "milliseconds": 10.819600105285645,
+            "width": 512,
+            "height": 512,
+            "samples": 128
+        },
+        {
+            "name": "forced-native-reintegration-2",
+            "milliseconds": 10.27280044555664,
+            "width": 512,
+            "height": 512,
+            "samples": 128
+        },
+        {
+            "name": "near-physical-arm",
+            "milliseconds": 14.475600242614746,
+            "width": 512,
+            "height": 512,
+            "samples": 192
+        },
+        {
+            "name": "near-arm-no-fine-field",
+            "milliseconds": 13.519399642944336,
+            "width": 512,
+            "height": 512,
+            "samples": 192
+        },
+        {
+            "name": "near-arm-double-quadrature",
+            "milliseconds": 21.61440086364746,
+            "width": 512,
+            "height": 512,
+            "samples": 384
+        },
+        {
+            "name": "embedded-disk-fine-dust",
+            "milliseconds": 15.015600204467774,
+            "width": 512,
+            "height": 512,
+            "samples": 224
+        },
+        {
+            "name": "embedded-disk-no-fine-field",
+            "milliseconds": 13.089400291442871,
+            "width": 512,
+            "height": 512,
+            "samples": 224
+        },
+        {
+            "name": "embedded-disk-double-quadrature",
+            "milliseconds": 20.402099609375,
+            "width": 512,
+            "height": 512,
+            "samples": 448
+        }
+    ]
+}

@@ -1,0 +1,82 @@
+{
+  "success": true,
+  "message": "Isolated Unity validation passed",
+  "data": {
+    "status": "succeeded",
+    "mode": "graphics",
+    "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+    "manifest": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\isolated-graphics-manifest.json",
+    "processExitCode": 0,
+    "errors": [],
+    "result": {
+      "passed": true,
+      "reports": [
+        {
+          "path": "shaders.json",
+          "passed": true,
+          "sha256": "e8f136dff81b4da9f4d4e5f6b184f5f2987198d540e838b95f300be8f1b2cee8"
+        },
+        {
+          "path": "atmosphere-pixels.json",
+          "passed": true,
+          "sha256": "da492c9f85034b48e15e85cc696a606dd3f7096d0e843b5c63e8513832459634"
+        },
+        {
+          "path": "CelestialPixels/celestial-pixels.json",
+          "passed": true,
+          "sha256": "54da4e2c30d8cd10a1fc0652679762f977ab838c73a59b8123f72ee9ea5714a5"
+        },
+        {
+          "path": "TerrainPixels/terrain-pixels.json",
+          "passed": true,
+          "sha256": "cd586af21b44de94f8e2dcd79df04d614d6812d6671e8026403206e9947a821e"
+        },
+        {
+          "path": "GroundPixels/ground-pixels.json",
+          "passed": true,
+          "sha256": "53cd3676a933dbc42ac75f75a5b0ddc6d219b999deba2c6a614db1a3a5f3cd6e"
+        },
+        {
+          "path": "GroundAtmospherePixels/ground-pixels.json",
+          "passed": true,
+          "sha256": "3505a82a57186c043e35443e0e2947c7db245d6eabdbea2c3ae0902c7cee1421"
+        },
+        {
+          "path": "CloudPixels/cloud-pixels.json",
+          "passed": true,
+          "sha256": "ed4888544eca0790f96516bea0978b8a13624cb1b0d7805966d9c53e5b0e8d7f"
+        },
+        {
+          "path": "GasHorizonPixels/gas-horizon-pixels.json",
+          "passed": true,
+          "sha256": "8d32734a7e4d9fbbdb413139658ebcd54ae6432d0ca2c9b3d36e5c3c161f8e2d"
+        },
+        {
+          "path": "GalaxyPixels/galaxy-pixels.json",
+          "passed": true,
+          "sha256": "407e4fa959b4e23dc65ee6a23fead09ef2dc74dca254697c82cf8edc0606101d"
+        },
+        {
+          "path": "GalaxyClarity/galaxy-clarity.json",
+          "passed": true,
+          "sha256": "af441abab2b9d34306fc042def0f2fb135edc59afb3b309d1c5f0c48fdfaf2e7"
+        },
+        {
+          "path": "TerrainLodPixels/terrain-lod-pixels.json",
+          "passed": true,
+          "sha256": "e594c91f197c46a6f0b17b348e9461940fd3389fb745c4986b5f734164863bdb"
+        },
+        {
+          "path": "ChineseGlyphPixels/glyph-pixels.json",
+          "passed": true,
+          "sha256": "b2a3fec26cdc49e2a0e7ed47876cc61aaefa3a7bc6624cd8bb4d5aa7cab01435"
+        },
+        {
+          "path": "LoadingPixels/loading-pixels.json",
+          "passed": true,
+          "sha256": "f260805e53de99a21de96d97a3cbb1168cde355b90c3a17f721696b4a1266c11"
+        }
+      ]
+    }
+  }
+}

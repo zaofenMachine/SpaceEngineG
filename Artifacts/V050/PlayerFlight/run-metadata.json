@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "route": "flight",
+  "startedAtUtc": "2026-10-28T05:50:14.484718+00:00",
+  "playerExecutable": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+  "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+  "playerCommand": [
+    "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+    "--verify-flight",
+    "--quit-after-verification",
+    "--evidence-path",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerFlight",
+    "-screen-fullscreen",
+    "0",
+    "-screen-width",
+    "1600",
+    "-screen-height",
+    "900",
+    "-logFile",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerFlight\\Player.log"
+  ],
+  "timeoutSeconds": 300.0,
+  "evidenceDirectory": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerFlight",
+  "previousEvidenceDirectory": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PreviousRuns\\20261028T055014Z-b29d0bfb\\PlayerFlight",
+  "playerPid": 77804,
+  "playerExitCode": 0,
+  "failures": [],
+  "buildGuid": "01e6f56554854f339b6e50bc10846e10",
+  "reportPassed": true,
+  "finishedAtUtc": "2026-10-28T05:50:32.171159+00:00",
+  "elapsedSeconds": 17.685514400014654
+}

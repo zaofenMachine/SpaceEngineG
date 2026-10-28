@@ -1,0 +1,22 @@
+{
+  "success": false,
+  "message": "Isolated Unity validation failed",
+  "data": {
+    "status": "failed",
+    "mode": "build",
+    "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+    "manifest": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\isolated-build-manifest.json",
+    "processExitCode": 0,
+    "errors": [
+      "Assets/Packages/ProjectSettings changed during validation. This includes Unity automatic ProjectSettings edits; review the recorded differences explicitly. No synchronization was performed."
+    ],
+    "result": {
+      "passed": true,
+      "buildReport": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\build.txt",
+      "buildReportSha256": "dd248bc6ab4576352007671892a0125b896abdb4a185b56498e09a30f9138bf0",
+      "executable": "F:\\Project\\SpaceEngineG\\Builds\\Windows-v0.5.0\\SpaceEngineG.exe",
+      "executableSha256": "d05c5848f7cc2eb32ff6016f54762ee3c666a69b862be297df2390830c1ea8cf",
+      "completePlayerFiles": true
+    }
+  }
+}

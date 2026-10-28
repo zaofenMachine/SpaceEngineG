@@ -6,11 +6,11 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 当前迭代 **0.5.0**：增加完整中文天体详情页，`F2 / I` 打开概览、轨道、环境、系统与来源四个页签；行星、卫星、巨行星和恒星共用物理报告，区分生成参数、公式推导、模型假设、模型估计与未建模数据。新世界按光照与简化温压模型布局参考海洋行星，无光黑洞周围不再生成暖海洋。保留旧版世界与存档，修复协程切换世界时的一帧空场。
 
-首轮 **183 项 EditMode、26 项 PlayMode 与全部 102 项 GPU 断言通过**；新增地球参考数据、卫星母体/受光距离、能量收支、2,048 个恒星系海洋温压筛选、旧世界恢复和同帧地形覆盖检查。本轮独立程序及截图/视频验收尚在进行，最终结果填写于 [0.5 实测记录](Docs/VALIDATION-V050.md)和 [Artifacts/V050](Artifacts/V050/)，不能用历史通过数替代。
+**183 项 EditMode、27 项 PlayMode 与全部 102 项 GPU 主断言通过**，另有 12 项替代控制及 11 个 Shader 检查；覆盖地球参考、卫星母体/受光距离、能量收支、2,048 个恒星系海洋温压筛选、旧世界恢复和同帧地形覆盖。最终同一 Windows 构建的四条路线全部通过、运行错误 0，保存 **57 张截图、51.8 秒原生帧缓冲录像**。详情与已知画质问题见 [0.5 实测记录](Docs/VALIDATION-V050.md)及 [Artifacts/V050](Artifacts/V050/)。
 
-![0.4 Windows实际中文探索界面](Artifacts/V040/PlayerExplorer/01-chinese-home.png)
+![0.5 Windows实际中文天体详情](Artifacts/V050/PlayerDetails/01-ocean-overview.png)
 
-![0.4 Windows实际银河总览](Artifacts/V040/PlayerGalaxy/01-galaxy-oblique.png)
+![0.5 Windows海洋行星的温度和大气参考数据](Artifacts/V050/PlayerDetails/19-ocean-environment-middle.png)
 
 ## 启动
 
@@ -18,15 +18,15 @@ Unity 6 / URP 程序化宇宙探索器。使用真实米制半径与轨道距离
 
 若需重建场景/默认资源，运行菜单 `Space Engine > Setup Explorer Scene`。Windows 打包菜单为 `Space Engine > Build Windows Explorer`，输出 `Builds/Windows-v0.5.0/SpaceEngineG.exe`。
 
-0.5 本地交付包目标为 `Builds/SpaceEngineG-0.5.0-windows-x64.zip`，完整验收后才打包。解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
+本地交付包为 `Builds/SpaceEngineG-0.5.0-windows-x64.zip`。解压后运行其中的 `SpaceEngineG.exe`，保留同目录数据和 DLL。二进制不提交 Git；源码用户按上述菜单构建。
 
-| 0.4.0 历史交付项（0.5 见上方实测记录） | 状态 |
+| 0.5.0 最终交付项 | 状态 |
 | --- | --- |
-| 独立程序三条路线、退出码及运行时错误 | 全部通过，退出码0、错误0；构建GUID见[清单](Artifacts/V040/package-manifest.json) |
-| 连续下降/静止/上升/原路返回视频及实际复核结果 | [51.8秒原生录像](Artifacts/V040/PlayerExplorer/descent.mp4)，1554帧全流解码；两次静止951帧无几何切换，返回误差0.46毫米；逐秒抽样记录见实测文档 |
-| ZIP 大小、SHA-256 与分发清单 | 53,954,753字节（53.95MB），[SHA-256清单](Artifacts/V040/package-manifest.json)，完整ZIP校验通过 |
+| 独立程序四条路线、退出码及运行时错误 | 全部通过，退出码0、错误0；21张详情图逐张查看，构建GUID见[清单](Artifacts/V050/package-manifest.json) |
+| 连续下降/静止/上升/原路返回视频及实际复核结果 | [51.8秒原生录像](Artifacts/V050/PlayerExplorer/descent.mp4)，1554帧全流解码；两次静止950帧无几何切换，返回误差0.077毫米；逐秒抽样与首帧筛查见实测文档 |
+| ZIP 大小、SHA-256 与分发清单 | 53,977,116字节（53.98MB），[SHA-256清单](Artifacts/V050/package-manifest.json)，完整ZIP校验通过 |
 
-旧版程序、ZIP 和证据保留；[0.3 实测记录](Docs/VALIDATION-V030.md)及其[分发包清单与 SHA-256](Artifacts/V030/package-manifest.json)仅说明 0.3 的交付状态。
+旧版程序、ZIP 和证据保留；[0.4 实测记录](Docs/VALIDATION-V040.md)及其[分发包清单](Artifacts/V040/package-manifest.json)、[0.3 实测记录](Docs/VALIDATION-V030.md)仅说明对应历史版本的交付状态。
 
 ## 操作
 
@@ -96,6 +96,8 @@ $env:UNITY_MCP_URL = 'http://127.0.0.1:8055/mcp' # 改为当前 Editor 的本地
 python Scripts/validate.py --tests --graphics --flight --galaxy --explorer
 ```
 
+主编辑器连接不可用时，可把 `SpaceEngineG/` 内的 `Assets`、`Packages`、`ProjectSettings` **复制**到仓库直接子目录 `.validation-unity-v050/`，通过 `python Scripts/run_unity_batch.py --mode editmode`（或 `playmode`、`graphics`、`build`）独立验证。脚本不关闭原编辑器，不同步源文件；副本必须与源项目匹配，清单记录原始和比较哈希。唯一字段例外是 Unity 构建时派生的 URP `m_RuntimeSettings.m_List`，保留原始差异；其他设置变化仍失败。构建另外检查实际 Bee Player 配置中的五项诊断/云服务均关闭。
+
 Windows 程序也能独立运行验证航线：
 
 ```powershell
@@ -105,9 +107,9 @@ Windows 程序也能独立运行验证航线：
 .\Builds\Windows-v0.5.0\SpaceEngineG.exe --verify-explorer --record-descent --quit-after-verification --evidence-path C:\Temp\SpaceEngineExplorer
 ```
 
-前两条路线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。第三条在功能验收后按实际经过时间连续下降、静止、上升并原路返回，记录观察者、LOD、过渡、静止几何及帧耗时；`--record-descent` 启用这段路线，本身不编码视频。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。
+前两条路线用固定虚拟时间步快速驱动导航，帧耗时统计衡量渲染与流式地形吞吐，不能当作实际旅行时长。第三条巡检四页详情、各类天体和旧世界；第四条在功能验收后按实际经过时间连续下降、静止、上升并原路返回，记录观察者、LOD、过渡、静止几何及帧耗时。`--record-descent` 启用连续路线，本身不编码视频。性能报告区分 Editor 和独立程序，不含 GPU 时间戳测量。
 
-`python Scripts/verify_windows.py` 负责运行独立程序四条路线、记录退出码及报告，并从 Unity 最终游戏帧缓冲直接录为 `Artifacts/V050/PlayerExplorer/descent.mp4`；使用游戏内 ReadPixels 和后台编码管道，不抓取桌面或窗口合成图；录像按实际时间采样30帧/秒，停顿时重复最近帧，并记录重复数。截图和录制要求程序窗口实际可见。录像复核包含逐秒联系表、静止区域图差和同帧截图比较；不等同人工逐帧验收。近地材质对比低及规则银河尘纹仍有改进空间，初始化空场修复必须由本轮实际视频验证。
+`python Scripts/verify_windows.py` 负责运行独立程序四条路线、记录退出码及报告，并从 Unity 最终游戏帧缓冲直接录为 `Artifacts/V050/PlayerExplorer/descent.mp4`；使用游戏内 ReadPixels 和后台编码管道，不抓取桌面或窗口合成图；录像按实际时间采样30帧/秒，停顿时重复最近帧，并记录重复数。截图和录制要求程序窗口实际可见。录像复核包含52张逐秒样本、静止区域图差和5个同帧截图比较；不等同人工逐帧验收。首帧重载由实际 PNG、精确录像标记及49帧像素筛查验证，旧版黑场保留负对照。近地材质对比低、云层硬边及规则银河尘纹仍有改进空间。
 
 全部独立程序验证通过后，运行 `python Scripts/package_windows.py` 生成分发 ZIP、完整性检查和哈希清单；四条路线必须使用相同构建 GUID，并保留实际游戏帧缓冲录制证据和字体许可证。`Artifacts/V050/source-revision.txt` 记录构建前的源码提交。
 

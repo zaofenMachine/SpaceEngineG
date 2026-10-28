@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "message": "Isolated Unity validation passed",
+  "data": {
+    "status": "succeeded",
+    "mode": "PlayMode",
+    "isolatedProject": "F:\\Project\\SpaceEngineG\\.validation-unity-v050",
+    "manifest": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\isolated-playmode-manifest.json",
+    "processExitCode": 0,
+    "errors": [],
+    "result": {
+      "passed": true,
+      "summary": {
+        "total": 27,
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0,
+        "durationSeconds": 2.6597339,
+        "resultState": "Passed"
+      },
+      "results": [],
+      "xml": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\final-playmode.xml",
+      "xmlSha256": "3d5962a3252629d54aab4fca3fd22c0dc30e92f46b7e93fc0b61b4053f2657f0",
+      "assemblyPaths": [
+        "F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.PlayMode.Tests.dll"
+      ],
+      "assemblyPathsMatchIsolatedProject": true,
+      "recordedPids": [
+        "95440"
+      ],
+      "recordedPlatforms": [
+        "PlayMode"
+      ]
+    }
+  }
+}

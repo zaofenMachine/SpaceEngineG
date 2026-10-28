@@ -1,0 +1,1292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="183" result="Passed" total="183" passed="183" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.8611745">
+  <test-suite type="TestSuite" id="1000" name="SpaceEngineG Explorer" fullname="SpaceEngineG Explorer" runstate="Runnable" testcasecount="183" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.861175" total="183" passed="183" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1111" name="SpaceEngine.Core.Tests.dll" fullname="F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Core.Tests.dll" runstate="Runnable" testcasecount="93" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.618819" total="93" passed="93" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="95884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1112" name="SpaceEngine" fullname="SpaceEngine" runstate="Runnable" testcasecount="93" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.616641" total="93" passed="93" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1113" name="Tests" fullname="SpaceEngine.Tests" runstate="Runnable" testcasecount="93" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.614454" total="93" passed="93" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1002" name="CoordinateTests" fullname="SpaceEngine.Tests.CoordinateTests" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.062325" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1014" name="InvalidPositionsAndRepresentableRangeOverflowAreRejected" fullname="SpaceEngine.Tests.CoordinateTests.InvalidPositionsAndRepresentableRangeOverflowAreRejected" methodname="InvalidPositionsAndRepresentableRangeOverflowAreRejected" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1426146673" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.013076" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="MillimetreMotionSurvivesGalacticAndInt64SectorCoordinates" fullname="SpaceEngine.Tests.CoordinateTests.MillimetreMotionSurvivesGalacticAndInt64SectorCoordinates" methodname="MillimetreMotionSurvivesGalacticAndInt64SectorCoordinates" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="722674928" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.005307" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1013" name="RelativePositionDoesNotOverflowWhenSectorsSpanInt64Range" fullname="SpaceEngine.Tests.CoordinateTests.RelativePositionDoesNotOverflowWhenSectorsSpanInt64Range" methodname="RelativePositionDoesNotOverflowWhenSectorsSpanInt64Range" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="962229872" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001828" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1012" name="SectorNormalizationUsesSymmetricHalfOpenIntervals" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.009672" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1006" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(500000000000.0d,1,-500000000000.0d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(500000000000.0d,1,-500000000000.0d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="626263890" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000950" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(-500000000000.0d,0,-500000000000.0d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(-500000000000.0d,0,-500000000000.0d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="32193959" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000223" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(-500000000001.0d,-1,499999999999.0d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(-500000000001.0d,-1,499999999999.0d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="718068364" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000177" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(2250000000000.0d,2,250000000000.0d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(2250000000000.0d,2,250000000000.0d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1095877966" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000128" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(-2250000000000.0d,-2,-250000000000.0d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(-2250000000000.0d,-2,-250000000000.0d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="183837242" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000156" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="SectorNormalizationUsesSymmetricHalfOpenIntervals(-0.001d,0,-0.001d)" fullname="SpaceEngine.Tests.CoordinateTests.SectorNormalizationUsesSymmetricHalfOpenIntervals(-0.001d,0,-0.001d)" methodname="SectorNormalizationUsesSymmetricHalfOpenIntervals" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1472367619" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000251" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1004" name="SmallMovementAcrossSectorBoundaryRemainsAccurate" fullname="SpaceEngine.Tests.CoordinateTests.SmallMovementAcrossSectorBoundaryRemainsAccurate" methodname="SmallMovementAcrossSectorBoundaryRemainsAccurate" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1062687939" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000847" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1015" name="VectorBasisAndNormalizationAreConsistent" fullname="SpaceEngine.Tests.CoordinateTests.VectorBasisAndNormalizationAreConsistent" methodname="VectorBasisAndNormalizationAreConsistent" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1440531723" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000931" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1005" name="WorstCaseSectorOffsetStillResolvesMillimetresWithinPointOneMillimetre" fullname="SpaceEngine.Tests.CoordinateTests.WorstCaseSectorOffsetStillResolvesMillimetresWithinPointOneMillimetre" methodname="WorstCaseSectorOffsetStillResolvesMillimetresWithinPointOneMillimetre" classname="SpaceEngine.Tests.CoordinateTests" runstate="Runnable" seed="1831339566" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000238" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1016" name="GalaxyTests" fullname="SpaceEngine.Tests.GalaxyTests" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.252564" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1024" name="AllSixComponentsOccupyThreeDimensionsAndRemainWithinTheirBounds" fullname="SpaceEngine.Tests.GalaxyTests.AllSixComponentsOccupyThreeDimensionsAndRemainWithinTheirBounds" methodname="AllSixComponentsOccupyThreeDimensionsAndRemainWithinTheirBounds" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="1373052166" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.213134" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1022" name="BarDensityFollowsItsConfiguredOrientation" fullname="SpaceEngine.Tests.GalaxyTests.BarDensityFollowsItsConfiguredOrientation" methodname="BarDensityFollowsItsConfiguredOrientation" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="273915389" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000852" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1026" name="CentralMassMustBePositiveAndFiniteBeforeSaveSettingsAreAccepted" fullname="SpaceEngine.Tests.GalaxyTests.CentralMassMustBePositiveAndFiniteBeforeSaveSettingsAreAccepted" methodname="CentralMassMustBePositiveAndFiniteBeforeSaveSettingsAreAccepted" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="442057857" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000550" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1025" name="ConfigurableVeryNarrowAndVeryBroadDiscsGenerateBoundedSamples" fullname="SpaceEngine.Tests.GalaxyTests.ConfigurableVeryNarrowAndVeryBroadDiscsGenerateBoundedSamples" methodname="ConfigurableVeryNarrowAndVeryBroadDiscsGenerateBoundedSamples" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="1642632083" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.023998" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1020" name="DiskFallsOffRadiallyAndVerticallyWithFiniteHaloBoundary" fullname="SpaceEngine.Tests.GalaxyTests.DiskFallsOffRadiallyAndVerticallyWithFiniteHaloBoundary" methodname="DiskFallsOffRadiallyAndVerticallyWithFiniteHaloBoundary" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="1949238154" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000441" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1018" name="GalacticConversionHasScaleAwarePrecisionAndFlightKeepsMillimetres" fullname="SpaceEngine.Tests.GalaxyTests.GalacticConversionHasScaleAwarePrecisionAndFlightKeepsMillimetres" methodname="GalacticConversionHasScaleAwarePrecisionAndFlightKeepsMillimetres" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="954996308" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000614" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1017" name="HomeIsSolarRadiusAndGalacticCenterMapsToItsUniversalAnchor" fullname="SpaceEngine.Tests.GalaxyTests.HomeIsSolarRadiusAndGalacticCenterMapsToItsUniversalAnchor" methodname="HomeIsSolarRadiusAndGalacticCenterMapsToItsUniversalAnchor" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="201621291" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000430" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1027" name="InvalidConfigurationAndNegativeCountsFailExplicitly" fullname="SpaceEngine.Tests.GalaxyTests.InvalidConfigurationAndNegativeCountsFailExplicitly" methodname="InvalidConfigurationAndNegativeCountsFailExplicitly" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="425910984" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000619" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1019" name="LocalDensityIsPhysicalConfiguredNumberPerCubicParsec" fullname="SpaceEngine.Tests.GalaxyTests.LocalDensityIsPhysicalConfiguredNumberPerCubicParsec" methodname="LocalDensityIsPhysicalConfiguredNumberPerCubicParsec" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="749490749" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000263" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="RepresentativesAreDeterministicDifferentSeedsDifferAndCountPreservesPrefix" fullname="SpaceEngine.Tests.GalaxyTests.RepresentativesAreDeterministicDifferentSeedsDifferAndCountPreservesPrefix" methodname="RepresentativesAreDeterministicDifferentSeedsDifferAndCountPreservesPrefix" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="1422567521" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.005640" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1021" name="SpiralArmsHaveSeededPhaseAndMeasurableDensityContrast" fullname="SpaceEngine.Tests.GalaxyTests.SpiralArmsHaveSeededPhaseAndMeasurableDensityContrast" methodname="SpiralArmsHaveSeededPhaseAndMeasurableDensityContrast" classname="SpaceEngine.Tests.GalaxyTests" runstate="Runnable" seed="1980001741" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001260" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1028" name="GenerationTests" fullname="SpaceEngine.Tests.GenerationTests" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.011671" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1030" name="IdenticalSeedAndCellProduceIdenticalSystemAndAllPlanetParameters" fullname="SpaceEngine.Tests.GenerationTests.IdenticalSeedAndCellProduceIdenticalSystemAndAllPlanetParameters" methodname="IdenticalSeedAndCellProduceIdenticalSystemAndAllPlanetParameters" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" seed="268106916" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.005671" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1033" name="ManyGeneratedSystemsHaveValidNonCrossingOrbitsAndLandingCandidates" fullname="SpaceEngine.Tests.GenerationTests.ManyGeneratedSystemsHaveValidNonCrossingOrbitsAndLandingCandidates" methodname="ManyGeneratedSystemsHaveValidNonCrossingOrbitsAndLandingCandidates" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" seed="1793095652" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.003722" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1032" name="OriginSystemIsAtOriginAndNeighbourCellsAreAstronomicalDistancesAway" fullname="SpaceEngine.Tests.GenerationTests.OriginSystemIsAtOriginAndNeighbourCellsAreAstronomicalDistancesAway" methodname="OriginSystemIsAtOriginAndNeighbourCellsAreAstronomicalDistancesAway" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" seed="1858662510" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000310" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1029" name="SplitMixStreamMatchesPublishedAlgorithmReferenceVector" fullname="SpaceEngine.Tests.GenerationTests.SplitMixStreamMatchesPublishedAlgorithmReferenceVector" methodname="SplitMixStreamMatchesPublishedAlgorithmReferenceVector" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" seed="379240642" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000523" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1031" name="UniverseSeedAndAll64CellBitsAffectGeneration" fullname="SpaceEngine.Tests.GenerationTests.UniverseSeedAndAll64CellBitsAffectGeneration" methodname="UniverseSeedAndAll64CellBitsAffectGeneration" classname="SpaceEngine.Tests.GenerationTests" runstate="Runnable" seed="548230363" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000347" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1034" name="OrbitPathTests" fullname="SpaceEngine.Tests.OrbitPathTests" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.004770" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1035" name="ClosedPathUsesTheActualKeplerSolution" fullname="SpaceEngine.Tests.OrbitPathTests.ClosedPathUsesTheActualKeplerSolution" methodname="ClosedPathUsesTheActualKeplerSolution" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" seed="407948032" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002936" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1039" name="InvalidSamplingBudgetsAreRejected" fullname="SpaceEngine.Tests.OrbitPathTests.InvalidSamplingBudgetsAreRejected" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001136" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1036" name="InvalidSamplingBudgetsAreRejected(0)" fullname="SpaceEngine.Tests.OrbitPathTests.InvalidSamplingBudgetsAreRejected(0)" methodname="InvalidSamplingBudgetsAreRejected" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" seed="1440333751" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000415" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1037" name="InvalidSamplingBudgetsAreRejected(15)" fullname="SpaceEngine.Tests.OrbitPathTests.InvalidSamplingBudgetsAreRejected(15)" methodname="InvalidSamplingBudgetsAreRejected" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" seed="1708163678" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000106" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="InvalidSamplingBudgetsAreRejected(2049)" fullname="SpaceEngine.Tests.OrbitPathTests.InvalidSamplingBudgetsAreRejected(2049)" methodname="InvalidSamplingBudgetsAreRejected" classname="SpaceEngine.Tests.OrbitPathTests" runstate="Runnable" seed="1752108605" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000061" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+          <test-suite type="TestFixture" id="1040" name="OrbitTests" fullname="SpaceEngine.Tests.OrbitTests" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.004786" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1047" name="EarthScaleOrbitHasYearPeriodAndClosesExactly" fullname="SpaceEngine.Tests.OrbitTests.EarthScaleOrbitHasYearPeriodAndClosesExactly" methodname="EarthScaleOrbitHasYearPeriodAndClosesExactly" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="1072667416" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000292" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1048" name="EccentricOrbitReachesAnalyticPeriapsisAndApoapsis" fullname="SpaceEngine.Tests.OrbitTests.EccentricOrbitReachesAnalyticPeriapsisAndApoapsis" methodname="EccentricOrbitReachesAnalyticPeriapsisAndApoapsis" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="578255564" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000191" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1046" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002262" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1041" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.0d)" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.0d)" methodname="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="351113738" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000696" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1042" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.2d)" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.2d)" methodname="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="1048482529" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000159" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1043" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.8d)" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.8d)" methodname="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="93618585" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000115" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1044" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.95d)" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.95d)" methodname="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="1705170112" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000125" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1045" name="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.999999d)" fullname="SpaceEngine.Tests.OrbitTests.KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits(0.999999d)" methodname="KeplerResidualRemainsSmallForCircularThroughHighlyEccentricOrbits" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="639617146" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000209" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1050" name="NonEllipticAndInvalidPhysicalInputsAreRejected" fullname="SpaceEngine.Tests.OrbitTests.NonEllipticAndInvalidPhysicalInputsAreRejected" methodname="NonEllipticAndInvalidPhysicalInputsAreRejected" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="1276935989" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000438" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1049" name="OrbitalInclinationUsesUnityYUpAndSupportsNegativeTime" fullname="SpaceEngine.Tests.OrbitTests.OrbitalInclinationUsesUnityYUpAndSupportsNegativeTime" methodname="OrbitalInclinationUsesUnityYUpAndSupportsNegativeTime" classname="SpaceEngine.Tests.OrbitTests" runstate="Runnable" seed="1713595175" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000233" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1051" name="PlanetGenerationTests" fullname="SpaceEngine.Tests.PlanetGenerationTests" classname="SpaceEngine.Tests.PlanetGenerationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.049066" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1053" name="EveryNewOceanWorldPassesItsOwnPressureAndWholeOrbitWaterScreen" fullname="SpaceEngine.Tests.PlanetGenerationTests.EveryNewOceanWorldPassesItsOwnPressureAndWholeOrbitWaterScreen" methodname="EveryNewOceanWorldPassesItsOwnPressureAndWholeOrbitWaterScreen" classname="SpaceEngine.Tests.PlanetGenerationTests" runstate="Runnable" seed="2071468025" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.039751" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1052" name="NewGenerationPreservesTheOriginalRandomStreamAndTerrainParameters" fullname="SpaceEngine.Tests.PlanetGenerationTests.NewGenerationPreservesTheOriginalRandomStreamAndTerrainParameters" methodname="NewGenerationPreservesTheOriginalRandomStreamAndTerrainParameters" classname="SpaceEngine.Tests.PlanetGenerationTests" runstate="Runnable" seed="2023786589" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.006951" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1054" name="NonAccretingBlackHoleHasNoStellarHeatOrLiquidOceanAndNoSolidBodyAtmospheres" fullname="SpaceEngine.Tests.PlanetGenerationTests.NonAccretingBlackHoleHasNoStellarHeatOrLiquidOceanAndNoSolidBodyAtmospheres" methodname="NonAccretingBlackHoleHasNoStellarHeatOrLiquidOceanAndNoSolidBodyAtmospheres" classname="SpaceEngine.Tests.PlanetGenerationTests" runstate="Runnable" seed="1088050223" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000921" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1055" name="VersionTwoStillContainsItsOriginalColdOceanRatherThanSilentlyMigratingIt" fullname="SpaceEngine.Tests.PlanetGenerationTests.VersionTwoStillContainsItsOriginalColdOceanRatherThanSilentlyMigratingIt" methodname="VersionTwoStillContainsItsOriginalColdOceanRatherThanSilentlyMigratingIt" classname="SpaceEngine.Tests.PlanetGenerationTests" runstate="Runnable" seed="1946939636" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000447" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1056" name="PlanetScienceTests" fullname="SpaceEngine.Tests.PlanetScienceTests" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.015464" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1078" name="AirlessSolidHasZeroPressureAndNoFictionalGasDensityOrScaleHeight" fullname="SpaceEngine.Tests.PlanetScienceTests.AirlessSolidHasZeroPressureAndNoFictionalGasDensityOrScaleHeight" methodname="AirlessSolidHasZeroPressureAndNoFictionalGasDensityOrScaleHeight" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1835794742" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001495" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1079" name="BlackHoleHasZeroStarlightAndZeroStellarHeatingTemperatureWithoutInventedWarmOcean" fullname="SpaceEngine.Tests.PlanetScienceTests.BlackHoleHasZeroStarlightAndZeroStellarHeatingTemperatureWithoutInventedWarmOcean" methodname="BlackHoleHasZeroStarlightAndZeroStellarHeatingTemperatureWithoutInventedWarmOcean" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="2034647440" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000721" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1068" name="ClimatePresetsAreDeterministicAndDoNotChangeAuthoritativePlanetData" fullname="SpaceEngine.Tests.PlanetScienceTests.ClimatePresetsAreDeterministicAndDoNotChangeAuthoritativePlanetData" methodname="ClimatePresetsAreDeterministicAndDoNotChangeAuthoritativePlanetData" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1042368051" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001798" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1057" name="EarthGeometryUsesMassAndRadiusWithKnownTerrestrialScale" fullname="SpaceEngine.Tests.PlanetScienceTests.EarthGeometryUsesMassAndRadiusWithKnownTerrestrialScale" methodname="EarthGeometryUsesMassAndRadiusWithKnownTerrestrialScale" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="456862460" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000363" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1059" name="EccentricOrbitUsesTrueParentKeplerPeriodAndVisVivaAtBothApsides" fullname="SpaceEngine.Tests.PlanetScienceTests.EccentricOrbitUsesTrueParentKeplerPeriodAndVisVivaAtBothApsides" methodname="EccentricOrbitUsesTrueParentKeplerPeriodAndVisVivaAtBothApsides" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="705994624" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000286" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1076" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002304" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1069" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Oceanic)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Oceanic)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="547118887" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000859" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1070" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Rocky)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Rocky)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="811819889" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000139" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1071" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Desert)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Desert)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="547784128" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000099" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1072" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Ice)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Ice)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="986184766" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000086" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1073" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Lava)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(Lava)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1825512203" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000055" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1074" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(GasGiant)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(GasGiant)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="560963982" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000059" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1075" name="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(IceGiant)" fullname="SpaceEngine.Tests.PlanetScienceTests.EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties(IceGiant)" methodname="EveryAtmosphereHasNormalizedMoleFractionsAndConsistentIdealGasProperties" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="579689204" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000070" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1062" name="GalacticTranslationDoesNotLosePrecisionOrChangeAnyLocalPhysicalQuantity" fullname="SpaceEngine.Tests.PlanetScienceTests.GalacticTranslationDoesNotLosePrecisionOrChangeAnyLocalPhysicalQuantity" methodname="GalacticTranslationDoesNotLosePrecisionOrChangeAnyLocalPhysicalQuantity" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="372027717" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000256" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1077" name="GiantsUseOneBarReferenceAndHaveNoSolidSurfacePressureOrTemperature" fullname="SpaceEngine.Tests.PlanetScienceTests.GiantsUseOneBarReferenceAndHaveNoSolidSurfacePressureOrTemperature" methodname="GiantsUseOneBarReferenceAndHaveNoSolidSurfacePressureOrTemperature" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="984083267" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000442" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1083" name="InvalidBodiesTimesAndParentCyclesAreRejectedRatherThanReturningNonFiniteData" fullname="SpaceEngine.Tests.PlanetScienceTests.InvalidBodiesTimesAndParentCyclesAreRejectedRatherThanReturningNonFiniteData" methodname="InvalidBodiesTimesAndParentCyclesAreRejectedRatherThanReturningNonFiniteData" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1581388554" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000679" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1067" name="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature" fullname="SpaceEngine.Tests.PlanetScienceTests.InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001007" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1064" name="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(1)" fullname="SpaceEngine.Tests.PlanetScienceTests.InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(1)" methodname="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="336244419" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000339" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1065" name="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(9371)" fullname="SpaceEngine.Tests.PlanetScienceTests.InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(9371)" methodname="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1917892271" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000070" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1066" name="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(-987654321)" fullname="SpaceEngine.Tests.PlanetScienceTests.InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature(-987654321)" methodname="InverseClimateHelperPlacesTheSameSeedAtTheRequestedMeanSurfaceTemperature" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1039962402" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000054" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1082" name="LegacyTemperatureConflictIsReportedWithoutMutatingOrRetconningTheSavedWorld" fullname="SpaceEngine.Tests.PlanetScienceTests.LegacyTemperatureConflictIsReportedWithoutMutatingOrRetconningTheSavedWorld" methodname="LegacyTemperatureConflictIsReportedWithoutMutatingOrRetconningTheSavedWorld" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1059870230" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000266" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1061" name="NestedMoonBoundsContainEverySampledActualStellarPosition" fullname="SpaceEngine.Tests.PlanetScienceTests.NestedMoonBoundsContainEverySampledActualStellarPosition" methodname="NestedMoonBoundsContainEverySampledActualStellarPosition" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="742079437" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000433" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1081" name="PrimarySolarDayDistinguishesSiderealAndSynchronousCases" fullname="SpaceEngine.Tests.PlanetScienceTests.PrimarySolarDayDistinguishesSiderealAndSynchronousCases" methodname="PrimarySolarDayDistinguishesSiderealAndSynchronousCases" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="782270116" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000352" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1060" name="SatelliteUsesItsParentMassButStarlightFollowsTheWholeParentChain" fullname="SpaceEngine.Tests.PlanetScienceTests.SatelliteUsesItsParentMassButStarlightFollowsTheWholeParentChain" methodname="SatelliteUsesItsParentMassButStarlightFollowsTheWholeParentChain" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="844281420" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000515" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1080" name="SmallEccentricitySynchronousTidalHeatIsPositiveAndScalesAsESquared" fullname="SpaceEngine.Tests.PlanetScienceTests.SmallEccentricitySynchronousTidalHeatIsPositiveAndScalesAsESquared" methodname="SmallEccentricitySynchronousTidalHeatIsPositiveAndScalesAsESquared" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="660818576" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000456" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1058" name="SolarIrradianceAndZeroGreenhouseEarthEquilibriumHaveIndependentReferenceValues" fullname="SpaceEngine.Tests.PlanetScienceTests.SolarIrradianceAndZeroGreenhouseEarthEquilibriumHaveIndependentReferenceValues" methodname="SolarIrradianceAndZeroGreenhouseEarthEquilibriumHaveIndependentReferenceValues" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="303292474" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000246" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1084" name="StarOnlyReportNeedsNoPlanetArrayAndDoesNotInventOrbitRotationOrAtmosphere" fullname="SpaceEngine.Tests.PlanetScienceTests.StarOnlyReportNeedsNoPlanetArrayAndDoesNotInventOrbitRotationOrAtmosphere" methodname="StarOnlyReportNeedsNoPlanetArrayAndDoesNotInventOrbitRotationOrAtmosphere" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1483555999" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000479" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1063" name="SurfaceAndEffectiveTemperaturesObeyEnergyBalanceRatherThanLinearTemperatureAddition" fullname="SpaceEngine.Tests.PlanetScienceTests.SurfaceAndEffectiveTemperaturesObeyEnergyBalanceRatherThanLinearTemperatureAddition" methodname="SurfaceAndEffectiveTemperaturesObeyEnergyBalanceRatherThanLinearTemperatureAddition" classname="SpaceEngine.Tests.PlanetScienceTests" runstate="Runnable" seed="1659926132" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000257" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1085" name="PopulationTests" fullname="SpaceEngine.Tests.PopulationTests" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.065719" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1094" name="AdmissionIsSeedStableAndMatchesGeneratedCandidateMetadata" fullname="SpaceEngine.Tests.PopulationTests.AdmissionIsSeedStableAndMatchesGeneratedCandidateMetadata" methodname="AdmissionIsSeedStableAndMatchesGeneratedCandidateMetadata" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="535449581" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.012290" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1092" name="BulkDensitiesRotationAndPrimaryPeriapsidesArePhysical" fullname="SpaceEngine.Tests.PopulationTests.BulkDensitiesRotationAndPrimaryPeriapsidesArePhysical" methodname="BulkDensitiesRotationAndPrimaryPeriapsidesArePhysical" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="199246260" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.018873" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1093" name="CompactAndGiantStarsHaveDistinctPhysicalRadiiAndLuminosities" fullname="SpaceEngine.Tests.PopulationTests.CompactAndGiantStarsHaveDistinctPhysicalRadiiAndLuminosities" methodname="CompactAndGiantStarsHaveDistinctPhysicalRadiiAndLuminosities" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1088637542" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002023" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1096" name="ConfiguredGalaxyAdmissionAndCandidateMetadataUseTheSameDensity" fullname="SpaceEngine.Tests.PopulationTests.ConfiguredGalaxyAdmissionAndCandidateMetadataUseTheSameDensity" methodname="ConfiguredGalaxyAdmissionAndCandidateMetadataUseTheSameDensity" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1782972387" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002809" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1088" name="GeneratedPopulationIncludesEveryStellarAndSurfaceClass" fullname="SpaceEngine.Tests.PopulationTests.GeneratedPopulationIncludesEveryStellarAndSurfaceClass" methodname="GeneratedPopulationIncludesEveryStellarAndSurfaceClass" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1481816364" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.003168" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1091" name="GiantRingsAndLandingRulesMatchBodyComposition" fullname="SpaceEngine.Tests.PopulationTests.GiantRingsAndLandingRulesMatchBodyComposition" methodname="GiantRingsAndLandingRulesMatchBodyComposition" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1300806190" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000407" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1087" name="HomeAlwaysOffersLandableOceanAndBothGiantClasses" fullname="SpaceEngine.Tests.PopulationTests.HomeAlwaysOffersLandableOceanAndBothGiantClasses" methodname="HomeAlwaysOffersLandableOceanAndBothGiantClasses" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="994522338" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001953" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1095" name="IntergalacticCellsAreEmptyButHomeRemainsAvailable" fullname="SpaceEngine.Tests.PopulationTests.IntergalacticCellsAreEmptyButHomeRemainsAvailable" methodname="IntergalacticCellsAreEmptyButHomeRemainsAvailable" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="239006265" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000240" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1090" name="MoonsHaveEarlierParentsClearRingsAndFitStableHillEnvelope" fullname="SpaceEngine.Tests.PopulationTests.MoonsHaveEarlierParentsClearRingsAndFitStableHillEnvelope" methodname="MoonsHaveEarlierParentsClearRingsAndFitStableHillEnvelope" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1023119075" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.013201" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1089" name="NewPopulationFieldsRemainBitwiseSeedDeterministic" fullname="SpaceEngine.Tests.PopulationTests.NewPopulationFieldsRemainBitwiseSeedDeterministic" methodname="NewPopulationFieldsRemainBitwiseSeedDeterministic" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1077557250" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.008289" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1086" name="PopulationVersionSeparatesNewHierarchyFromOldSaves" fullname="SpaceEngine.Tests.PopulationTests.PopulationVersionSeparatesNewHierarchyFromOldSaves" methodname="PopulationVersionSeparatesNewHierarchyFromOldSaves" classname="SpaceEngine.Tests.PopulationTests" runstate="Runnable" seed="1305547105" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000226" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1097" name="TerrainNoiseTests" fullname="SpaceEngine.Tests.TerrainNoiseTests" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.015361" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1100" name="GlobeHasBoundedVariedTerrainAndBothLandAndSeabed" fullname="SpaceEngine.Tests.TerrainNoiseTests.GlobeHasBoundedVariedTerrainAndBothLandAndSeabed" methodname="GlobeHasBoundedVariedTerrainAndBothLandAndSeabed" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="953787616" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.008557" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1099" name="LongitudeSeamAndPolesAreContinuous" fullname="SpaceEngine.Tests.TerrainNoiseTests.LongitudeSeamAndPolesAreContinuous" methodname="LongitudeSeamAndPolesAreContinuous" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="545782894" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000464" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1104" name="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales" fullname="SpaceEngine.Tests.TerrainNoiseTests.PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.004515" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1101" name="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(1.0d,0.003d)" fullname="SpaceEngine.Tests.TerrainNoiseTests.PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(1.0d,0.003d)" methodname="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="1561619550" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001390" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1102" name="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(10.0d,0.1d)" fullname="SpaceEngine.Tests.TerrainNoiseTests.PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(10.0d,0.1d)" methodname="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="2144952458" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1103" name="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(100.0d,1.0d)" fullname="SpaceEngine.Tests.TerrainNoiseTests.PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales(100.0d,1.0d)" methodname="PhysicalReliefRemainsPresentAtMetreThroughHundredMetreScales" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="885070074" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001009" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1098" name="SurfaceIsDeterministicAndDependsOnSeed" fullname="SpaceEngine.Tests.TerrainNoiseTests.SurfaceIsDeterministicAndDependsOnSeed" methodname="SurfaceIsDeterministicAndDependsOnSeed" classname="SpaceEngine.Tests.TerrainNoiseTests" runstate="Runnable" seed="346722723" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000289" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1105" name="TypedTerrainTests" fullname="SpaceEngine.Tests.TypedTerrainTests" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.129150" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1107" name="EveryKindRetainsSeededBoundedMetreHeightAndNonLavaHasNoEmission" fullname="SpaceEngine.Tests.TypedTerrainTests.EveryKindRetainsSeededBoundedMetreHeightAndNonLavaHasNoEmission" methodname="EveryKindRetainsSeededBoundedMetreHeightAndNonLavaHasNoEmission" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" seed="161016392" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.100383" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1109" name="IcePaletteIsBrightBlueAndDesertHasHeightDependentStrata" fullname="SpaceEngine.Tests.TypedTerrainTests.IcePaletteIsBrightBlueAndDesertHasHeightDependentStrata" methodname="IcePaletteIsBrightBlueAndDesertHasHeightDependentStrata" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" seed="1638080306" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000760" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1110" name="LavaHasDarkCrustBrightFissuresAndGeometricTroughs" fullname="SpaceEngine.Tests.TypedTerrainTests.LavaHasDarkCrustBrightFissuresAndGeometricTroughs" methodname="LavaHasDarkCrustBrightFissuresAndGeometricTroughs" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" seed="778221669" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.004174" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1106" name="OceanHeightRegressionKeepsExistingLandingGeometry" fullname="SpaceEngine.Tests.TypedTerrainTests.OceanHeightRegressionKeepsExistingLandingGeometry" methodname="OceanHeightRegressionKeepsExistingLandingGeometry" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" seed="1049703458" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000322" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1108" name="RockyCraterFieldChangesActualHeightsWithBowlsAndRaisedRims" fullname="SpaceEngine.Tests.TypedTerrainTests.RockyCraterFieldChangesActualHeightsWithBowlsAndRaisedRims" methodname="RockyCraterFieldChangesActualHeightsWithBowlsAndRaisedRims" classname="SpaceEngine.Tests.TypedTerrainTests" runstate="Runnable" seed="450201029" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.022097" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1136" name="SpaceEngine.Rendering.Tests.dll" fullname="F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Rendering.Tests.dll" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.093871" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="95884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1137" name="SpaceEngine" fullname="SpaceEngine" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.090788" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1138" name="Rendering" fullname="SpaceEngine.Rendering" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.090437" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1139" name="Tests" fullname="SpaceEngine.Rendering.Tests" runstate="Runnable" testcasecount="19" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.090064" total="19" passed="19" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1114" name="CelestialRenderingTests" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.058703" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1120" name="CameraRelativeSpherePreservesAngularSizeAcrossRenderScale" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.CameraRelativeSpherePreservesAngularSizeAcrossRenderScale" methodname="CameraRelativeSpherePreservesAngularSizeAcrossRenderScale" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1587291605" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.010569" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1115" name="CloudReferenceMeshIsClosedAndAllTrianglesFaceOutward" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.CloudReferenceMeshIsClosedAndAllTrianglesFaceOutward" methodname="CloudReferenceMeshIsClosedAndAllTrianglesFaceOutward" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="868551532" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.010484" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1124" name="DisabledGalaxyFieldHidesItsActualRendererInEditorAndTick" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.DisabledGalaxyFieldHidesItsActualRendererInEditorAndTick" methodname="DisabledGalaxyFieldHidesItsActualRendererInEditorAndTick" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="492094093" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.005729" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1119" name="GasHasCloudGeometryAndLandableBodiesHaveNoCloudSurface" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.GasHasCloudGeometryAndLandableBodiesHaveNoCloudSurface" methodname="GasHasCloudGeometryAndLandableBodiesHaveNoCloudSurface" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1611679940" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001640" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1117" name="IdenticalResolutionBuildsIdenticalSphereAndRingGeometry" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.IdenticalResolutionBuildsIdenticalSphereAndRingGeometry" methodname="IdenticalResolutionBuildsIdenticalSphereAndRingGeometry" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="198930793" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.021850" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1116" name="RingAnnulusHasOnlyItsTwoPhysicalBoundaryLoops" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.RingAnnulusHasOnlyItsTwoPhysicalBoundaryLoops" methodname="RingAnnulusHasOnlyItsTwoPhysicalBoundaryLoops" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1598675886" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002266" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1118" name="RingRejectsGeometryInsidePlanetOrInvertedEdges" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.RingRejectsGeometryInsidePlanetOrInvertedEdges" methodname="RingRejectsGeometryInsidePlanetOrInvertedEdges" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1910212943" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000393" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1121" name="RotationUsesSimulationTimeAndRingPlaneUsesAxialTilt" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.RotationUsesSimulationTimeAndRingPlaneUsesAxialTilt" methodname="RotationUsesSimulationTimeAndRingPlaneUsesAxialTilt" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1588865311" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001501" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1122" name="SeededMaterialsAreRepeatableAndDoNotMutateTemplate" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.SeededMaterialsAreRepeatableAndDoNotMutateTemplate" methodname="SeededMaterialsAreRepeatableAndDoNotMutateTemplate" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="1347990090" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001352" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1123" name="VisibilityAndInvalidRenderScaleRemoveActualRenderers" fullname="SpaceEngine.Rendering.Tests.CelestialRenderingTests.VisibilityAndInvalidRenderScaleRemoveActualRenderers" methodname="VisibilityAndInvalidRenderScaleRemoveActualRenderers" classname="SpaceEngine.Rendering.Tests.CelestialRenderingTests" runstate="Runnable" seed="473918992" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000611" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1125" name="GalaxyVolumeTests" fullname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" classname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.020931" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1128" name="DefinitionUploadRetainsAllGeometricScalesAndSeedSpecificStructure" fullname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests.DefinitionUploadRetainsAllGeometricScalesAndSeedSpecificStructure" methodname="DefinitionUploadRetainsAllGeometricScalesAndSeedSpecificStructure" classname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" runstate="Runnable" seed="1944027478" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001712" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="NullGalaxyCannotLeaveAnAmbiguousRenderingConfiguration" fullname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests.NullGalaxyCannotLeaveAnAmbiguousRenderingConfiguration" methodname="NullGalaxyCannotLeaveAnAmbiguousRenderingConfiguration" classname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" runstate="Runnable" seed="1349250528" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001567" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1126" name="SmallCameraRotationInvalidatesTheVolumeWhileStationaryViewsStayCached" fullname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests.SmallCameraRotationInvalidatesTheVolumeWhileStationaryViewsStayCached" methodname="SmallCameraRotationInvalidatesTheVolumeWhileStationaryViewsStayCached" classname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" runstate="Runnable" seed="1526580816" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.013548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1127" name="VolumeUsesIndependentOwnedMaterialsAndFiniteFullscreenGeometry" fullname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests.VolumeUsesIndependentOwnedMaterialsAndFiniteFullscreenGeometry" methodname="VolumeUsesIndependentOwnedMaterialsAndFiniteFullscreenGeometry" classname="SpaceEngine.Rendering.Tests.GalaxyVolumeTests" runstate="Runnable" seed="1080849899" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001704" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1130" name="PlanetCloudRenderingTests" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.009876" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1135" name="InvalidCoordinatesAndZeroCoverageHideActualShell" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests.InvalidCoordinatesAndZeroCoverageHideActualShell" methodname="InvalidCoordinatesAndZeroCoverageHideActualShell" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" seed="1631748503" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.003505" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1133" name="LayerFadesBeforeEntryAndStaysHiddenAtGroundAndWhenDisabled" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests.LayerFadesBeforeEntryAndStaysHiddenAtGroundAndWhenDisabled" methodname="LayerFadesBeforeEntryAndStaysHiddenAtGroundAndWhenDisabled" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" seed="2135571299" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000894" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1134" name="SeedAndWeatherClockAreExplicitAndTemplateRemainsUnmodified" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests.SeedAndWeatherClockAreExplicitAndTemplateRemainsUnmodified" methodname="SeedAndWeatherClockAreExplicitAndTemplateRemainsUnmodified" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" seed="1663535574" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001163" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1131" name="WeatherLayerOnlyExistsForOceanicAndNeverCreatesCollider" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests.WeatherLayerOnlyExistsForOceanicAndNeverCreatesCollider" methodname="WeatherLayerOnlyExistsForOceanicAndNeverCreatesCollider" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" seed="1183621245" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000859" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1132" name="WeatherRadiusAndCameraRelativePositionSharePhysicalRenderScale" fullname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests.WeatherRadiusAndCameraRelativePositionSharePhysicalRenderScale" methodname="WeatherRadiusAndCameraRelativePositionSharePhysicalRenderScale" classname="SpaceEngine.Rendering.Tests.PlanetCloudRenderingTests" runstate="Runnable" seed="825656905" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000864" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1194" name="SpaceEngine.Terrain.Tests.dll" fullname="F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.Terrain.Tests.dll" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.103165" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="95884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1195" name="SpaceEngine" fullname="SpaceEngine" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.101305" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1196" name="Terrain" fullname="SpaceEngine.Terrain" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.100374" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1197" name="Tests" fullname="SpaceEngine.Terrain.Tests" runstate="Runnable" testcasecount="42" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:04Z" duration="2.099602" total="42" passed="42" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1140" name="TerrainGeometryTests" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:03Z" duration="0.552437" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1146" name="EarthSurfacePatchRetainsCentimeterCameraMotion" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.EarthSurfacePatchRetainsCentimeterCameraMotion" methodname="EarthSurfacePatchRetainsCentimeterCameraMotion" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="197396864" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.005191" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1142" name="EveryFaceHasOutwardTrianglesAndValidSkirts" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.EveryFaceHasOutwardTrianglesAndValidSkirts" methodname="EveryFaceHasOutwardTrianglesAndValidSkirts" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="654602107" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.011606" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="EverySkirtQuadWritesDepthFromBothSidesAndReachesBelowFineRelief" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.EverySkirtQuadWritesDepthFromBothSidesAndReachesBelowFineRelief" methodname="EverySkirtQuadWritesDepthFromBothSidesAndReachesBelowFineRelief" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="1982311933" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.002104" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1141" name="FaceChartsMeetAtExactSharedDirections" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.FaceChartsMeetAtExactSharedDirections" methodname="FaceChartsMeetAtExactSharedDirections" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="309894454" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.000686" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1144" name="FineAndCoarseSkirtsOverlapAcrossActualSeededEdgeProfiles" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.FineAndCoarseSkirtsOverlapAcrossActualSeededEdgeProfiles" methodname="FineAndCoarseSkirtsOverlapAcrossActualSeededEdgeProfiles" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="1738410418" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.094367" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1148" name="GroundMeshContainsMeterScaleGeometricRelief" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.GroundMeshContainsMeterScaleGeometricRelief" methodname="GroundMeshContainsMeterScaleGeometricRelief" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="1958298232" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:02Z" duration="0.001894" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1150" name="LargeVisibleOrbitalPlanetReceivesCoastlineDetailBeforeProximityLod" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.LargeVisibleOrbitalPlanetReceivesCoastlineDetailBeforeProximityLod" methodname="LargeVisibleOrbitalPlanetReceivesCoastlineDetailBeforeProximityLod" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="636562758" result="Passed" start-time="2026-10-28 05:32:02Z" end-time="2026-10-28 05:32:03Z" duration="0.324981" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1149" name="NearSurfaceLodConvergesWithinBoundedResidentAndLeafBudgets" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.NearSurfaceLodConvergesWithinBoundedResidentAndLeafBudgets" methodname="NearSurfaceLodConvergesWithinBoundedResidentAndLeafBudgets" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="2080385735" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.106409" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1147" name="NormalsRemainContinuousAcrossCubeChartBoundary" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.NormalsRemainContinuousAcrossCubeChartBoundary" methodname="NormalsRemainContinuousAcrossCubeChartBoundary" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="576028432" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.000284" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1145" name="SameSeedAndAddressBuildBitwiseIdenticalGeometry" fullname="SpaceEngine.Terrain.Tests.TerrainGeometryTests.SameSeedAndAddressBuildBitwiseIdenticalGeometry" methodname="SameSeedAndAddressBuildBitwiseIdenticalGeometry" classname="SpaceEngine.Terrain.Tests.TerrainGeometryTests" runstate="Runnable" seed="1451721599" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002720" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1151" name="TerrainLoadingTests" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.022062" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1158" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.019624" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1152" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(1,0.23d,0.41d)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(1,0.23d,0.41d)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="1441667818" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.004601" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1153" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(-1,0.23d,0.41d)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(-1,0.23d,0.41d)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="2085045323" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002980" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1154" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,1,0.41d)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,1,0.41d)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="1703455511" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002876" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1155" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,-1,0.41d)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,-1,0.41d)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="1609386215" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002831" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1156" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,0.41d,1)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,0.41d,1)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="1630611678" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002778" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1157" name="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,0.41d,-1)" fullname="SpaceEngine.Terrain.Tests.TerrainLoadingTests.FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget(0.23d,0.41d,-1)" methodname="FirstSubmittedColdFrameHasFacingProceduralSurfaceWithinOneBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLoadingTests" runstate="Runnable" seed="1863679830" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.002842" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestFixture" id="1159" name="TerrainLodContinuityTests" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:04Z" duration="1.294123" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1166" name="DescentAndReverseTrajectoryKeepCoverageWithLowBuildBudget" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.DescentAndReverseTrajectoryKeepCoverageWithLowBuildBudget" methodname="DescentAndReverseTrajectoryKeepCoverageWithLowBuildBudget" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="756366803" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.285095" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1163" name="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.153593" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1160" name="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(3,5)" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(3,5)" methodname="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="964250106" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.035696" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1161" name="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(12,12)" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(12,12)" methodname="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="1031800736" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.078275" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1162" name="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(19,8)" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs(19,8)" methodname="EveryChildStartsOnActualParentTrianglesWithIdenticalMaterialInputs" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="439278871" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:03Z" duration="0.037834" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1167" name="IdenticalTimedDescentProducesIdenticalVisibleRepresentations" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.IdenticalTimedDescentProducesIdenticalVisibleRepresentations" methodname="IdenticalTimedDescentProducesIdenticalVisibleRepresentations" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="1311942354" result="Passed" start-time="2026-10-28 05:32:03Z" end-time="2026-10-28 05:32:04Z" duration="0.453885" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1164" name="StationaryViewStopsBuildingSwitchingAndChangingTheVisibleSurface" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.StationaryViewStopsBuildingSwitchingAndChangingTheVisibleSurface" methodname="StationaryViewStopsBuildingSwitchingAndChangingTheVisibleSurface" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="1614200309" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.274478" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1165" name="ThresholdJitterKeepsExistingSplitCohortAndRoundTripRestoresSameSurface" fullname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests.ThresholdJitterKeepsExistingSplitCohortAndRoundTripRestoresSameSurface" methodname="ThresholdJitterKeepsExistingSplitCohortAndRoundTripRestoresSameSurface" classname="SpaceEngine.Terrain.Tests.TerrainLodContinuityTests" runstate="Runnable" seed="854516334" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.125628" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1168" name="TerrainMaterialGpuTests" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.188467" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1178" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.173825" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1173" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Oceanic)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Oceanic)" methodname="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="104542705" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.162291" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Oceanic GPU/CPU height error maximum=0.273759m mean=0.048046m across 128 positions
+]]></output>
+                </test-case>
+                <test-case id="1174" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Desert)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Desert)" methodname="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="1312374376" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002614" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Desert GPU/CPU height error maximum=0.249180m mean=0.045901m across 128 positions
+]]></output>
+                </test-case>
+                <test-case id="1175" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Rocky)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Rocky)" methodname="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="1476792010" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.003029" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Rocky GPU/CPU height error maximum=0.249180m mean=0.045194m across 128 positions
+]]></output>
+                </test-case>
+                <test-case id="1176" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Ice)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Ice)" methodname="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="1154311822" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002520" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Ice GPU/CPU height error maximum=0.249180m mean=0.045387m across 128 positions
+]]></output>
+                </test-case>
+                <test-case id="1177" name="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Lava)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures(Lava)" methodname="GpuHeightMapUsesActualCpuContinentsReliefCratersAndFissures" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="1819430734" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002601" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Lava GPU/CPU height error maximum=0.249180m mean=0.046682m across 128 positions
+]]></output>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1172" name="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.006858" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1169" name="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(9371)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(9371)" methodname="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="585178334" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002680" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1170" name="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(-1873647123)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(-1873647123)" methodname="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="472477316" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001906" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1171" name="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(int.MinValue)" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates(int.MinValue)" methodname="GpuSplitMixGradientNoiseMatchesCpuAcrossSignedSeedAndCoordinates" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="2010847115" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001535" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1179" name="MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry" methodname="MaterialCubeChartsMeetAndHaveMipLevelsWithoutChangingGeometry" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="1100608370" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.004323" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1180" name="MaterialRawHeightChannelPreservesSeabedWhileVisibleGeometryClampsOceanDatum" fullname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests.MaterialRawHeightChannelPreservesSeabedWhileVisibleGeometryClampsOceanDatum" methodname="MaterialRawHeightChannelPreservesSeabedWhileVisibleGeometryClampsOceanDatum" classname="SpaceEngine.Terrain.Tests.TerrainMaterialGpuTests" runstate="Runnable" seed="789557616" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002072" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1181" name="TypedTerrainGeometryTests" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.041791" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1187" name="OnlyLavaPatchVerticesCarryFissureEmissionIncludingSkirts" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.OnlyLavaPatchVerticesCarryFissureEmissionIncludingSkirts" methodname="OnlyLavaPatchVerticesCarryFissureEmissionIncludingSkirts" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1692326716" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.019758" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1193" name="TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.009895" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1191" name="TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates(Lava,1.0f)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates(Lava,1.0f)" methodname="TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1951108703" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.005188" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1192" name="TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates(Ice,0.0f)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates(Ice,0.0f)" methodname="TerrainSuppliesExplicitLavaFlagSeedWordsAndBoundedPlanetCoordinates" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="780197221" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.003815" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1186" name="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.008446" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1182" name="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Rocky)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Rocky)" methodname="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1201986873" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002181" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1183" name="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Ice)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Ice)" methodname="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="655547243" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001839" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1184" name="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Desert)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Desert)" methodname="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="2039287103" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001761" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1185" name="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Lava)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals(Lava)" methodname="TypedPatchSamplesTheActualHeightFieldAndKeepsPhysicalNormals" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1870637410" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001913" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1190" name="TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.002445" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1188" name="TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh(Ice)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh(Ice)" methodname="TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1173149309" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001078" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1189" name="TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh(Lava)" fullname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests.TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh(Lava)" methodname="TypedTerrainPreservesCubeChartSeamNormalsAndDeterministicMesh" classname="SpaceEngine.Terrain.Tests.TypedTerrainGeometryTests" runstate="Runnable" seed="1211541853" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000955" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1232" name="SpaceEngine.UI.Tests.dll" fullname="F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.UI.Tests.dll" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.033250" total="29" passed="29" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="95884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1233" name="SpaceEngine" fullname="SpaceEngine" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.032251" total="29" passed="29" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1234" name="Runtime" fullname="SpaceEngine.Runtime" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.031990" total="29" passed="29" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1235" name="Tests" fullname="SpaceEngine.Runtime.Tests" runstate="Runnable" testcasecount="29" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.031738" total="29" passed="29" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1198" name="CelestialDetailsPageTests" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.017597" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1215" name="ClimateSeparatesModelAssumptionsFromTemperatureEstimatesAndUnknownWeather" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.ClimateSeparatesModelAssumptionsFromTemperatureEstimatesAndUnknownWeather" methodname="ClimateSeparatesModelAssumptionsFromTemperatureEstimatesAndUnknownWeather" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="479600544" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.005936" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1207" name="EarthReferenceFieldsKeepDensityGravityAndEscapeSpeedInTheirCorrectRows" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EarthReferenceFieldsKeepDensityGravityAndEscapeSpeedInTheirCorrectRows" methodname="EarthReferenceFieldsKeepDensityGravityAndEscapeSpeedInTheirCorrectRows" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="2005977902" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000879" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1206" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.006290" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1199" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(Rocky)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(Rocky)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="1361340295" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001862" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1200" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(Oceanic)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(Oceanic)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="1893776789" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000648" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1201" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(Desert)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(Desert)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="2051368336" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000648" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1202" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(Ice)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(Ice)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="580549167" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000633" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1203" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(Lava)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(Lava)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="390690976" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000642" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1204" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(GasGiant)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(GasGiant)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="102195263" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000612" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1205" name="EveryGeneratedPlanetKindHasFourCompleteChinesePages(IceGiant)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.EveryGeneratedPlanetKindHasFourCompleteChinesePages(IceGiant)" methodname="EveryGeneratedPlanetKindHasFourCompleteChinesePages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="1861421479" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000597" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1210" name="GasReferencesNeverPresentOneBarPressureAsASolidSurface" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.GasReferencesNeverPresentOneBarPressureAsASolidSurface" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000693" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1208" name="GasReferencesNeverPresentOneBarPressureAsASolidSurface(GasGiant)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.GasReferencesNeverPresentOneBarPressureAsASolidSurface(GasGiant)" methodname="GasReferencesNeverPresentOneBarPressureAsASolidSurface" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="665659117" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000284" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1209" name="GasReferencesNeverPresentOneBarPressureAsASolidSurface(IceGiant)" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.GasReferencesNeverPresentOneBarPressureAsASolidSurface(IceGiant)" methodname="GasReferencesNeverPresentOneBarPressureAsASolidSurface" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="1368953282" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000116" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1213" name="MoonPageLinksToItsActualParentAndStarPageListsOnlyDirectPrimaryBodies" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.MoonPageLinksToItsActualParentAndStarPageListsOnlyDirectPrimaryBodies" methodname="MoonPageLinksToItsActualParentAndStarPageListsOnlyDirectPrimaryBodies" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="128478053" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001103" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1212" name="RelatedTargetSelectionPreservesRemoteSystemAddressAndDoesNotMutateTheOriginalTarget" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.RelatedTargetSelectionPreservesRemoteSystemAddressAndDoesNotMutateTheOriginalTarget" methodname="RelatedTargetSelectionPreservesRemoteSystemAddressAndDoesNotMutateTheOriginalTarget" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="598909566" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000377" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1216" name="StellarPageKeepsUnsupportedPlanetClimateAndRotationExplicitlyUnmodeled" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.StellarPageKeepsUnsupportedPlanetClimateAndRotationExplicitlyUnmodeled" methodname="StellarPageKeepsUnsupportedPlanetClimateAndRotationExplicitlyUnmodeled" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="1763885576" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000245" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1217" name="TabChangesResetScrollAndRejectNonexistentPages" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.TabChangesResetScrollAndRejectNonexistentPages" methodname="TabChangesResetScrollAndRejectNonexistentPages" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="157367591" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000356" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1214" name="TemperatureAndNullFormattingDoNotTurnUnknownDataIntoZero" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.TemperatureAndNullFormattingDoNotTurnUnknownDataIntoZero" methodname="TemperatureAndNullFormattingDoNotTurnUnknownDataIntoZero" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="244376269" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000236" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1211" name="V2LegacyWarningDoesNotSilentlyReclassifyTheSavedPlanet" fullname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests.V2LegacyWarningDoesNotSilentlyReclassifyTheSavedPlanet" methodname="V2LegacyWarningDoesNotSilentlyReclassifyTheSavedPlanet" classname="SpaceEngine.Runtime.Tests.CelestialDetailsPageTests" runstate="Runnable" seed="691095312" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000284" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1218" name="ChineseUiTests" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.013783" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1219" name="BundledFontProducesDistinctRealChineseGlyphMetrics" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.BundledFontProducesDistinctRealChineseGlyphMetrics" methodname="BundledFontProducesDistinctRealChineseGlyphMetrics" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1288282378" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.009684" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1230" name="DynamicNoticesKeepAddressesButTranslateTheUserFacingMessage" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.DynamicNoticesKeepAddressesButTranslateTheUserFacingMessage" methodname="DynamicNoticesKeepAddressesButTranslateTheUserFacingMessage" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="87753366" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000633" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1220" name="EveryGeneratedBodyAndStellarClassHasAChineseDisplayName" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.EveryGeneratedBodyAndStellarClassHasAChineseDisplayName" methodname="EveryGeneratedBodyAndStellarClassHasAChineseDisplayName" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="280743072" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000691" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1231" name="PointerHitRegionsCoverHudAndOpenPanelsWithoutBlockingTheSpaceView" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.PointerHitRegionsCoverHudAndOpenPanelsWithoutBlockingTheSpaceView" methodname="PointerHitRegionsCoverHudAndOpenPanelsWithoutBlockingTheSpaceView" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1421814427" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000462" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1229" name="SimulationStatusIsLocalizedAtTheDisplayBoundary" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.001495" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1221" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;FREE FLIGHT&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;FREE FLIGHT&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1632563204" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000224" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1222" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CONTINUOUS DESCENT&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CONTINUOUS DESCENT&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1486617304" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000056" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1223" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CONTINUOUS ASCENT&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CONTINUOUS ASCENT&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1740883201" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000036" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1224" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;APPROACH CLOUD TOPS / NO SOLID SURFACE&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;APPROACH CLOUD TOPS / NO SOLID SURFACE&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="219443044" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000032" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1225" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;HOLDING ABOVE CLOUDS / NON-LANDABLE&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;HOLDING ABOVE CLOUDS / NON-LANDABLE&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1338692317" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000032" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1226" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;LANDED / TERRAIN FOLLOW&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;LANDED / TERRAIN FOLLOW&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1031752218" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000031" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1227" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;Flight saved / F9 restore&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;Flight saved / F9 restore&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="1335002182" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000030" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1228" name="SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CENTRAL BLACK HOLE / geometric horizon; no relativistic lensing&quot;)" fullname="SpaceEngine.Runtime.Tests.ChineseUiTests.SimulationStatusIsLocalizedAtTheDisplayBoundary(&quot;CENTRAL BLACK HOLE / geometric horizon; no relativistic lensing&quot;)" methodname="SimulationStatusIsLocalizedAtTheDisplayBoundary" classname="SpaceEngine.Runtime.Tests.ChineseUiTests" runstate="Runnable" seed="262028768" result="Passed" start-time="2026-10-28 05:32:04Z" end-time="2026-10-28 05:32:04Z" duration="0.000045" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/zaofenMachine/AppData/LocalLow/SpaceEngineG/SpaceEngineG Explorer\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

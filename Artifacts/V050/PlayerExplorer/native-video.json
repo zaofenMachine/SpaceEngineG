@@ -1,0 +1,92 @@
+{
+    "passed": true,
+    "backend": "Unity framebuffer ReadPixels + rawvideo pipe",
+    "scope": "30fps wall-clock sampling at WaitForEndOfFrame, not every rendered game frame. Missing sample slots repeat the last actual framebuffer. RGB24 bottom-up input is flipped once by FFmpeg. Readback/encoding adds performance overhead.",
+    "startedUtc": "2026-10-28T05:51:15.0478184+00:00",
+    "firstFrameUtc": "2026-10-28T05:51:15.0478184+00:00",
+    "finishedUtc": "2026-10-28T05:52:06.8717489Z",
+    "productName": "SpaceEngineG Explorer",
+    "encoderPath": "C:\\Environment\\python\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v7.1.exe",
+    "videoOutput": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer\\descent.mp4",
+    "error": "",
+    "firstFrameEpoch": 1793166675.047,
+    "firstFrameRealtimeSeconds": 3.2325256006802727,
+    "timestampUncertaintySeconds": 0.1,
+    "playerPid": 58992,
+    "width": 1600,
+    "height": 900,
+    "framesPerSecond": 30,
+    "actualReadFrames": 1489,
+    "repeatedFrames": 65,
+    "encodedFrames": 1554,
+    "encoderExitCode": 0,
+    "maximumQueueDepth": 1,
+    "durationSeconds": 51.8,
+    "wallSeconds": 51.79078079999999,
+    "totalReadbackMilliseconds": 13381.47060000002,
+    "maximumReadbackMilliseconds": 61.508700000000008,
+    "totalQueueMilliseconds": 13.482699999999989,
+    "maximumClockLeadSeconds": 0.02105276666666711,
+    "stages": [
+        {
+            "screenshot": "01-chinese-home.png",
+            "videoFrameIndex": 40,
+            "gameFrame": 143,
+            "elapsedSeconds": 1.343921
+        },
+        {
+            "screenshot": "02-search-filter-cn.png",
+            "videoFrameIndex": 45,
+            "gameFrame": 147,
+            "elapsedSeconds": 1.5289861
+        },
+        {
+            "screenshot": "03-target-information-cn.png",
+            "videoFrameIndex": 47,
+            "gameFrame": 151,
+            "elapsedSeconds": 1.6305142
+        },
+        {
+            "screenshot": "04-orbital-system-cn.png",
+            "videoFrameIndex": 54,
+            "gameFrame": 167,
+            "elapsedSeconds": 1.7944871999999999
+        },
+        {
+            "screenshot": "05-bookmarks-cn.png",
+            "videoFrameIndex": 56,
+            "gameFrame": 173,
+            "elapsedSeconds": 1.8560242999999997
+        },
+        {
+            "screenshot": "05b-same-frame-home-reload.png",
+            "videoFrameIndex": 60,
+            "gameFrame": 177,
+            "elapsedSeconds": 2.0695142
+        },
+        {
+            "screenshot": "06-descent-start.png",
+            "videoFrameIndex": 104,
+            "gameFrame": 339,
+            "elapsedSeconds": 3.4782920999999997
+        },
+        {
+            "screenshot": "07-first-surface-hold.png",
+            "videoFrameIndex": 800,
+            "gameFrame": 2148,
+            "elapsedSeconds": 26.6488162
+        },
+        {
+            "screenshot": "08-continuous-ascent.png",
+            "videoFrameIndex": 1117,
+            "gameFrame": 3406,
+            "elapsedSeconds": 37.2271301
+        },
+        {
+            "screenshot": "09-return-surface-hold.png",
+            "videoFrameIndex": 1553,
+            "gameFrame": 5132,
+            "elapsedSeconds": 51.762187499999999
+        }
+    ]
+}

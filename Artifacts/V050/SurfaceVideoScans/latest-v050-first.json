@@ -1,0 +1,1145 @@
+{
+  "utc": "2026-10-28T05:33:39.235102+00:00",
+  "pipelineSucceeded": true,
+  "automaticVisualPass": null,
+  "manualFrameByFrameReviewed": false,
+  "scope": "Every source frame in the native bookmarks-to-descent-start interval, not every frame of the whole movie. Fixed display-RGB ROI screening only; intentional overview/space darkness is not automatically a bug.",
+  "video": "Artifacts/V050/PlayerExplorer/descent.mp4",
+  "videoSha256": "590d485b72672126f4465625c07205b63c9395f6c0ac2603a81f00d28d11b7dd",
+  "videoBytes": 11133936,
+  "analysisScriptSha256": "496000b7564353c040f0aec9ff0bc6102f6ac142042f12e89da18ebaab92205e",
+  "captureMetadata": "Artifacts/V050/PlayerExplorer/capture-metadata.json",
+  "captureMetadataSha256": "5434ede94c0ac461962f73741dd57e3e20861f90f631c9a3bf8b3810cf03e491",
+  "sourceReport": "Artifacts/V050/PlayerExplorer/explorer-verification.json",
+  "sourceReportSha256": "1e948fb9af23fb9127c83a599a607c5e819acac698584b52bd234086fa546578",
+  "buildGuid": "11f6a042aebf4d86a633904998d26526",
+  "generationVersion": "0.5.0",
+  "capturePassed": true,
+  "nativePassed": true,
+  "nativeEncodedFrames": 1553,
+  "nativeDurationSeconds": 51.766666666666666,
+  "nativeCfrFramesPerSecond": 30,
+  "sourceWidth": 1600,
+  "sourceHeight": 900,
+  "sourceIndexConvention": "Zero-based decoder n and native.stages.videoFrameIndex. No rate conversion or frame deletion.",
+  "stages": {
+    "start": {
+      "screenshot": "05-bookmarks-cn.png",
+      "videoFrameIndex": 56,
+      "gameFrame": 173,
+      "elapsedSeconds": 1.8776267999999998
+    },
+    "end": {
+      "screenshot": "06-descent-start.png",
+      "videoFrameIndex": 105,
+      "gameFrame": 339,
+      "elapsedSeconds": 3.5007894
+    }
+  },
+  "roiNormalized": [
+    0.32,
+    0.56,
+    0.65,
+    0.86
+  ],
+  "thresholds": {
+    "blackChannel8Bit": 8,
+    "minimumNonBlackFraction": 0.02,
+    "maximumDarkP95": 0.025
+  },
+  "metricColorScope": "FFmpeg RGB24 output; Rec.709-weighted display-signal luma proxy. Not linear radiance or absolute photometry.",
+  "warnings": [
+    "Exact ReturnHome EOF is unavailable. Early dark candidates remain ambiguous; absence of later candidates cannot prove the first transition frames were fixed."
+  ],
+  "failures": [],
+  "ffmpegExecutable": "C:\\Environment\\python\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v7.1.exe",
+  "roiPixels": [
+    512,
+    504,
+    1040,
+    774
+  ],
+  "returnHomeBoundary": {
+    "source": "first matching report settling sample after bookmarks",
+    "exact": false,
+    "confirmedStartFrame": 67,
+    "sampleEstimatedVideoSeconds": 2.09635995305481,
+    "sampleEstimatedSourceFrame": 62.8907985916443,
+    "sample": {
+      "elapsed": 2.6669669000000003,
+      "clearance": 599999.9999979872,
+      "frameMs": 196.44691050052643,
+      "renderedHeightError": -20451.790774490877,
+      "phase": "settling",
+      "lod": 0,
+      "pending": 96,
+      "transitions": 24,
+      "switches": 0,
+      "geometryHash": 1943390995,
+      "settled": false
+    },
+    "reportToVideoOffsetSeconds": -0.5706069469451904,
+    "timestampUncertaintySeconds": 0.1,
+    "guardSeconds": 0.13333333333333333,
+    "note": "Known route: bookmarks overview -> restore bookmark -> ReturnHome -> 600km -> WaitForTerrain. The exact first new-world EOF was not marked. Earlier frames are ambiguous, not automatic bugs."
+  },
+  "roiDecodeCommand": [
+    "C:\\Environment\\python\\Lib\\site-packages\\imageio_ffmpeg\\binaries\\ffmpeg-win-x86_64-v7.1.exe",
+    "-hide_banner",
+    "-nostdin",
+    "-xerror",
+    "-i",
+    "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\PlayerExplorer\\descent.mp4",
+    "-map",
+    "0:v:0",
+    "-an",
+    "-sn",
+    "-dn",
+    "-vf",
+    "select=between(n\\,56\\,105),crop=528:270:512:504,showinfo",
+    "-fps_mode",
+    "passthrough",
+    "-f",
+    "rawvideo",
+    "-pix_fmt",
+    "rgb24",
+    "pipe:1"
+  ],
+  "frames": [
+    {
+      "sourceFrameIndex": 56,
+      "videoSecondsByNativeCfr": 1.8666666666666667,
+      "sceneScope": "documented_bookmarks_overview",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        4.294823232323233,
+        12.33712822671156,
+        17.3704335016835
+      ],
+      "meanLuma": 0.04310093820095062,
+      "medianLuma": 0.04180470481514931,
+      "p95Luma": 0.04180470481514931,
+      "p99Luma": 0.06533411890268326,
+      "lumaStd": 0.01838916353881359,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 1.866667
+    },
+    {
+      "sourceFrameIndex": 57,
+      "videoSecondsByNativeCfr": 1.9,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        4.295770202020202,
+        12.340263748597081,
+        17.37300785634119
+      ],
+      "meanLuma": 0.04311124607920647,
+      "medianLuma": 0.04180470481514931,
+      "p95Luma": 0.04180470481514931,
+      "p99Luma": 0.06533411890268326,
+      "lumaStd": 0.018428148701786995,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 1.9
+    },
+    {
+      "sourceFrameIndex": 58,
+      "videoSecondsByNativeCfr": 1.9333333333333333,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        4.296394500561167,
+        12.341715768799101,
+        17.37530162738496
+      ],
+      "meanLuma": 0.0431164875626564,
+      "medianLuma": 0.04180470481514931,
+      "p95Luma": 0.04180470481514931,
+      "p99Luma": 0.06533411890268326,
+      "lumaStd": 0.018457049503922462,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 1.933333
+    },
+    {
+      "sourceFrameIndex": 59,
+      "videoSecondsByNativeCfr": 1.9666666666666666,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        4.296429573512907,
+        12.340831930415264,
+        17.37556818181818
+      ],
+      "meanLuma": 0.04311411827802658,
+      "medianLuma": 0.04180470481514931,
+      "p95Luma": 0.04180470481514931,
+      "p99Luma": 0.06533411890268326,
+      "lumaStd": 0.018499623984098434,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 1.966667
+    },
+    {
+      "sourceFrameIndex": 60,
+      "videoSecondsByNativeCfr": 2.0,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        4.2957491582491585,
+        12.342290965207631,
+        17.376269640852975
+      ],
+      "meanLuma": 0.043117839843034744,
+      "medianLuma": 0.04180470481514931,
+      "p95Luma": 0.04180470481514931,
+      "p99Luma": 0.06533411890268326,
+      "lumaStd": 0.018514808267354965,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.0
+    },
+    {
+      "sourceFrameIndex": 61,
+      "videoSecondsByNativeCfr": 2.033333333333333,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        165.50624298540964,
+        154.33396464646464,
+        136.82591189674523
+      ],
+      "meanLuma": 0.6095887422561646,
+      "medianLuma": 0.6155560612678528,
+      "p95Luma": 0.6637160778045654,
+      "p99Luma": 0.6798807978630066,
+      "lumaStd": 0.03869928419589996,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.033333
+    },
+    {
+      "sourceFrameIndex": 62,
+      "videoSecondsByNativeCfr": 2.066666666666667,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        165.52220117845118,
+        154.31726290684625,
+        136.82135942760942
+      ],
+      "meanLuma": 0.609553873538971,
+      "medianLuma": 0.6155560612678528,
+      "p95Luma": 0.6639631390571594,
+      "p99Luma": 0.6798807978630066,
+      "lumaStd": 0.03870059549808502,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.066667
+    },
+    {
+      "sourceFrameIndex": 63,
+      "videoSecondsByNativeCfr": 2.1,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        165.53245650953986,
+        154.31702441077442,
+        136.83310185185186
+      ],
+      "meanLuma": 0.6095650792121887,
+      "medianLuma": 0.6155560612678528,
+      "p95Luma": 0.6639631390571594,
+      "p99Luma": 0.6802157163619995,
+      "lumaStd": 0.03874846175312996,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.1
+    },
+    {
+      "sourceFrameIndex": 64,
+      "videoSecondsByNativeCfr": 2.1333333333333333,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        165.5366372053872,
+        154.3386854657688,
+        136.80501543209877
+      ],
+      "meanLuma": 0.6096213459968567,
+      "medianLuma": 0.6155560612678528,
+      "p95Luma": 0.6641945242881775,
+      "p99Luma": 0.6798807978630066,
+      "lumaStd": 0.03883456811308861,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.133333
+    },
+    {
+      "sourceFrameIndex": 65,
+      "videoSecondsByNativeCfr": 2.1666666666666665,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        165.82745510662178,
+        154.58166386083053,
+        137.09294332211
+      ],
+      "meanLuma": 0.610626757144928,
+      "medianLuma": 0.6166572570800781,
+      "p95Luma": 0.6651003956794739,
+      "p99Luma": 0.6807191967964172,
+      "lumaStd": 0.03904200717806816,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.166667
+    },
+    {
+      "sourceFrameIndex": 66,
+      "videoSecondsByNativeCfr": 2.2,
+      "sceneScope": "unresolved_overview_or_return_transition",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        166.77151374859707,
+        155.48683361391696,
+        138.1505260942761
+      ],
+      "meanLuma": 0.6142520904541016,
+      "medianLuma": 0.6194776892662048,
+      "p95Luma": 0.6681160926818848,
+      "p99Luma": 0.683838427066803,
+      "lumaStd": 0.0399300679564476,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.2
+    },
+    {
+      "sourceFrameIndex": 67,
+      "videoSecondsByNativeCfr": 2.2333333333333334,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        167.8202721661055,
+        156.56614758698092,
+        140.34162457912458
+      ],
+      "meanLuma": 0.6187739968299866,
+      "medianLuma": 0.6261835694313049,
+      "p95Luma": 0.6726964712142944,
+      "p99Luma": 0.6922117471694946,
+      "lumaStd": 0.041093118488788605,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.233333
+    },
+    {
+      "sourceFrameIndex": 68,
+      "videoSecondsByNativeCfr": 2.2666666666666666,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        168.87316217732885,
+        158.73505892255892,
+        142.74970538720538
+      ],
+      "meanLuma": 0.626416802406311,
+      "medianLuma": 0.6360337734222412,
+      "p95Luma": 0.6788674592971802,
+      "p99Luma": 0.7000596523284912,
+      "lumaStd": 0.04037134721875191,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.266667
+    },
+    {
+      "sourceFrameIndex": 69,
+      "videoSecondsByNativeCfr": 2.3,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        170.12748316498318,
+        160.68483445566778,
+        145.50183782267115
+      ],
+      "meanLuma": 0.6337103843688965,
+      "medianLuma": 0.6424360871315002,
+      "p95Luma": 0.6856094598770142,
+      "p99Luma": 0.7076666951179504,
+      "lumaStd": 0.04208625480532646,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.3
+    },
+    {
+      "sourceFrameIndex": 70,
+      "videoSecondsByNativeCfr": 2.3333333333333335,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        171.453528338945,
+        162.34384820426487,
+        148.16194584736252
+      ],
+      "meanLuma": 0.6402220726013184,
+      "medianLuma": 0.6503152847290039,
+      "p95Luma": 0.6948007941246033,
+      "p99Luma": 0.7174603343009949,
+      "lumaStd": 0.042958006262779236,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.333333
+    },
+    {
+      "sourceFrameIndex": 71,
+      "videoSecondsByNativeCfr": 2.3666666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        172.99246632996633,
+        164.0770342312009,
+        151.40366161616163
+      ],
+      "meanLuma": 0.6472840905189514,
+      "medianLuma": 0.6556730270385742,
+      "p95Luma": 0.7026439309120178,
+      "p99Luma": 0.7275059223175049,
+      "lumaStd": 0.043701574206352234,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.366667
+    },
+    {
+      "sourceFrameIndex": 72,
+      "videoSecondsByNativeCfr": 2.4,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        174.22739197530865,
+        165.70887345679012,
+        154.36644921436587
+      ],
+      "meanLuma": 0.6537293791770935,
+      "medianLuma": 0.6655184626579285,
+      "p95Luma": 0.7093498110771179,
+      "p99Luma": 0.7328792214393616,
+      "lumaStd": 0.04497911036014557,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.4
+    },
+    {
+      "sourceFrameIndex": 73,
+      "videoSecondsByNativeCfr": 2.433333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.16369248035915,
+        166.84306958473624,
+        156.40109427609428
+      ],
+      "meanLuma": 0.6582671403884888,
+      "medianLuma": 0.6699341535568237,
+      "p95Luma": 0.7176619172096252,
+      "p99Luma": 0.7372996807098389,
+      "lumaStd": 0.045086298137903214,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.433333
+    },
+    {
+      "sourceFrameIndex": 74,
+      "videoSecondsByNativeCfr": 2.466666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.42955948372614,
+        167.28087822671156,
+        157.22049663299663
+      ],
+      "meanLuma": 0.6599487662315369,
+      "medianLuma": 0.6719051003456116,
+      "p95Luma": 0.7208157181739807,
+      "p99Luma": 0.7410416007041931,
+      "lumaStd": 0.045442111790180206,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.466667
+    },
+    {
+      "sourceFrameIndex": 75,
+      "videoSecondsByNativeCfr": 2.5,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.5073021885522,
+        167.33510802469135,
+        157.30446829405162
+      ],
+      "meanLuma": 0.6601894497871399,
+      "medianLuma": 0.6721726059913635,
+      "p95Luma": 0.7211145162582397,
+      "p99Luma": 0.743239164352417,
+      "lumaStd": 0.04550844058394432,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.5
+    },
+    {
+      "sourceFrameIndex": 76,
+      "videoSecondsByNativeCfr": 2.533333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.56417648709316,
+        167.37539983164984,
+        157.377560325477
+      ],
+      "meanLuma": 0.6603705883026123,
+      "medianLuma": 0.6721726059913635,
+      "p95Luma": 0.7213772535324097,
+      "p99Luma": 0.7443451285362244,
+      "lumaStd": 0.04555096477270126,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.533333
+    },
+    {
+      "sourceFrameIndex": 77,
+      "videoSecondsByNativeCfr": 2.566666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.67899130190796,
+        167.48715628507296,
+        157.5802539281706
+      ],
+      "meanLuma": 0.6608371734619141,
+      "medianLuma": 0.673042356967926,
+      "p95Luma": 0.7216808199882507,
+      "p99Luma": 0.74467533826828,
+      "lumaStd": 0.04565634950995445,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.566667
+    },
+    {
+      "sourceFrameIndex": 78,
+      "videoSecondsByNativeCfr": 2.6,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        175.84984567901233,
+        167.6492564534231,
+        157.87899831649833
+      ],
+      "meanLuma": 0.6615187525749207,
+      "medianLuma": 0.6738447546958923,
+      "p95Luma": 0.7227226495742798,
+      "p99Luma": 0.7452102303504944,
+      "lumaStd": 0.045821238309144974,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.6
+    },
+    {
+      "sourceFrameIndex": 79,
+      "videoSecondsByNativeCfr": 2.6333333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        176.00085578002245,
+        167.81423961840628,
+        158.19740460157126
+      ],
+      "meanLuma": 0.6621975302696228,
+      "medianLuma": 0.673855721950531,
+      "p95Luma": 0.7233530282974243,
+      "p99Luma": 0.7465788722038269,
+      "lumaStd": 0.046081531792879105,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.633333
+    },
+    {
+      "sourceFrameIndex": 80,
+      "videoSecondsByNativeCfr": 2.6666666666666665,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        176.25019640852975,
+        168.05861391694725,
+        158.6043490460157
+      ],
+      "meanLuma": 0.6632060408592224,
+      "medianLuma": 0.6744219660758972,
+      "p95Luma": 0.7247890830039978,
+      "p99Luma": 0.7469137907028198,
+      "lumaStd": 0.04635647311806679,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.666667
+    },
+    {
+      "sourceFrameIndex": 81,
+      "videoSecondsByNativeCfr": 2.7,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        176.5702581369248,
+        168.38611111111112,
+        159.10858585858585
+      ],
+      "meanLuma": 0.6645342111587524,
+      "medianLuma": 0.6755231618881226,
+      "p95Luma": 0.725355327129364,
+      "p99Luma": 0.7483184337615967,
+      "lumaStd": 0.04658227041363716,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.7
+    },
+    {
+      "sourceFrameIndex": 82,
+      "videoSecondsByNativeCfr": 2.7333333333333334,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        176.88418911335577,
+        168.69510381593716,
+        159.59706790123457
+      ],
+      "meanLuma": 0.665800929069519,
+      "medianLuma": 0.6774988770484924,
+      "p95Luma": 0.7264925837516785,
+      "p99Luma": 0.7488329410552979,
+      "lumaStd": 0.046777740120887756,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.733333
+    },
+    {
+      "sourceFrameIndex": 83,
+      "videoSecondsByNativeCfr": 2.7666666666666666,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.39135802469136,
+        169.0395061728395,
+        160.66815375982043
+      ],
+      "meanLuma": 0.6674929857254028,
+      "medianLuma": 0.6783435344696045,
+      "p95Luma": 0.7275529503822327,
+      "p99Luma": 0.7500264644622803,
+      "lumaStd": 0.0471184141933918,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.766667
+    },
+    {
+      "sourceFrameIndex": 84,
+      "videoSecondsByNativeCfr": 2.8,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.5728465207632,
+        169.36591610549945,
+        160.8914211560045
+      ],
+      "meanLuma": 0.6686229705810547,
+      "medianLuma": 0.6800156831741333,
+      "p95Luma": 0.7287576794624329,
+      "p99Luma": 0.7508353590965271,
+      "lumaStd": 0.04724215716123581,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.8
+    },
+    {
+      "sourceFrameIndex": 85,
+      "videoSecondsByNativeCfr": 2.8333333333333335,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.7003086419753,
+        169.53945005611672,
+        161.06461840628506
+      ],
+      "meanLuma": 0.6692650318145752,
+      "medianLuma": 0.6808807849884033,
+      "p95Luma": 0.7292768359184265,
+      "p99Luma": 0.7510824203491211,
+      "lumaStd": 0.04740865156054497,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.833333
+    },
+    {
+      "sourceFrameIndex": 86,
+      "videoSecondsByNativeCfr": 2.8666666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.67579966329967,
+        169.62588383838383,
+        161.07013187429854
+      ],
+      "meanLuma": 0.6694885492324829,
+      "medianLuma": 0.6811168789863586,
+      "p95Luma": 0.7294598817825317,
+      "p99Luma": 0.7514172196388245,
+      "lumaStd": 0.047427088022232056,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.866667
+    },
+    {
+      "sourceFrameIndex": 87,
+      "videoSecondsByNativeCfr": 2.9,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.59308361391695,
+        169.85997474747475,
+        161.1405303030303
+      ],
+      "meanLuma": 0.6700960397720337,
+      "medianLuma": 0.6819866895675659,
+      "p95Luma": 0.730414092540741,
+      "p99Luma": 0.7523691058158875,
+      "lumaStd": 0.04746216535568237,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.9
+    },
+    {
+      "sourceFrameIndex": 88,
+      "videoSecondsByNativeCfr": 2.933333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.63655303030302,
+        169.9740951178451,
+        161.2004699775533
+      ],
+      "meanLuma": 0.670469343662262,
+      "medianLuma": 0.6819866895675659,
+      "p95Luma": 0.730861246585846,
+      "p99Luma": 0.7525184750556946,
+      "lumaStd": 0.047548841685056686,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.933333
+    },
+    {
+      "sourceFrameIndex": 89,
+      "videoSecondsByNativeCfr": 2.966666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.66234567901233,
+        170.05928731762066,
+        161.30289001122335
+      ],
+      "meanLuma": 0.6707587838172913,
+      "medianLuma": 0.6820181012153625,
+      "p95Luma": 0.7309960722923279,
+      "p99Luma": 0.7528063058853149,
+      "lumaStd": 0.04769831523299217,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 2.966667
+    },
+    {
+      "sourceFrameIndex": 90,
+      "videoSecondsByNativeCfr": 3.0,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.7450687429854,
+        170.13676346801347,
+        161.40573092031426
+      ],
+      "meanLuma": 0.6710741519927979,
+      "medianLuma": 0.6822910308837891,
+      "p95Luma": 0.7311961054801941,
+      "p99Luma": 0.7536196112632751,
+      "lumaStd": 0.047786012291908264,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.0
+    },
+    {
+      "sourceFrameIndex": 91,
+      "videoSecondsByNativeCfr": 3.033333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.86603535353535,
+        170.24760101010102,
+        161.58497474747475
+      ],
+      "meanLuma": 0.6715366840362549,
+      "medianLuma": 0.6831238865852356,
+      "p95Luma": 0.7320659160614014,
+      "p99Luma": 0.7538557052612305,
+      "lumaStd": 0.04794417321681976,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.033333
+    },
+    {
+      "sourceFrameIndex": 92,
+      "videoSecondsByNativeCfr": 3.066666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        177.92568041526374,
+        170.32800925925926,
+        161.7312640291807
+      ],
+      "meanLuma": 0.6718533039093018,
+      "medianLuma": 0.6833710074424744,
+      "p95Luma": 0.7326635718345642,
+      "p99Luma": 0.7544220089912415,
+      "lumaStd": 0.04812879115343094,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.066667
+    },
+    {
+      "sourceFrameIndex": 93,
+      "videoSecondsByNativeCfr": 3.1,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.0144921436588,
+        170.38632154882154,
+        161.91300505050506
+      ],
+      "meanLuma": 0.6721423268318176,
+      "medianLuma": 0.6833710074424744,
+      "p95Luma": 0.7328792214393616,
+      "p99Luma": 0.7544376850128174,
+      "lumaStd": 0.04821944609284401,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.1
+    },
+    {
+      "sourceFrameIndex": 94,
+      "videoSecondsByNativeCfr": 3.1333333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.10516273849606,
+        170.45782828282827,
+        162.0168911335578
+      ],
+      "meanLuma": 0.672447919845581,
+      "medianLuma": 0.6839373111724854,
+      "p95Luma": 0.7329105734825134,
+      "p99Luma": 0.7544894218444824,
+      "lumaStd": 0.048274628818035126,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.133333
+    },
+    {
+      "sourceFrameIndex": 95,
+      "videoSecondsByNativeCfr": 3.1666666666666665,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.1577441077441,
+        170.59438832772167,
+        162.15519079685745
+      ],
+      "meanLuma": 0.6729139089584351,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.7334454655647278,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04841270670294762,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.166667
+    },
+    {
+      "sourceFrameIndex": 96,
+      "videoSecondsByNativeCfr": 3.2,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.17149270482605,
+        170.60920314253647,
+        162.1712121212121
+      ],
+      "meanLuma": 0.6729714870452881,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.7340117692947388,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04845131188631058,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.2
+    },
+    {
+      "sourceFrameIndex": 97,
+      "videoSecondsByNativeCfr": 3.2333333333333334,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.20391414141415,
+        170.63101851851852,
+        162.21126543209877
+      ],
+      "meanLuma": 0.6730710864067078,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.7340259552001953,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04844101145863533,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.233333
+    },
+    {
+      "sourceFrameIndex": 98,
+      "videoSecondsByNativeCfr": 3.2666666666666666,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.18778058361391,
+        170.65430695847363,
+        162.2176346801347
+      ],
+      "meanLuma": 0.6731246709823608,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.7342478632926941,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.048452481627464294,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.266667
+    },
+    {
+      "sourceFrameIndex": 99,
+      "videoSecondsByNativeCfr": 3.3,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.19795875420874,
+        170.65345819304153,
+        162.21900252525253
+      ],
+      "meanLuma": 0.6731311678886414,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.7342478632926941,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04844176024198532,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.3
+    },
+    {
+      "sourceFrameIndex": 100,
+      "videoSecondsByNativeCfr": 3.3333333333333335,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.2604377104377,
+        170.6654882154882,
+        162.29539842873177
+      ],
+      "meanLuma": 0.6732386350631714,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04842304438352585,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.333333
+    },
+    {
+      "sourceFrameIndex": 101,
+      "videoSecondsByNativeCfr": 3.3666666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.2629278900112,
+        170.66449915824916,
+        162.29651374859708
+      ],
+      "meanLuma": 0.6732382774353027,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04842478409409523,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.366667
+    },
+    {
+      "sourceFrameIndex": 102,
+      "videoSecondsByNativeCfr": 3.4,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.2629208754209,
+        170.6644921436588,
+        162.29650673400673
+      ],
+      "meanLuma": 0.673238217830658,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04842478036880493,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.4
+    },
+    {
+      "sourceFrameIndex": 103,
+      "videoSecondsByNativeCfr": 3.433333333333333,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.26291386083054,
+        170.66448512906845,
+        162.29649971941637
+      ],
+      "meanLuma": 0.673238217830658,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04842477664351463,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.433333
+    },
+    {
+      "sourceFrameIndex": 104,
+      "videoSecondsByNativeCfr": 3.466666666666667,
+      "sceneScope": "guarded_post_return_surface",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.26294893378227,
+        170.6645202020202,
+        162.29653479236813
+      ],
+      "meanLuma": 0.6732383370399475,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.04842469468712807,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.466667
+    },
+    {
+      "sourceFrameIndex": 105,
+      "videoSecondsByNativeCfr": 3.5,
+      "sceneScope": "documented_descent_start",
+      "knownNegativeControl": false,
+      "meanRgb8Bit": [
+        178.26295594837262,
+        170.66452721661054,
+        162.2965418069585
+      ],
+      "meanLuma": 0.6732383370399475,
+      "medianLuma": 0.6848023533821106,
+      "p95Luma": 0.734335720539093,
+      "p99Luma": 0.7550039887428284,
+      "lumaStd": 0.048424698412418365,
+      "nonBlackFraction": 1.0,
+      "darkCandidate": false,
+      "sourcePtsSeconds": 3.5
+    }
+  ],
+  "scannedFrameCount": 50,
+  "darkCandidateCountsBySceneScope": {},
+  "darkCandidateRuns": [],
+  "knownNegativeControls": [],
+  "maximumSourcePtsVersusNativeCfrSeconds": 3.33333333379926e-07,
+  "extractedFrames": [
+    {
+      "sourceFrameIndex": 56,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000056.png"
+    },
+    {
+      "sourceFrameIndex": 60,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000060.png"
+    },
+    {
+      "sourceFrameIndex": 61,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000061.png"
+    },
+    {
+      "sourceFrameIndex": 66,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000066.png"
+    },
+    {
+      "sourceFrameIndex": 71,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000071.png"
+    },
+    {
+      "sourceFrameIndex": 76,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000076.png"
+    },
+    {
+      "sourceFrameIndex": 81,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000081.png"
+    },
+    {
+      "sourceFrameIndex": 86,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000086.png"
+    },
+    {
+      "sourceFrameIndex": 91,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000091.png"
+    },
+    {
+      "sourceFrameIndex": 96,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000096.png"
+    },
+    {
+      "sourceFrameIndex": 101,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000101.png"
+    },
+    {
+      "sourceFrameIndex": 105,
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/frames/frame-000105.png"
+    }
+  ],
+  "contactSheets": [
+    {
+      "file": "Artifacts/V050/SurfaceVideoScans/20261028T053339.234711Z-v050-first-590d485b/candidate-context-001.png",
+      "sourceFrameIndices": [
+        56,
+        60,
+        61,
+        66,
+        71,
+        76,
+        81,
+        86,
+        91,
+        96,
+        101,
+        105
+      ],
+      "note": "Orange rectangle marks the measured ROI. Original full-frame PNGs are preserved separately."
+    }
+  ],
+  "candidateImageSelection": {
+    "maximumCandidateCenters": 16,
+    "contextFramesEachSide": 1,
+    "progressionContextStrideFrames": 5,
+    "explicitInspectionFrames": [
+      60
+    ],
+    "note": "If needed, candidate centers are evenly subsampled for sheets; every frame metric remains in the JSON. Known controls, caller-requested inspection frames, regular progression context and interval endpoints are always included."
+  },
+  "interpretation": "pipelineSucceeded means extraction/metadata processing succeeded, never that visual quality passed. Dark pixels can be legitimate sky, occlusion or an overlay; bright pixels can still show wrong/loading geometry. Open original frames and contact sheets. This automatic pixel scan is not human frame-by-frame review."
+}

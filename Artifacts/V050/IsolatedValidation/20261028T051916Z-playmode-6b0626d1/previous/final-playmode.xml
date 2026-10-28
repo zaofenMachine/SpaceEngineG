@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="26" result="Passed" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.4881681">
+  <test-suite type="TestSuite" id="1035" name="SpaceEngineG Explorer" fullname="SpaceEngineG Explorer" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.488168" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1028" name="SpaceEngine.PlayMode.Tests.dll" fullname="F:/Project/SpaceEngineG/.validation-unity-v050/Library/ScriptAssemblies/SpaceEngine.PlayMode.Tests.dll" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.482358" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="67240" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1029" name="SpaceEngine" fullname="SpaceEngine" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.481821" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1030" name="Tests" fullname="SpaceEngine.Tests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.481521" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1031" name="PlayMode" fullname="SpaceEngine.Tests.PlayMode" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.481222" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="ExplorerIntegrationTests" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:12:00Z" duration="2.480113" total="26" passed="26" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1004" name="ACoroutineWorldReplacementIsSubmittedBeforeTheSameFramesRender" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ACoroutineWorldReplacementIsSubmittedBeforeTheSameFramesRender" methodname="ACoroutineWorldReplacementIsSubmittedBeforeTheSameFramesRender" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1225575256" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.356627" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1016" name="ApproachingAnotherPlanetSelectsItsLocalFrameWithoutTeleporting" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ApproachingAnotherPlanetSelectsItsLocalFrameWithoutTeleporting" methodname="ApproachingAnotherPlanetSelectsItsLocalFrameWithoutTeleporting" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="281652574" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.058261" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1026" name="BodyGalaxyAndNucleusReferenceModesRoundTripWithTheirObserverAndScale" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.BodyGalaxyAndNucleusReferenceModesRoundTripWithTheirObserverAndScale" methodname="BodyGalaxyAndNucleusReferenceModesRoundTripWithTheirObserverAndScale" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="622605629" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.149969" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1018" name="CentimetreMotionAndSaveRestoreSurviveGalacticCoordinates" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.CentimetreMotionAndSaveRestoreSurviveGalacticCoordinates" methodname="CentimetreMotionAndSaveRestoreSurviveGalacticCoordinates" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="2085519965" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.113053" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="CompactStellarReferenceHasVisibleScaleAndSurvivesSaveRestore" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.CompactStellarReferenceHasVisibleScaleAndSurvivesSaveRestore" methodname="CompactStellarReferenceHasVisibleScaleAndSurvivesSaveRestore" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="794125970" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.116118" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="DetailsSelectsRelatedBodyWithoutTeleportingAndCapturesFlightInput" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.DetailsSelectsRelatedBodyWithoutTeleportingAndCapturesFlightInput" methodname="DetailsSelectsRelatedBodyWithoutTeleportingAndCapturesFlightInput" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1109541957" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:58Z" duration="0.080553" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="GalacticVolumeCachesStableFlightAndInvalidatesOnAstronomicalMotionAndViewRotation" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.GalacticVolumeCachesStableFlightAndInvalidatesOnAstronomicalMotionAndViewRotation" methodname="GalacticVolumeCachesStableFlightAndInvalidatesOnAstronomicalMotionAndViewRotation" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="23530836" result="Passed" start-time="2026-10-28 05:11:58Z" end-time="2026-10-28 05:11:59Z" duration="0.130123" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1023" name="GalaxyGpuVerticesContainTheSeededThreeDimensionalPopulation" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.GalaxyGpuVerticesContainTheSeededThreeDimensionalPopulation" methodname="GalaxyGpuVerticesContainTheSeededThreeDimensionalPopulation" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1979180460" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.063346" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1022" name="GalaxyOverviewAndStreamingRetainTheActualAstronomicalObserver" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.GalaxyOverviewAndStreamingRetainTheActualAstronomicalObserver" methodname="GalaxyOverviewAndStreamingRetainTheActualAstronomicalObserver" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="2056680183" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.065698" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1020" name="GasGiantApproachStopsAboveCloudsWithoutClaimingALanding" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.GasGiantApproachStopsAboveCloudsWithoutClaimingALanding" methodname="GasGiantApproachStopsAboveCloudsWithoutClaimingALanding" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="10553303" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.055270" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="GroundConstraintUsesTheSeededSurfaceAndConfiguredClearance" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.GroundConstraintUsesTheSeededSurfaceAndConfiguredClearance" methodname="GroundConstraintUsesTheSeededSurfaceAndConfiguredClearance" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="43130896" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.057104" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1019" name="InvalidSaveDoesNotPartiallyReplaceTheCurrentFlight" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.InvalidSaveDoesNotPartiallyReplaceTheCurrentFlight" methodname="InvalidSaveDoesNotPartiallyReplaceTheCurrentFlight" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1971860264" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.056923" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[InvalidDataException: Invalid orientation
+SpaceEngine.Runtime.UniverseApp.RestoreFlightState (System.String state) (at Assets/SpaceEngine/Runtime/UniverseApp.cs:599)
+UnityEngine.Debug:LogException(Exception)
+SpaceEngine.Runtime.UniverseApp:RestoreFlightState(String) (at Assets/SpaceEngine/Runtime/UniverseApp.cs:612)
+SpaceEngine.Runtime.UniverseApp:LoadFlight() (at Assets/SpaceEngine/Runtime/UniverseApp.cs:574)
+SpaceEngine.Tests.PlayMode.<InvalidSaveDoesNotPartiallyReplaceTheCurrentFlight>d__35:MoveNext() (at Assets/SpaceEngine/Tests/PlayMode/ExplorerIntegrationTests.cs:341)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+
+]]></output>
+              </test-case>
+              <test-case id="1027" name="KeyboardEventsDriveRealUpdateFlightAndEngageContinuousDescent" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.KeyboardEventsDriveRealUpdateFlightAndEngageContinuousDescent" methodname="KeyboardEventsDriveRealUpdateFlightAndEngageContinuousDescent" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1396254884" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.126986" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1021" name="MoonWorldPositionIncludesItsMovingParentAndParentMassOrbit" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.MoonWorldPositionIncludesItsMovingParentAndParentMassOrbit" methodname="MoonWorldPositionIncludesItsMovingParentAndParentMassOrbit" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1628996551" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.055595" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="NativeWheelNotchesAndModalTextDoNotFlyTheCamera" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.NativeWheelNotchesAndModalTextDoNotFlyTheCamera" methodname="NativeWheelNotchesAndModalTextDoNotFlyTheCamera" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="369700291" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.117377" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="OceanicWeatherRendersInOrbitAndFadesBeforeTheActualSurfaceWithoutMovingFlight" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.OceanicWeatherRendersInOrbitAndFadesBeforeTheActualSurfaceWithoutMovingFlight" methodname="OceanicWeatherRendersInOrbitAndFadesBeforeTheActualSurfaceWithoutMovingFlight" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1608192083" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.080673" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="OrbitalOverlayHasRealPathsAndHonorsDisableAndVisibility" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.OrbitalOverlayHasRealPathsAndHonorsDisableAndVisibility" methodname="OrbitalOverlayHasRealPathsAndHonorsDisableAndVisibility" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="782699787" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.088769" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="SelectedSolidMaterialMapAllocatesAtConfiguredResolutionWithoutChangingPhysicalHeight" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.SelectedSolidMaterialMapAllocatesAtConfiguredResolutionWithoutChangingPhysicalHeight" methodname="SelectedSolidMaterialMapAllocatesAtConfiguredResolutionWithoutChangingPhysicalHeight" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="12486516" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.055589" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="StartupCreatesSeededBodiesAndVisibleProceduralTerrain" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.StartupCreatesSeededBodiesAndVisibleProceduralTerrain" methodname="StartupCreatesSeededBodiesAndVisibleProceduralTerrain" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="706245513" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:11:59Z" duration="0.059324" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="StreamingNeighbourRetainsObserverAndReleasesPreviousPlanetObjects" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.StreamingNeighbourRetainsObserverAndReleasesPreviousPlanetObjects" methodname="StreamingNeighbourRetainsObserverAndReleasesPreviousPlanetObjects" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="89429864" result="Passed" start-time="2026-10-28 05:11:59Z" end-time="2026-10-28 05:12:00Z" duration="0.078694" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="TargetFlightHandsOffToContinuousLandingWithoutLosingTheHorizon" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.TargetFlightHandsOffToContinuousLandingWithoutLosingTheHorizon" methodname="TargetFlightHandsOffToContinuousLandingWithoutLosingTheHorizon" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="2072659672" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.055145" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="TargetSelectionAndChineseFiltersRetainTheObserver" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.TargetSelectionAndChineseFiltersRetainTheObserver" methodname="TargetSelectionAndChineseFiltersRetainTheObserver" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1737896962" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.063625" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="TypingIInSearchDoesNotOpenDetailsOrMoveTheObserver" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.TypingIInSearchDoesNotOpenDetailsOrMoveTheObserver" methodname="TypingIInSearchDoesNotOpenDetailsOrMoveTheObserver" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1386990030" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.121953" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="VersionTwoFlightFallbackPreservesItsOwnWorldAndOriginalBytes" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.VersionTwoFlightFallbackPreservesItsOwnWorldAndOriginalBytes" methodname="VersionTwoFlightFallbackPreservesItsOwnWorldAndOriginalBytes" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="1266006624" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.113973" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="VersionTwoSavePreservesLegacyBytesAndRestoresGalaxyConfiguration" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.VersionTwoSavePreservesLegacyBytesAndRestoresGalaxyConfiguration" methodname="VersionTwoSavePreservesLegacyBytesAndRestoresGalaxyConfiguration" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="889405434" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.070391" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1010" name="ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup" fullname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests.ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup" methodname="ViewBookmarksRoundTripFullPrecisionAndKeepAnAtomicBackup" classname="SpaceEngine.Tests.PlayMode.ExplorerIntegrationTests" runstate="Runnable" seed="55282890" result="Passed" start-time="2026-10-28 05:12:00Z" end-time="2026-10-28 05:12:00Z" duration="0.075203" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: C:/Users/zaofenMachine/AppData/LocalLow/SpaceEngineG/SpaceEngineG Explorer\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

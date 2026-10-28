@@ -1,0 +1,103 @@
+{
+    "utcTimestamp": "2026-10-28T05:49:07.3525367Z",
+    "unityVersion": "6000.5.7f1",
+    "graphicsApi": "Direct3D12",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070",
+    "scope": "512x512 floating-point URP GPU renders and readbacks. Seed repeatability, changing seeds, rotation, ice/gas distinction, ring coverage, analytic planet-shadow differential and terrain lava emission. PNGs are display-gamma previews. Timings include GPU submission and synchronous readback; they are not gameplay frame times.",
+    "exception": "",
+    "imageDirectory": "F:\\Project\\SpaceEngineG\\Artifacts\\V050\\CelestialPixels",
+    "passed": true,
+    "submitAndReadbackMilliseconds": [
+        33.92660140991211,
+        8.1225004196167,
+        9.151800155639649,
+        9.375499725341797,
+        9.066800117492676,
+        8.726200103759766,
+        8.600799560546875,
+        8.93809986114502,
+        8.802200317382813,
+        11.239999771118164,
+        11.081299781799317,
+        20.29129981994629,
+        7.486499786376953,
+        8.332900047302246,
+        8.225799560546875,
+        8.728099822998047,
+        19.531700134277345,
+        8.27079963684082,
+        8.273900032043457,
+        7.811800003051758,
+        7.776800155639648,
+        7.815999984741211,
+        7.85830020904541
+    ],
+    "checks": [
+        {
+            "name": "Generated clouds draw a visible lit disk",
+            "passed": true,
+            "measured": 25187.0,
+            "threshold": 1000.0
+        },
+        {
+            "name": "Same seed and time reproduce GPU radiance",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.000009999999747378752
+        },
+        {
+            "name": "Changing seed changes rendered cloud pattern",
+            "passed": true,
+            "measured": 0.009019526652991772,
+            "threshold": 0.0005000000237487257
+        },
+        {
+            "name": "Simulation rotation visibly advects clouds and vortices",
+            "passed": true,
+            "measured": 0.005499007645994425,
+            "threshold": 0.0003000000142492354
+        },
+        {
+            "name": "Ice giant has distinct blue cloud radiance",
+            "passed": true,
+            "measured": 0.3464360535144806,
+            "threshold": 0.029999999329447748
+        },
+        {
+            "name": "Particle rings add visible pixels beyond cloud disk",
+            "passed": true,
+            "measured": 34687.0,
+            "threshold": 500.0
+        },
+        {
+            "name": "Analytic planet shadow removes light from correct ring pixels",
+            "passed": true,
+            "measured": 1735.0,
+            "threshold": 50.0
+        },
+        {
+            "name": "Ten-kilometre cloud approach reveals actual procedural cell detail",
+            "passed": true,
+            "measured": 0.061431873589754108,
+            "threshold": 0.0010000000474974514
+        },
+        {
+            "name": "Procedural lava fissures emit red radiance without sunlight or vertex alpha",
+            "passed": true,
+            "measured": 32429.0,
+            "threshold": 500.0
+        },
+        {
+            "name": "Lava fissures remain invariant under mesh density and vertex-color changes",
+            "passed": true,
+            "measured": 0.0000495581807626877,
+            "threshold": 0.0010000000474974514
+        },
+        {
+            "name": "Material emission strength zero removes nightside lava radiance",
+            "passed": true,
+            "measured": 0.0,
+            "threshold": 0.0
+        }
+    ]
+}
