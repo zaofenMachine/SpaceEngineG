@@ -80,6 +80,8 @@ if __name__ == '__main__':
         raise RuntimeError('Evidence belongs to another player version.')
     if len({flight['buildGuid'],galaxy['buildGuid'],explorer['buildGuid'],details['buildGuid']}) != 1 or not flight['buildGuid'].strip('0'):
         raise RuntimeError('All four routes must use the same standalone build.')
+    if load(OUT / 'build-batch.json')['data']['status'] != 'succeeded' or not load(OUT / 'player-services.json')['passed']:
+        raise RuntimeError('Actual Player services and the build source audit must pass before packaging.')
     for mode in ('editmode', 'playmode'):
         if load(OUT / (mode + '-tests.json'))['data']['status'] != 'succeeded':
             raise RuntimeError('Unity tests must pass before packaging: ' + mode)
