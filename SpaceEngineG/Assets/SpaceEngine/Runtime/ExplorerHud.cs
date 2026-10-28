@@ -69,7 +69,7 @@ namespace SpaceEngine.Runtime
             }
             var tools=app.GetComponent<ExplorerTools>();
             Rect(0,0,1600,78,new Color(.016f,.027f,.041f,.94f));Rect(0,77,1600,1,new Color(.18f,.32f,.38f,.75f));
-            Text(30,12,350,"SPACE ENGINE  G",title);Text(32,45,430,"程序化宇宙 / 自由探索 04",small);
+            Text(30,12,350,"SPACE ENGINE  G",title);Text(32,45,430,"程序化宇宙 / 自由探索 "+Application.version,small);
             Text(475,14,460,app.GalaxyOverview?"棒旋银河 / 直径 "+(app.Settings.Galaxy.RadiusLy*2).ToString("N0")+" 光年":app.NucleusView?"银河中央核心":app.System.Name);
             Text(475,45,460,"种子 "+app.Settings.UniverseSeed+" · 第 "+app.Settings.WorldGenerationVersion+" 代生成器 · "+app.Settings.Galaxy.ArmCount+" 条旋臂",small);
             if(Button(950,7,145,"搜索 [F3]"))tools?.ToggleSearch();
@@ -98,7 +98,7 @@ namespace SpaceEngine.Runtime
 
             Rect(1285,110,289,372,new Color(.018f,.032f,.047f,.90f));
             string altitudeLabel=app.GalaxyOverview?"距银河中心":app.NucleusView?"距几何视界":app.StellarView?
-                "参考 "+app.System.Name+" · 距恒星表面":"参考 "+app.Planet.Name+" · "+(app.Planet.IsLandable?"距地表高度":"距云顶高度");
+                "参考 "+app.System.Name+" · "+(app.System.Kind==StellarKind.BlackHole?"距几何视界":"距恒星表面"):"参考 "+app.Planet.Name+" · "+(app.Planet.IsLandable?"距地表高度":"距云顶高度");
             Text(1304,123,250,altitudeLabel,small);
             double displayDistance=app.GalaxyOverview?GalaxyModel.ToGalacticLy(app.Observer,app.Settings.Galaxy).Length*PhysicalConstants.LightYear:app.Altitude;
             Text(1304,148,250,Distance(displayDistance),number);

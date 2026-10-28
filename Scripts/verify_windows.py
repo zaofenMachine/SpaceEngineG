@@ -144,7 +144,7 @@ def validate_video(ffmpeg, ffprobe, directory, metadata, deadline):
 
 def compare_stages(ffmpeg, directory, native, metadata, deadline):
     """Compare real stage PNGs with their native EOF video-frame addresses."""
-    wanted = {'06-descent-start.png', '07-first-surface-hold.png',
+    wanted = {'05b-same-frame-home-reload.png', '06-descent-start.png', '07-first-surface-hold.png',
               '08-continuous-ascent.png', '09-return-surface-hold.png'}
     stages = [stage for stage in native.get('stages', []) if stage['screenshot'] in wanted]
     if {stage['screenshot'] for stage in stages} != wanted:
@@ -193,12 +193,12 @@ def validate_report(directory, route, report_name):
         raise RuntimeError('Report does not identify the v0.5.0 standalone build.')
     if route == 'explorer':
         names = report['screenshots']
-        if not {'06-descent-start.png', '07-first-surface-hold.png', '08-continuous-ascent.png',
+        if not {'05b-same-frame-home-reload.png', '06-descent-start.png', '07-first-surface-hold.png', '08-continuous-ascent.png',
                 '09-return-surface-hold.png'}.issubset(names):
             raise RuntimeError('Explorer report is missing complete descent/return milestones.')
     elif route == 'details':
         names = report['screenshots']
-        if len(names) < 19:
+        if len(names) < 21 or not {'19-ocean-environment-middle.png', '20-gas-reference-middle.png'}.issubset(names):
             raise RuntimeError('Missing full details page/category/legacy captures.')
     elif route == 'flight':
         names = [entry['stage'] + '.png' for entry in report['samples']]

@@ -48,7 +48,7 @@ def explorer_acceptance():
         raise RuntimeError('Both actual stationary holds must preserve settled terrain.')
     if report['returnedPositionError'] >= .01 or len(report['frames']) < 100:
         raise RuntimeError('Missing continuous return flight/position evidence.')
-    if len(report['screenshots']) < 9:
+    if len(report['screenshots']) < 10:
         raise RuntimeError('Missing explorer and wall-time flight screenshots.')
     for name in report['screenshots']:
         screenshot = directory / name
@@ -60,7 +60,7 @@ def explorer_acceptance():
     if capture['fullDecodeExitCode'] or capture['encoderExitCode'] or capture['decodedFrames'] != capture['native']['encodedFrames']:
         raise RuntimeError('Incomplete native framebuffer video stream.')
     comparisons=capture.get('stagePngComparisons', [])
-    if len(comparisons)<4 or not all(item['passed'] for item in comparisons):
+    if len(comparisons)<5 or not all(item['passed'] for item in comparisons):
         raise RuntimeError('Video must match the actual 06-09 screenshot frames in content and orientation.')
     if (directory / 'descent.mp4').stat().st_size < 1000000:
         raise RuntimeError('Empty continuous flight video.')
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     details=load(OUT / 'PlayerDetails/details-verification.json')
     if not details['passed'] or details['errors'] or (OUT / 'PlayerDetails/exit-code.txt').read_text().strip() != '0':
         raise RuntimeError('Details acceptance must pass.')
-    if len(details['screenshots'])<19 or not all((OUT / 'PlayerDetails' / name).is_file() for name in details['screenshots']):
+    if len(details['screenshots'])<21 or not all((OUT / 'PlayerDetails' / name).is_file() for name in details['screenshots']):
         raise RuntimeError('Details screenshot coverage is incomplete.')
     if flight['applicationVersion'] != VERSION or galaxy['version'] != VERSION or explorer['version'] != VERSION or details['version'] != VERSION:
         raise RuntimeError('Evidence belongs to another player version.')

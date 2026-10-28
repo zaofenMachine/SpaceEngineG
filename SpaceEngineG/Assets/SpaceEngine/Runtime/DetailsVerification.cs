@@ -55,6 +55,9 @@ namespace SpaceEngine.Runtime
                 app.Tools.Select(target);Show(2);Sample(target);Check(app.Observer.Equals(home),"Inspecting catalogue "+kind+" leaves the observer unchanged");
                 yield return Capture((captured++).ToString("D2")+"-environment-"+kind.ToString().ToLowerInvariant());
             }
+            app.Tools.SelectCurrentBody(0);Show(2);app.Tools.DetailsPage.ScrollTo(450);yield return Capture("19-ocean-environment-middle");
+            if(targets.TryGetValue(PlanetKind.GasGiant,out var gasTarget))
+            {app.Tools.Select(gasTarget);Show(2);yield return Frames(2);app.Tools.DetailsPage.ScrollTo(450);yield return Capture("20-gas-reference-middle");}
             Check(vacuum!=null&&moon!=null,"The actual catalogue contains a vacuum solid and a satellite");
             if(moon!=null){app.Tools.Select(moon);Show(1);yield return Capture("13-satellite-parent-orbit");}
             if(vacuum!=null){app.Tools.Select(vacuum);Show(2);Sample(vacuum);yield return Capture("14-vacuum-environment");}

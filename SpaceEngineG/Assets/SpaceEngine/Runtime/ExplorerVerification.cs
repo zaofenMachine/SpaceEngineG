@@ -83,7 +83,7 @@ namespace SpaceEngine.Runtime
         IEnumerator DescentRoute()
         {
             app.ReturnHome();app.Tools.ClosePanels();app.Tools.ShowOrbits=false;app.Tools.ShowLabels=false;app.TimeRate=0;
-            app.SetAltitude(600000);yield return WaitForTerrain();yield return Frames(30);yield return Capture("06-descent-start");
+            app.SetAltitude(600000);yield return Capture("05b-same-frame-home-reload");yield return WaitForTerrain();yield return Frames(30);yield return Capture("06-descent-start");
             app.Notice="连续实录：下降 → 静止 → 上升 → 原路下降";app.BeginDescent();
             yield return FlyUntil(()=>!app.RadialNavigationActive,48,"first-descent");yield return WaitForTerrain();
             Check(app.Navigation.StartsWith("LANDED")&&Math.Abs(app.Altitude-2)<.05,"Real-time descent reaches a landed state without placement shortcuts");
@@ -135,7 +135,7 @@ namespace SpaceEngine.Runtime
         }
         IEnumerator Frames(int count){for(int i=0;i<count;i++)yield return null;}
         IEnumerator Capture(string name)
-        {yield return new WaitForEndOfFrame();video?.MarkScreenshot(name+".png");ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));report.screenshots.Add(name+".png");yield return Frames(4);}
+        {yield return new WaitForEndOfFrame();if(name=="05b-same-frame-home-reload")Check(app.Terrains[0].ActivePatchCount>0,"The first EOF after replacing the world contains submitted procedural terrain");video?.MarkScreenshot(name+".png");ScreenCapture.CaptureScreenshot(Path.Combine(output,name+".png"));report.screenshots.Add(name+".png");yield return Frames(4);}
         void Check(bool passed,string message){report.checks.Add((passed?"PASS ":"FAIL ")+message);if(!passed){failed=true;Debug.LogWarning(message);}}
         void Log(string text,string trace,LogType type){if(type==LogType.Error||type==LogType.Exception||type==LogType.Assert){report.errors++;report.runtimeErrors.Add(text+"\n"+trace);}}
     }

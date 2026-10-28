@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using SpaceEngine.Runtime;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -82,10 +83,20 @@ namespace SpaceEngine.Editor
         {
             string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../.."));
             string output=Path.Combine(root,"Builds/Windows-v0.5.0/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
+            // Unity's engine diagnostics is separate from the legacy cloud diagnostics toggle.
+            // Preserve this project's explicit disabled services in the actual Player configuration.
+            UnityEditor.EngineDiagnostics.EngineDiagnosticsSettings.enabled=false;
+            UnityEditor.CrashReporting.CrashReportingSettings.enabled=false;
+            var connect=Type.GetType("UnityEngine.Connect.UnityConnectSettings, UnityEngine.UnityConnectModule",true)
+                .GetProperty("enabled",BindingFlags.Public|BindingFlags.Static);
+            if(connect==null||!connect.CanWrite)throw new InvalidOperationException("Cannot enforce the project's Unity Connect build setting.");
+            connect.SetValue(null,false);
             var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
             Directory.CreateDirectory(Path.Combine(root,"Artifacts/V050"));
             File.WriteAllText(Path.Combine(root,"Artifacts/V050/build.txt"),$"Result: {result.summary.result}\nBytes: {result.summary.totalSize}\nSeconds: {result.summary.totalTime.TotalSeconds:F2}\nErrors: {result.summary.totalErrors}\nWarnings: {result.summary.totalWarnings}\nOutput: Builds/Windows-v0.5.0/SpaceEngineG.exe\n");
             if(result.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Player build failed");
+            if((bool)connect.GetValue(null)||UnityEditor.EngineDiagnostics.EngineDiagnosticsSettings.enabled||UnityEditor.CrashReporting.CrashReportingSettings.enabled)
+                throw new InvalidOperationException("Unity unexpectedly enabled project services during the Player build; inspect the actual Bee Services configuration.");
             string notices=Path.Combine(Path.GetDirectoryName(output),"ThirdPartyNotices");Directory.CreateDirectory(notices);
             foreach(string name in new[]{"OFL-NotoSansCJK.txt","NOTICE-NotoSansCJK.txt"})
                 File.Copy(Path.Combine(Application.dataPath,"SpaceEngine/Resources/Fonts",name),Path.Combine(notices,name),true);

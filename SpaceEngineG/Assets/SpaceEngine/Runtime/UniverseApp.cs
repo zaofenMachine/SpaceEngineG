@@ -441,7 +441,7 @@ namespace SpaceEngine.Runtime
             return best;
         }
 
-        public void ReturnHome(){LoadSystem(0,0,0);FramePlanet(0,Settings.InitialAltitude);Notice="Home system / generation v2";}
+        public void ReturnHome(){LoadSystem(0,0,0);FramePlanet(0,Settings.InitialAltitude);Notice="起始恒星系 / 第 "+Settings.WorldGenerationVersion+" 代生成器";}
         public void FrameStar()
         {
             StopNavigation();GalaxyOverview=false;NucleusView=false;StellarView=true;

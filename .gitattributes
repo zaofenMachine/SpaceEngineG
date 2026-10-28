@@ -5,3 +5,4 @@
 *.py text eol=lf
 *.json text eol=lf
 *.asmdef text eol=lf
+SpaceEngineG/ProjectSettings/*.asset text eol=lf

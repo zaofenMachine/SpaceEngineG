@@ -143,7 +143,7 @@ namespace SpaceEngine.Runtime
             overview.Add("参考半径",Distance(geometry.RadiusMetres),DataOrigin.Generated);
             overview.Add("直径",Distance(geometry.DiameterMetres),DataOrigin.Derived);
             overview.Add("质量",Number(geometry.MassKilograms,"千克","E4"),DataOrigin.Generated);
-            overview.Add("平均密度",Number(geometry.MeanDensityKgM3,"千克/米³","F2"),DataOrigin.Derived);
+            overview.Add("平均密度",Number(geometry.MeanDensityKgM3,"千克/米³",geometry.MeanDensityKgM3>=1e7?"E4":"F2"),DataOrigin.Derived);
             overview.Add("参考半径处重力",Number(geometry.GravityAtReferenceRadiusMps2,"米/秒²","G5"),DataOrigin.Derived);
             overview.Add("逃逸速度（参考）",Number(geometry.EscapeSpeedAtReferenceRadiusMps,"米/秒","G5"),DataOrigin.Derived);
             overview.Add("参考位置",target.IsStar?(target.System.Kind==StellarKind.BlackHole?"几何事件视界":"恒星光球半径"):
