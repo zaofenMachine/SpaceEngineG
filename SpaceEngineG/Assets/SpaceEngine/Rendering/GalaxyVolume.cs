@@ -28,10 +28,13 @@ namespace SpaceEngine.Rendering
         [Min(10)] public float DustScaleHeightLy = 220;
         [Min(1)] public float DustAttenuationLengthLy = 1200;
         public bool ShowVolume = true;
-        public int RenderedWidth => radiance == null ? 0 : radiance.width;
-        public int RenderedHeight => radiance == null ? 0 : radiance.height;
+        /// <summary>Resolution scale while the view keeps changing in play mode; a still view is re-rendered at full resolution.</summary>
+        [Range(.25f, 1)] public float MotionResolutionScale = .5f;
+        public int RenderedWidth => Active == null ? 0 : Active.width;
+        public int RenderedHeight => Active == null ? 0 : Active.height;
         public int RenderRevision { get; private set; }
-        public RenderTexture RadianceTexture => radiance;
+        public RenderTexture RadianceTexture => Active;
+        RenderTexture Active => active != null ? active : radiance;
         /// <summary>When set, also integrate the whole sky (equirectangular, longitude in x) for off-screen lookups.</summary>
         public bool RenderSkyMap;
         public RenderTexture SkyMap => skyMap;
@@ -39,7 +42,9 @@ namespace SpaceEngine.Rendering
         public int EffectiveSampleCount { get; private set; }
 
         Material integration, composite;
-        RenderTexture radiance, skyMap;
+        RenderTexture radiance, skyMap, motionRadiance, active;
+        bool refinePending;
+        float lastViewChange = -10;
         Vector3 previousSkyObserver;
         int previousSkyParameters;
         Mesh mesh;
@@ -119,14 +124,34 @@ namespace SpaceEngine.Rendering
             // Quaternion.operator== deliberately treats rotations within about 0.16 degrees
             // as equal. That is several display pixels and stalls a slowly moving sky.
             // Cache only an identical quaternion; true stationary views still reuse it.
-            if (!dirty && galacticObserver == previousObserver && rotation.Equals(previousRotation) &&
+            bool unchanged = !dirty && galacticObserver == previousObserver && rotation.Equals(previousRotation) &&
                 camera.fieldOfView == previousFov && camera.aspect == previousAspect &&
                 Exposure == previousExposure && DustStrength == previousDust && samples == previousSamples &&
                 InteriorExposureMultiplier == previousInteriorExposure && ExteriorExposureMultiplier == previousExteriorExposure &&
                 Contrast == previousContrast &&
                 DetailStrength == previousDetailStrength && DetailScaleLy == previousDetailScale && NearDetailDistanceLy == previousNearDistance &&
                 DustScaleHeightLy == previousDustHeight && DustAttenuationLengthLy == previousDustLength &&
-                definitionHash == previousDefinitionHash) return;
+                definitionHash == previousDefinitionHash;
+            if (unchanged && !refinePending) return;
+            // A continuously changing view integrates at reduced resolution; as soon as it holds
+            // still, one full-resolution pass replaces it. Edit-mode renders are always full size.
+            bool moving = !unchanged && Application.isPlaying && MotionResolutionScale < .999f && Time.unscaledTime - lastViewChange < .25f;
+            if (!unchanged) lastViewChange = Time.unscaledTime;
+            RenderTexture target = radiance;
+            if (moving)
+            {
+                int motionWidth = Mathf.Max(64, Mathf.CeilToInt(width * MotionResolutionScale));
+                int motionHeight = Mathf.Max(64, Mathf.CeilToInt(height * MotionResolutionScale));
+                if (motionRadiance == null || motionRadiance.width != motionWidth || motionRadiance.height != motionHeight)
+                {
+                    if (motionRadiance != null) { motionRadiance.Release(); DestroyOwned(motionRadiance); }
+                    motionRadiance = new RenderTexture(motionWidth, motionHeight, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear)
+                        { name = "Galactic emitted radiance (in motion)", filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp, useMipMap = false };
+                    motionRadiance.Create();
+                }
+                target = motionRadiance;
+            }
+            refinePending = moving;
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
             SetDefinition(integration, Definition);
@@ -134,7 +159,7 @@ namespace SpaceEngine.Rendering
             integration.SetVector("_ViewRight", rotation * Vector3.right);
             integration.SetVector("_ViewUp", rotation * Vector3.up);
             integration.SetVector("_ViewForward", rotation * Vector3.forward);
-            integration.SetVector("_ViewShape", new Vector4(Mathf.Tan(camera.fieldOfView * Mathf.Deg2Rad * .5f), camera.aspect, width, height));
+            integration.SetVector("_ViewShape", new Vector4(Mathf.Tan(camera.fieldOfView * Mathf.Deg2Rad * .5f), camera.aspect, target.width, target.height));
             integration.SetFloat("_Exposure", Mathf.Max(0, Exposure));
             integration.SetFloat("_InteriorExposure", Mathf.Clamp(InteriorExposureMultiplier, .01f, 2));
             integration.SetFloat("_ExteriorExposure", Mathf.Clamp(ExteriorExposureMultiplier, .1f, 4));
@@ -147,8 +172,10 @@ namespace SpaceEngine.Rendering
             integration.SetFloat("_DetailScaleLy", Mathf.Max(80, DetailScaleLy));
             integration.SetFloat("_NearDetailDistanceLy", Mathf.Max(1000, NearDetailDistanceLy));
             RenderTexture previousTarget = RenderTexture.active;
-            Graphics.Blit(Texture2D.blackTexture, radiance, integration, 0);
+            Graphics.Blit(Texture2D.blackTexture, target, integration, 0);
             RenderTexture.active = previousTarget;
+            active = target;
+            composite.SetTexture("_MainTex", active);
             LastSubmissionMilliseconds = (float)watch.Elapsed.TotalMilliseconds;
             RenderRevision++;
             previousObserver = galacticObserver; previousRotation = rotation;
@@ -294,6 +321,8 @@ namespace SpaceEngine.Rendering
             if (radiance == null) return;
             radiance.Release(); DestroyOwned(radiance); radiance = null;
             if (skyMap != null) { skyMap.Release(); DestroyOwned(skyMap); skyMap = null; }
+            if (motionRadiance != null) { motionRadiance.Release(); DestroyOwned(motionRadiance); motionRadiance = null; }
+            active = null; refinePending = false;
         }
         static void DestroyOwned(UnityEngine.Object value)
         {
