@@ -30,7 +30,7 @@ float3 StarfieldTint(float kelvin)
     c.r = t <= 66 ? 1.0 : saturate(1.29293618 * pow(t - 60, -0.1332047592));
     c.g = t <= 66 ? saturate(0.39008157 * log(t) - 0.63184144) : saturate(1.12989086 * pow(t - 60, -0.0755148492));
     c.b = t >= 66 ? 1.0 : (t <= 19 ? 0.0 : saturate(0.54320679 * log(t - 10) - 1.19625409));
-    return lerp(dot(c, float3(.2126, .7152, .0722)).xxx, c, .78);
+    return lerp(dot(c, float3(.2126, .7152, .0722)).xxx, c, .95);
 }
 
 void StarfieldFace(float3 d, out uint face, out float2 uv)

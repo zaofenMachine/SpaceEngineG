@@ -20,7 +20,7 @@ namespace SpaceEngine.Runtime
         [Range(0,2)] public float GalaxyDetailStrength = 1;
         [Range(80,1200)] public float GalaxyDetailScaleLy = 360;
         [Range(1000,20000)] public float GalaxyNearDetailDistanceLy = 8000;
-        [Range(.01f,2)] public float GalaxyInteriorExposure = .22f;
+        [Range(.01f,2)] public float GalaxyInteriorExposure = .8f;
         [Range(.1f,4)] public float GalaxyExteriorExposure = 1.6f;
         [Range(1,3)] public float GalaxyContrast = 2;
         [Range(0,5)] public float GalaxyDustStrength = 1;

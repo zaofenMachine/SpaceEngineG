@@ -24,7 +24,8 @@ namespace SpaceEngine.Runtime
             "15-sky-galactic-centre","16-sky-along-plane","17-sky-high-latitude","18-star-close","19-star-behind-planet",
             "20-star-redgiant","20-star-bluemainsequence","20-star-whitedwarf","20-star-blackhole",
             "21-galaxy-oblique","22-galaxy-edge","23-galaxy-near","24-galaxy-hud","25-galactic-nucleus","26-nucleus-disk-edge",
-            "27-ground-closeup","28-rocky-ground","29-ice-ground"};
+            "27-ground-closeup","28-rocky-ground","29-ice-ground",
+            "30-milkyway-portrait","31-desert-orbit","32-rocky-orbit","33-ringed-giant-low"};
         /// <summary>Names of the most recent <see cref="Shoot"/> request once it has finished.</summary>
         public static string Completed {get;private set;}
 
@@ -79,6 +80,8 @@ namespace SpaceEngine.Runtime
 
         IEnumerator Setup(string shot,Action framed)
         {
+            // Body indices below refer to the home system; a previous shot may have left another one loaded.
+            if(app.CellX!=0||app.CellY!=0||app.CellZ!=0)app.ReturnHome();
             int ocean=Find(PlanetKind.Oceanic);
             switch(shot)
             {
@@ -155,6 +158,23 @@ namespace SpaceEngine.Runtime
                 case "27-ground-closeup":if(ocean<0)yield break;yield return Surface(ocean,40,-24f,.05);yield return SettleTerrain();break;
                 case "28-rocky-ground":{int rocky=Find(PlanetKind.Rocky);if(rocky<0)yield break;yield return Surface(rocky,55,-8f);yield return SettleTerrain();break;}
                 case "29-ice-ground":{int ice=Find(PlanetKind.Ice);if(ice<0)yield break;yield return Surface(ice,60,-6f);yield return SettleTerrain();break;}
+                case "30-milkyway-portrait":
+                {
+                    // Reference composition: the band runs nearly vertically through a 60 degree view.
+                    app.ReturnHome();
+                    Vector3 toCentre=(-GalaxyModel.ToGalacticLy(app.System.Position,app.Settings.Galaxy)).Normalized.ToVector3();
+                    Vector3 look=Quaternion.AngleAxis(38,Vector3.up)*toCentre;
+                    Vector3 up=Quaternion.AngleAxis(14,look)*Vector3.Cross(look,Vector3.up).normalized;
+                    app.SetObserver(app.System.Position.Add(new Double3(0,8*PhysicalConstants.AstronomicalUnit,0)),Quaternion.LookRotation(look,up));
+                    yield return Settle(90);break;
+                }
+                case "31-desert-orbit":
+                {
+                    if(!FindPlanet(PlanetKind.Desert,out long x,out long z,out int index))yield break;
+                    app.LoadSystem(x,0,z);yield return Orbit(index,.62,.6,.22,false);yield return Settle(160);break;
+                }
+                case "32-rocky-orbit":{int rocky=Find(PlanetKind.Rocky);if(rocky<0)yield break;yield return Orbit(rocky,.62,.55,.2);yield return Settle(160);break;}
+                case "33-ringed-giant-low":{int gas=Find(PlanetKind.GasGiant);if(gas<0)yield break;yield return Orbit(gas,2.2,.62,.07);yield return Settle(140);break;}
                 default:Debug.LogWarning("Unknown showcase shot "+shot);yield break;
             }
             framed();
@@ -163,9 +183,10 @@ namespace SpaceEngine.Runtime
         int Find(PlanetKind kind)=>Array.FindIndex(app.System.Planets,b=>b.Kind==kind);
 
         /// <summary>Place the observer at a given distance (in radii) with an explicit phase: +1 sunward, -1 night side.</summary>
-        IEnumerator Orbit(int body,double radii,double sunward,double elevation)
+        IEnumerator Orbit(int body,double radii,double sunward,double elevation,bool home=true)
         {
-            app.ReturnHome();app.FramePlanet(body,app.System.Planets[body].Radius*.5);
+            if(home)app.ReturnHome();
+            app.FramePlanet(body,app.System.Planets[body].Radius*.5);
             var planet=app.PlanetPosition(body);
             Double3 toSun=app.System.Position.RelativeTo(planet).Normalized;
             Double3 side=Double3.Cross(toSun,new Double3(0,1,0)).Normalized;
@@ -230,6 +251,20 @@ namespace SpaceEngine.Runtime
                 {x=i;z=j;return true;}
             }
             x=z=0;return false;
+        }
+
+        bool FindPlanet(PlanetKind kind,out long x,out long z,out int index)
+        {
+            for(int r=0;r<=128;r++)
+            for(int i=-r;i<=r;i++)
+            for(int j=-r;j<=r;j++)
+            {
+                if(Math.Max(Math.Abs(i),Math.Abs(j))!=r)continue;
+                if(!UniverseGenerator.TryGenerateSystem(app.Settings.UniverseSeed,i,0,j,app.Settings.Galaxy,out var candidate))continue;
+                index=Array.FindIndex(candidate.Planets,b=>b.Kind==kind);
+                if(index>=0){x=i;z=j;return true;}
+            }
+            x=z=0;index=-1;return false;
         }
 
         IEnumerator Settle(int count){for(int i=0;i<count;i++)yield return null;}

@@ -40,7 +40,7 @@ MonoBehaviour:
   GalaxyDetailStrength: 1
   GalaxyDetailScaleLy: 360
   GalaxyNearDetailDistanceLy: 8000
-  GalaxyInteriorExposure: 0.22
+  GalaxyInteriorExposure: 0.8
   GalaxyExteriorExposure: 1.6
   GalaxyContrast: 2
   GalaxyDustStrength: 1

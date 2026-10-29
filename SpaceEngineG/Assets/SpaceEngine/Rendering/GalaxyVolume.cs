@@ -15,7 +15,7 @@ namespace SpaceEngine.Rendering
     {
         public GalaxyDefinition Definition { get; private set; }
         [Range(0, 8)] public float Exposure = 1;
-        [Range(.01f, 2)] public float InteriorExposureMultiplier = .22f;
+        [Range(.01f, 2)] public float InteriorExposureMultiplier = .8f;
         [Range(.1f, 4)] public float ExteriorExposureMultiplier = 1.6f;
         [Range(1, 3)] public float Contrast = 2;
         [Range(0, 5)] public float DustStrength = 1.35f;
@@ -65,6 +65,7 @@ namespace SpaceEngine.Rendering
             if (shader == null) throw new InvalidOperationException("Galaxy volume shader is missing.");
             integration = source == null ? new Material(shader) : new Material(source);
             integration.name = "Galaxy volume integration instance";
+            integration.SetTexture("_Turbulence", TurbulenceTexture);
             Shader compositeShader = compositeSource == null ? Shader.Find("SpaceEngine/GalaxyVolumeComposite") : compositeSource.shader;
             if (compositeShader == null) throw new InvalidOperationException("Galaxy volume composite shader is missing.");
             composite = compositeSource == null ? new Material(compositeShader) : new Material(compositeSource);
@@ -89,6 +90,8 @@ namespace SpaceEngine.Rendering
         public void Tick(UniversalPosition observer, Camera camera)
         {
             if (integration == null || Definition == null || camera == null) return;
+            // A shader reimport (editor hot reload) drops textures that are not material properties.
+            if (integration.GetTexture(TurbulenceId) == null) { integration.SetTexture(TurbulenceId, TurbulenceTexture); dirty = true; }
             rendererComponent.enabled = ShowVolume && isActiveAndEnabled;
             if (!rendererComponent.enabled) return;
             int width = Mathf.Max(64, Mathf.CeilToInt(camera.pixelWidth * Mathf.Clamp(ResolutionScale, .2f, 1)));
@@ -194,6 +197,70 @@ namespace SpaceEngine.Rendering
             // The perspective pass shares this material; force it to restore its own view next.
             dirty = true;
         }
+
+        static Texture3D turbulence;
+        static readonly int TurbulenceId = Shader.PropertyToID("_Turbulence");
+        /// <summary>
+        /// Two independent channels of tileable 3D gradient noise (8 lattice cells per 64-voxel tile).
+        /// The shader builds multi-octave interstellar-medium turbulence from it with hardware
+        /// filtering; the seed enters through the sampling offset, so one texture serves all galaxies.
+        /// </summary>
+        public static Texture3D TurbulenceTexture
+        {
+            get
+            {
+                if (turbulence != null) return turbulence;
+                const int size = 64, period = 8, cell = size / period;
+                var random = new DeterministicRandom(0x47616c4475737431UL);
+                var gradients = new Vector3[2, period, period, period];
+                for (int c = 0; c < 2; c++)
+                for (int z = 0; z < period; z++)
+                for (int y = 0; y < period; y++)
+                for (int x = 0; x < period; x++)
+                {
+                    Vector3 g;
+                    do g = new Vector3((float)random.Range(-1.0, 1.0), (float)random.Range(-1.0, 1.0), (float)random.Range(-1.0, 1.0));
+                    while (g.sqrMagnitude > 1 || g.sqrMagnitude < .01f);
+                    gradients[c, x, y, z] = g.normalized;
+                }
+                var data = new byte[size * size * size * 4];
+                for (int z = 0; z < size; z++)
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    int index = ((z * size + y) * size + x) * 4;
+                    for (int c = 0; c < 2; c++)
+                    {
+                        float value = Gradient(gradients, c, (x + .5f) / cell, (y + .5f) / cell, (z + .5f) / cell, period);
+                        data[index + c] = (byte)Mathf.Clamp(Mathf.RoundToInt((value * .75f + .5f) * 255), 0, 255);
+                    }
+                    data[index + 3] = 255;
+                }
+                turbulence = new Texture3D(size, size, size, TextureFormat.RGBA32, false)
+                    { name = "Interstellar turbulence", wrapMode = TextureWrapMode.Repeat, filterMode = FilterMode.Trilinear, hideFlags = HideFlags.DontSave };
+                turbulence.SetPixelData(data, 0);
+                turbulence.Apply(false, true);
+                return turbulence;
+            }
+        }
+
+        static float Gradient(Vector3[,,,] gradients, int channel, float x, float y, float z, int period)
+        {
+            int x0 = Mathf.FloorToInt(x), y0 = Mathf.FloorToInt(y), z0 = Mathf.FloorToInt(z);
+            float fx = x - x0, fy = y - y0, fz = z - z0;
+            float u = Fade(fx), v = Fade(fy), w = Fade(fz);
+            float result = 0;
+            for (int k = 0; k < 2; k++)
+            for (int j = 0; j < 2; j++)
+            for (int i = 0; i < 2; i++)
+            {
+                Vector3 g = gradients[channel, (x0 + i) % period, (y0 + j) % period, (z0 + k) % period];
+                float dot = g.x * (fx - i) + g.y * (fy - j) + g.z * (fz - k);
+                result += dot * (i == 0 ? 1 - u : u) * (j == 0 ? 1 - v : v) * (k == 0 ? 1 - w : w);
+            }
+            return result;
+        }
+        static float Fade(float t) => t * t * t * (t * (t * 6 - 15) + 10);
 
         static int DefinitionFingerprint(GalaxyDefinition galaxy)
         {

@@ -3,6 +3,7 @@ Shader "SpaceEngine/GalaxyVolume"
     Properties
     {
         _Exposure("Stellar population exposure",Range(0,8))=1
+        _Turbulence("Tileable interstellar turbulence (set by GalaxyVolume)",3D)=""{}
         _DustStrength("Dust optical-depth multiplier",Range(0,5))=1.35
         _DustScaleHeightLy("Dust vertical scale height (ly)",Float)=220
         _DustAttenuationLengthLy("Dust attenuation length (ly)",Float)=1200
@@ -12,7 +13,7 @@ Shader "SpaceEngine/GalaxyVolume"
         _NearDetailDistanceLy("Near-observer high-quality integration distance (ly)",Float)=8000
         _HaloRadiusLy("Finite stellar halo radius (ly)",Float)=160000
         _PopulationScale("Relative stellar number-density normalization",Float)=1
-        _InteriorExposure("Inside-disk display exposure multiplier",Range(.01,2))=.22
+        _InteriorExposure("Inside-disk display exposure multiplier",Range(.01,2))=.8
         _ExteriorExposure("Exterior display exposure multiplier",Range(.1,4))=1.6
         _Contrast("Night-sky display contrast",Range(1,3))=2
         _YoungArmStartBarFraction("Young blue arms inner fade / bar half-length",Range(.5,1.2))=.75
@@ -59,11 +60,28 @@ Shader "SpaceEngine/GalaxyVolume"
                 float d=lerp(Hash(cell+float3(0,1,1)),Hash(cell+1),f.x);
                 return lerp(lerp(a,b,f.y),lerp(c,d,f.y),f.z);
             }
-            float Clumps(float3 p)
+            TEXTURE3D(_Turbulence); SAMPLER(sampler_Turbulence);
+            // Interstellar-medium turbulence: domain-warped multi-octave gradient noise from a
+            // tileable 3D texture. x drives molecular dust, y the stellar cloud brightness.
+            // Clouds in a thin disc are sheets, so the vertical axis is compressed, and octave
+            // rotations stay within the plane. Octaves finer than the integration or pixel
+            // footprint fade to their mean, so unresolved structure cannot alias.
+            float2 Turbulence(float3 p,float footprintLy)
             {
-                // Clouds in a thin disc are sheets: flattened vertically, extended in the plane.
-                p=float3(p.x,p.y*2.2,p.z)/1300+_SeedOffset.xyz;
-                return .57*Noise(p)+.29*Noise(p*2.13+17.4)+.14*Noise(p*4.37+39.1);
+                float3 q=float3(p.x,p.y*1.25,p.z)/2600+_SeedOffset.xyz*.37;
+                float2 warp=SAMPLE_TEXTURE3D_LOD(_Turbulence,sampler_Turbulence,q*(.32/8),0).rg-.5;
+                q+=float3(warp.x,0,warp.y)*1.7;
+                float2 sum=0;float amplitude=.5,norm=0,wavelength=2600;
+                [loop] for(int octave=0;octave<9;octave++)
+                {
+                    float visible=1-smoothstep(.3,.9,footprintLy/wavelength);
+                    if(visible<=0)break;
+                    float2 n=SAMPLE_TEXTURE3D_LOD(_Turbulence,sampler_Turbulence,q/8,0).rg;
+                    sum+=amplitude*lerp(.5,n,visible);norm+=amplitude;
+                    q=float3(.8*q.x-.6*q.z,q.y*1.04,.6*q.x+.8*q.z)*2.07+float3(3.1,1.7,5.3);
+                    amplitude*=.6;wavelength/=2.07;
+                }
+                return norm>0?sum/norm:.5;
             }
             float Wrapped(float phase) { return phase-6.28318530718*floor((phase+3.14159265359)/6.28318530718); }
 
@@ -94,11 +112,16 @@ Shader "SpaceEngine/GalaxyVolume"
                     // Molecular dust is a thinner, offset, clumpy spiral medium.
                     float laneDistance=armDistance+_ArmScales.z*.38;
                     float lane=exp(-.5*laneDistance*laneDistance/(.22*_ArmScales.z*_ArmScales.z));
-                    float clump=Clumps(p);
-                    float molecular=.08+8*pow(saturate((clump-.24)/.52),2.2);
+                    float2 medium=Turbulence(p,footprintLy);
+                    // Expand the fBm's narrow distribution into cloud and void.
+                    float clump=saturate(.5+(medium.x-.5)*3.1);
+                    float stars=saturate(.5+(medium.y-.5)*2.3);
+                    // Molecular clouds are nearly opaque over a few hundred light years and the
+                    // voids between them nearly clear; nearby clouds then break up the whole band.
+                    float molecular=.04+16*pow(clump,3.2);
                     dust=exp(-height/max(10,_DustScaleHeightLy))*exp(-radius/22000)*taper*
-                        smoothstep(1800,5000,radius)*(.2+lane*1.9)*molecular;
-                    float stellarCloud=.3+1.9*pow(saturate((clump-.2)/.62),1.5);
+                        smoothstep(1800,5000,radius)*(.32+lane*1.8)*molecular;
+                    float stellarCloud=.32+1.75*pow(stars,1.4);
                     thin*=stellarCloud;
                     arm*=pow(armCore,1.6)*(.08+3.8*smoothstep(.24,.78,clump));
                     // Young luminous tracers begin near the ends of the bar. The
@@ -140,7 +163,7 @@ Shader "SpaceEngine/GalaxyVolume"
                 if(barRadius<1)bar=15*exp(-3*barRadius)*(1-smoothstep(.8,1,barRadius));
                 float halo=.002*pow((_CentralScales.w+_CentralScales.x)/(sphere+_CentralScales.x),3)*
                     (1-smoothstep(_HaloRadiusLy*.8,_HaloRadiusLy,sphere));
-                emission+=thin*float3(.78,.73,.63)+thick*float3(.8,.53,.32)*.45+
+                emission+=thin*float3(.78,.73,.63)+thick*float3(.8,.53,.32)*.3+
                     arm*float3(.45,.65,1)*3.7+bulge*float3(1,.72,.44)+bar*float3(1,.67,.39)+halo*float3(.65,.72,1);
                 emission*=_PopulationScale/15000;
             }
@@ -155,18 +178,28 @@ Shader "SpaceEngine/GalaxyVolume"
                 start=max(0,max(low.x,max(low.y,low.z)));end=min(high.x,min(high.y,high.z));
                 return end>start;
             }
-            void March(float3 origin,float3 direction,float start,float end,int count,inout float3 result,inout float3 transmittance)
+            // geometric > 0 spaces samples exponentially from the start, so structure close to an
+            // embedded observer (which subtends the largest angles) is integrated finely.
+            void March(float3 origin,float3 direction,float start,float end,int count,float geometric,inout float3 result,inout float3 transmittance)
             {
                 if(end<=start||count<1)return;
-                float ds=(end-start)/count;
+                float span=end-start,scale=geometric>0?1/(exp(geometric)-1):0;
                 [loop]for(int i=0;i<count;i++)
                 {
                     float3 emission;float density;
-                    float distanceLy=start+(i+.5)*ds;
+                    float u0=(float)i/count,u1=(float)(i+1)/count;
+                    float t0=geometric>0?(exp(geometric*u0)-1)*scale:u0;
+                    float t1=geometric>0?(exp(geometric*u1)-1)*scale:u1;
+                    float ds=span*(t1-t0);
+                    float distanceLy=start+span*(t0+t1)*.5;
                     float pixelFootprint=distanceLy*(_ViewShape.x*2/max(1,_ViewShape.w));
                     float footprint=max(pixelFootprint,ds*.65);
                     Population(origin+direction*distanceLy,footprint,emission,density);
-                    float3 opticalDepth=float3(.58,.92,1.55)*density*_DustStrength*ds/max(1,_DustAttenuationLengthLy);
+                    // Stars within a few thousand light years are drawn individually by the
+                    // starfield and catalogue; their diffuse glow would double-count them and
+                    // grey the off-plane sky. Their dust still absorbs.
+                    emission*=smoothstep(350,3000,distanceLy);
+                    float3 opticalDepth=float3(.7,.93,1.3)*density*_DustStrength*ds/max(1,_DustAttenuationLengthLy);
                     float3 segment=exp(-opticalDepth);
                     // Integrate constant emission/absorption analytically within each segment.
                     // Stable transparent limit prevents a zero-dust division discontinuity.
@@ -186,10 +219,10 @@ Shader "SpaceEngine/GalaxyVolume"
                 {
                     int nearCount=max(16,(int)(count*.65));
                     nearCount=min(count-8,nearCount);
-                    March(origin,direction,start,split,nearCount,result,transmittance);
-                    March(origin,direction,split,end,count-nearCount,result,transmittance);
+                    March(origin,direction,start,split,nearCount,start<1?4.5:0,result,transmittance);
+                    March(origin,direction,split,end,count-nearCount,0,result,transmittance);
                 }
-                else March(origin,direction,start,end,count,result,transmittance);
+                else March(origin,direction,start,end,count,0,result,transmittance);
             }
             float HaloDensity(float3 p)
             {
