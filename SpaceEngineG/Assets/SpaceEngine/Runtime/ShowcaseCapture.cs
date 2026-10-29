@@ -15,7 +15,7 @@ namespace SpaceEngine.Runtime
     /// </summary>
     public sealed class ShowcaseCapture:MonoBehaviour
     {
-        UniverseApp app;string output;bool renderToTexture;
+        UniverseApp app;string output;bool renderToTexture;Coroutine shooting;
         /// <summary>Shot names in route order. Each name is a composed view set up by <see cref="Setup"/>.</summary>
         public static readonly string[] Shots={
             "01-home-hud","02-details-hud","03-search-hud","04-home-clean",
@@ -52,13 +52,16 @@ namespace SpaceEngine.Runtime
         public void Shoot(string folder,string names)
         {
             app=GetComponent<UniverseApp>();output=folder;Directory.CreateDirectory(folder);Completed=null;
-            StartCoroutine(ShootRoutine(names.Split(',')));
+            // A repeated request (e.g. a remote call replayed across a domain reload) replaces the
+            // running one; two interleaved routines would capture each other's views.
+            if(shooting!=null)StopCoroutine(shooting);
+            shooting=StartCoroutine(ShootRoutine(names.Split(',')));
         }
         IEnumerator ShootRoutine(string[] names)
         {
             app.VerificationOwnsFlight=true;app.TimeRate=0;renderToTexture=true;
             foreach(string name in names)yield return Run(name.Trim());
-            renderToTexture=false;Completed=string.Join(",",names);
+            renderToTexture=false;shooting=null;Completed=string.Join(",",names);
         }
 
         IEnumerator Run(string shot)
