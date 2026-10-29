@@ -83,7 +83,8 @@ namespace SpaceEngine.Runtime
             switch(shot)
             {
                 case "01-home-hud":case "02-details-hud":case "03-search-hud":case "04-home-clean":
-                    app.ReturnHome();yield return Settle(shot=="01-home-hud"?150:30);break;
+                    // Each shot reloads the home system; wait for its terrain to finish loading.
+                    app.ReturnHome();yield return SettleTerrain();break;
                 case "05-ocean-crescent":if(ocean<0)yield break;yield return Orbit(ocean,1.25,-.62,.08);yield return Settle(160);break;
                 case "06-ocean-three-quarter":if(ocean<0)yield break;yield return Orbit(ocean,1.9,.45,.25);yield return Settle(120);break;
                 case "07-ocean-limb-400km":if(ocean<0)yield break;yield return Limb(ocean,450000,55);yield return Settle(200);break;
