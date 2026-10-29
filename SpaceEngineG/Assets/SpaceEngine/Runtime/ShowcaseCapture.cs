@@ -25,7 +25,7 @@ namespace SpaceEngine.Runtime
             "20-star-redgiant","20-star-bluemainsequence","20-star-whitedwarf","20-star-blackhole",
             "21-galaxy-oblique","22-galaxy-edge","23-galaxy-near","24-galaxy-hud","25-galactic-nucleus","26-nucleus-disk-edge",
             "27-ground-closeup","28-rocky-ground","29-ice-ground",
-            "30-milkyway-portrait","31-desert-orbit","32-rocky-orbit","33-ringed-giant-low"};
+            "30-milkyway-portrait","31-desert-orbit","32-rocky-orbit","33-ringed-giant-low","34-ice-orbit","35-rocky-terminator"};
         /// <summary>Names of the most recent <see cref="Shoot"/> request once it has finished.</summary>
         public static string Completed {get;private set;}
 
@@ -174,6 +174,8 @@ namespace SpaceEngine.Runtime
                     app.LoadSystem(x,0,z);yield return Orbit(index,.62,.6,.22,false);yield return Settle(160);break;
                 }
                 case "32-rocky-orbit":{int rocky=Find(PlanetKind.Rocky);if(rocky<0)yield break;yield return Orbit(rocky,.62,.55,.2);yield return Settle(160);break;}
+                case "34-ice-orbit":{int ice=Find(PlanetKind.Ice);if(ice<0)yield break;yield return Orbit(ice,.7,.5,.18);yield return Settle(160);break;}
+                case "35-rocky-terminator":{int rocky=Find(PlanetKind.Rocky);if(rocky<0)yield break;yield return Orbit(rocky,.45,.08,.1);yield return Settle(160);break;}
                 case "33-ringed-giant-low":{int gas=Find(PlanetKind.GasGiant);if(gas<0)yield break;yield return Orbit(gas,2.2,.62,.07);yield return Settle(140);break;}
                 default:Debug.LogWarning("Unknown showcase shot "+shot);yield break;
             }

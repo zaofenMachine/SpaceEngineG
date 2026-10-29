@@ -43,6 +43,8 @@ Material:
     - _FogDensity: 0.0001
     - _FogStrength: 0
     - _GroundDetailStrength: 1
+    - _PlanetDetailStrength: 1
+    - _ReliefExaggeration: 2.5
     - _HasOcean: 0
     - _IsLava: 0
     - _LavaFissureWidth: 0.035

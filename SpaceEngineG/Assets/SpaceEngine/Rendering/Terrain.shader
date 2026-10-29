@@ -36,6 +36,8 @@ Shader "SpaceEngine/Terrain"
         _GroundDetail ("Close ground detail layers", 2DArray) = "" {}
         _GroundNormal ("Close ground detail normals", 2DArray) = "" {}
         _GroundDetailStrength ("Close ground detail strength (0 keeps the procedural-only look)", Range(0,1)) = 0
+        _PlanetDetailStrength ("Orbital geology: craters, plains, lineae (0 keeps the map-only look)", Range(0,1)) = 0
+        _ReliefExaggeration ("Orbital relief exaggeration of the map normal", Range(1,6)) = 1
         _FogStrength ("Optional artistic aerial fog (off with physical atmosphere)", Range(0,1)) = 0
         _FogColor ("Optional aerial fog color", Color) = (0.2,0.4,0.7,1)
         _FogDensity ("Optional aerial fog density per render unit", Float) = 0.0001
@@ -61,7 +63,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength, _PlanetDetailStrength, _ReliefExaggeration;
             CBUFFER_END
             #include "TerrainSurface.hlsl"
 
@@ -225,7 +227,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength, _PlanetDetailStrength, _ReliefExaggeration;
             CBUFFER_END
             struct DepthNormalInput { float4 positionOS:POSITION;float3 normalOS:NORMAL;float4 parentData:TEXCOORD2;float3 parentNormal:TEXCOORD3; };
             struct DepthNormalOutput { float4 positionCS:SV_POSITION;float3 normalWS:TEXCOORD0; };
@@ -277,7 +279,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength, _PlanetDetailStrength, _ReliefExaggeration;
             CBUFFER_END
             struct DepthInput { float4 positionOS:POSITION;float4 parentData:TEXCOORD2; };
             float4 DepthVert(DepthInput input) : SV_POSITION
