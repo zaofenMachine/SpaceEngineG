@@ -23,6 +23,7 @@
 | 轨道尺度地质 | 岩石/冰/沙漠行星从轨道看是平滑的噪声色块 | 着色器内的地质层（不改高度数据）：五个尺度的三维 Worley 撞击坑（坑底、坑缘、溅射亮纹，按足迹淡出），岩石行星的低洼“月海”，沙漠行星的干涸盆地，冰卫星沿大圆的线状裂纹（类木卫二）；坡度光照的地势放大 2.5 倍以便轨道上可读。近地时（几何细节接管）地质层淡出。材质属性默认关，验证不受影响。低平原（月海、沙海）的阈值改用粗级高度的三次 B 样条重建（双线性的等值线会在每个纹素边折角），轮廓噪声只到半径的 1/60 且在接近像素前淡出，边缘是圆润的熔岩流前缘而不是像素级碎边；月海内部按“熔岩单元”在偏蓝与偏褐之间变化并向中心变暗。沙漠：沙海边缘被沿纬圈拉伸的风纹梳开，陨石坑下风向拖出暗色风尾（类火星），坡面露出较暗的岩石。 |
 | 轨道地形法线 | 夸大后的地图法线来自屏幕导数：2×2 像素块内为常数、且对近奈奎斯特的高度图求差，在明暗交界与临边处呈椒盐噪点 | 沿行星切向对滤波后的高度图做一纹素间距的中心差分，逐像素平滑、与视角无关。 |
 | 明暗交界 | 撞击坑法线扰动让坑壁在夜面深处仍被照亮 | 地形光照乘以行星本体遮挡项（几何法线与太阳方向，允许约 2° 的高地余晖）。 |
+| 天空光 | 地形只有一个很小的均匀环境光，日落时背光坡面一片死黑并露出三角面的折角 | 有大气的行星加天空光项：随本地太阳高度（经暮光淡出）和坡面朝向天穹的程度变化的蓝色环境光（`UniverseSettings.SkyAmbient`，正午约为直射光的 1/10）。背光雪坡在黄昏呈暗蓝色。 |
 | 轨道上的大气 | 为地面天空调高的散射曝光（3）在轨道上把地表洗成灰紫 | 观察者离开大气后散射曝光平滑降到 `AtmosphereOrbitalFactor`（0.4）倍；地面天空不变。 |
 | 光环与大气的合成 | 光环在大气消光之前绘制，挡在气态巨行星前方的环段被按身后行星的临边路径染成橙色 | 光环队列移到大气两遍之后（光环远在大气之外）。 |
 | 光环 | 等间距的正弦条纹 | 类土星结构：C 环暗淡、B 环致密、卡西尼缝、A 环与恩克缝、窄 F 环，叠加按种子的细密小环；颜色按光学深度。外观模型。 |
@@ -35,7 +36,7 @@
 
 ## 新增设置
 
-`UniverseSettings` 新字段（资产中未写入时使用默认值）：`StarfieldBrightness`（1）、`StarSurfaceRadiance`（2.8）、`PostProcessing`（开）、`BloomIntensity`（0.6）、`CentralAccretionDisk`（开）、`AccretionDiskRadiance`（2.5）、`AccretionDiskOuterRadius`（14 Rs）。地面细节强度在 `Resources/Terrain.mat` 的 `_GroundDetailStrength`（1）。调整过的默认值：`AmbientLight` 0.006、`AtmosphereExposure` 3（地面）、`AtmosphereOrbitalFactor` 0.4（轨道上相对地面的倍数）。游戏内“设置”新增“背景星空亮度”“泛光强度”和“开发信息 F10”。
+`UniverseSettings` 新字段（资产中未写入时使用默认值）：`StarfieldBrightness`（1）、`StarSurfaceRadiance`（2.8）、`PostProcessing`（开）、`BloomIntensity`（0.6）、`CentralAccretionDisk`（开）、`AccretionDiskRadiance`（2.5）、`AccretionDiskOuterRadius`（14 Rs）。地面细节强度在 `Resources/Terrain.mat` 的 `_GroundDetailStrength`（1）。调整过的默认值：`AmbientLight` 0.006、`AtmosphereExposure` 3（地面）、`AtmosphereOrbitalFactor` 0.4（轨道上相对地面的倍数）、`SkyAmbient`（0.07, 0.11, 0.19）。游戏内“设置”新增“背景星空亮度”“泛光强度”和“开发信息 F10”。
 
 ## 验证
 

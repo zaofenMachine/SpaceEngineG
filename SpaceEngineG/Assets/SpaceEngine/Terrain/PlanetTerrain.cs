@@ -41,6 +41,8 @@ namespace SpaceEngine.Terrain
         public bool HorizonCulling = true;
         public float SunIntensity = 1.5f;
         public Color SunColor = new Color(1,.96f,.88f);
+        [Tooltip("Skylight on a horizontal surface under a high sun, relative to direct sunlight. Black for airless bodies.")]
+        public Color SkyAmbient = Color.black;
         [Header("Visible orbital detail")]
         [Range(0, 5)] public int OrbitalMinimumLevel = 3;
         [Tooltip("Apply orbital minimum LOD when the planet's angular diameter exceeds this many degrees.")]
@@ -170,6 +172,7 @@ namespace SpaceEngine.Terrain
             properties.SetVector(sunDirectionId, sunDirection.normalized);
             properties.SetFloat("_SunIntensity",SunIntensity);
             properties.SetColor("_SunColor",SunColor);
+            properties.SetColor("_SkyAmbient",SkyAmbient);
             properties.SetFloat("_MaterialDetailStrength", MaterialDetailStrength);
             properties.SetFloat("_OceanRoughness", OceanRoughness);
             properties.SetFloat("_OceanSpecularStrength", OceanSpecularStrength);

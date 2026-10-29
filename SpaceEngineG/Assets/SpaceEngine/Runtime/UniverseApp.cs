@@ -536,6 +536,7 @@ namespace SpaceEngine.Runtime
                 float light=SolarExposure(i);
                 Color stellarTint=Color.Lerp(Color.white,StarCatalogueRenderer.TemperatureColor(System.StarTemperature),.4f);
                 Terrains[i].SunIntensity=light*Settings.SunLightingExposure;Terrains[i].SunColor=stellarTint;
+                Terrains[i].SkyAmbient=System.Planets[i].AtmosphereHeight>0?Settings.SkyAmbient:Color.black;
                 Celestials[i].SunIntensity=light*Settings.SunLightingExposure;Celestials[i].SunColor=stellarTint;
                 // Far bodies use an angularly exact render proxy; their SI positions and radii do not change.
                 if(i!=SelectedPlanet)scale*=ProxyScale(from.Length*scale);

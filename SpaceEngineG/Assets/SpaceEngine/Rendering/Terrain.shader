@@ -7,6 +7,7 @@ Shader "SpaceEngine/Terrain"
         _SunColor ("Stellar light color", Color) = (1,0.96,0.88,1)
         _SunIntensity ("Stellar irradiance multiplier", Range(0,8)) = 1.5
         _AmbientFloor ("Ambient illumination", Range(0,1)) = 0.035
+        _SkyAmbient ("Skylight on a horizontal surface at high sun (relative to direct sun)", Color) = (0,0,0,0)
         _Roughness ("Surface roughness", Range(0.04,1)) = 0.8
         _SpecularStrength ("Dielectric reflection", Range(0,1)) = 0.12
         _EmissionStrength ("Lava fissure emission", Range(0,8)) = 1.5
@@ -58,7 +59,7 @@ Shader "SpaceEngine/Terrain"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor;
+                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor, _SkyAmbient;
                 float _SunIntensity, _AmbientFloor, _Roughness, _SpecularStrength, _EmissionStrength;
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
@@ -195,7 +196,13 @@ Shader "SpaceEngine/Terrain"
                     albedo *= 1 - lavaGlow * .35;
                 }
                 float3 irradiance = _SunColor.rgb * _SunIntensity;
-                float3 color = albedo * (_AmbientFloor + irradiance * nDotL);
+                // Skylight: an atmosphere lights slopes turned away from a low sun with blue sky
+                // instead of leaving them black. It follows the local sun height (fading through
+                // twilight) and how much of the sky dome the surface faces.
+                float3 up = normalize(input.planetPosition);
+                float sunHeight = dot(up, lightDirection);
+                float3 sky = _SkyAmbient.rgb * _SunIntensity * smoothstep(-.12, .25, sunHeight) * (.6 + .4 * dot(normal, up));
+                float3 color = albedo * (_AmbientFloor + irradiance * nDotL + sky);
                 color += irradiance * nDotL * specular * lerp(_SpecularStrength, _OceanSpecularStrength, water);
                 // Blackbody-like ramp: deep red edges, orange-yellow cores, dim glow on hot crust.
                 float3 molten = lerp(float3(1.0, 0.08, 0.005), float3(1.0, 0.42, 0.06), lavaCore);
@@ -225,7 +232,7 @@ Shader "SpaceEngine/Terrain"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
             CBUFFER_START(UnityPerMaterial)
-                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor;
+                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor, _SkyAmbient;
                 float _SunIntensity, _AmbientFloor, _Roughness, _SpecularStrength, _EmissionStrength;
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
@@ -277,7 +284,7 @@ Shader "SpaceEngine/Terrain"
             #pragma fragment DepthFrag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             CBUFFER_START(UnityPerMaterial)
-                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor;
+                float4 _PlanetTint, _SunDirection, _SunColor, _PlanetCenter, _FogColor, _LavaSeed, _PatchAnchor, _SurfaceTint, _PatchDetailAnchor, _SkyAmbient;
                 float _SunIntensity, _AmbientFloor, _Roughness, _SpecularStrength, _EmissionStrength;
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;

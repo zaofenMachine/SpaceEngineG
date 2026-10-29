@@ -68,6 +68,8 @@ namespace SpaceEngine.Runtime
         /// <summary>Scattering exposure seen from well above the atmosphere, relative to AtmosphereExposure.
         /// The ground sky needs the brighter value; from orbit it washes out the surface colours.</summary>
         [Range(.1f, 1)] public float AtmosphereOrbitalFactor = .4f;
+        /// <summary>Skylight on level ground under a high sun, relative to direct sunlight (planets with air only).</summary>
+        public Color SkyAmbient = new Color(.07f, .11f, .19f);
         public AtmosphereSettings Atmosphere = new AtmosphereSettings();
         [Range(.25f, 3)] public float StarBrightness = 1.2f;
         [Range(0, 3)] public float StarfieldBrightness = 1;
