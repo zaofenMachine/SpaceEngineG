@@ -565,10 +565,12 @@ namespace SpaceEngine.Runtime
             // The lens draws the shadow itself; an opaque horizon sphere would hide the disk in front of it.
             starRenderer.enabled=!systemLens.Visible;
             Daylight=atmosphere.enabled?AtmosphericDaylight():0;
-            Shader.SetGlobalFloat(SkyDaylight,Daylight*.97f);
-            Stars.Visibility=1-Daylight*.97f;
+            // A sunlit sky outshines everything behind it; fade fully just before full daylight.
+            float skyFade=Mathf.Clamp01(Daylight*1.1f);
+            Shader.SetGlobalFloat(SkyDaylight,skyFade);
+            Stars.Visibility=1-skyFade;
             Stars.Tick(Observer,ViewCamera,Settings.StarBrightness,Settings.StarMinimumAngularRadius);
-            Galaxy.Exposure=Settings.GalaxyExposure*(1-Daylight*.97f);Galaxy.KernelScale=Settings.GalaxyKernelScale;Galaxy.DustStrength=Settings.GalaxyDustStrength;
+            Galaxy.Exposure=Settings.GalaxyExposure*(1-skyFade);Galaxy.KernelScale=Settings.GalaxyKernelScale;Galaxy.DustStrength=Settings.GalaxyDustStrength;
             Galaxy.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;Galaxy.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
             Galaxy.LocalFadeLy=Settings.GalaxyLocalFadeLy;Galaxy.Tick(Observer);
             GalacticLight.Exposure=Settings.GalaxyVolumeExposure;GalacticLight.ResolutionScale=Settings.GalaxyResolutionScale;
@@ -588,7 +590,7 @@ namespace SpaceEngine.Runtime
             GalacticLight.RenderSkyMap=systemLensVisible||nucleusLensVisible;
             GalacticLight.Tick(Observer,ViewCamera);
             if(GalacticLight.SkyMap!=null)Shader.SetGlobalTexture(GalaxySkyMap,GalacticLight.SkyMap);
-            Starfield.Brightness=Settings.StarfieldBrightness;Starfield.Visibility=1-Daylight*.97f;
+            Starfield.Brightness=Settings.StarfieldBrightness;Starfield.Visibility=1-skyFade;
             Starfield.Tick(Observer,ViewCamera,GalacticLight.RadianceTexture);
             double coreScale=RenderScale*ProxyScale(coreFrom.Length*RenderScale);
             nucleusObject.transform.position=(coreFrom*coreScale).ToVector3();nucleusObject.transform.localScale=Vector3.one*(float)(NucleusRadius*coreScale);
