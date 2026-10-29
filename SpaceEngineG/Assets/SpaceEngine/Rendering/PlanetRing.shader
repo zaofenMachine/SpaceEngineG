@@ -17,7 +17,10 @@ Shader "SpaceEngine/PlanetRing"
     }
     SubShader
     {
-        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent+10" }
+        // After the atmosphere passes (3100/3101): the sheet lies far outside the air. Drawn before them,
+        // the extinction pass reddened ring segments in front of the planet by the limb path to the
+        // surface behind, and in-scattering hazed over them.
+        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent+110" }
         Pass
         {
             Name "RingScattering"

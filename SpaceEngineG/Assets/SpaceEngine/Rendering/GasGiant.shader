@@ -154,7 +154,11 @@ Shader "SpaceEngine/GasGiant"
                 float warpedLatitude = asin(clamp(warped.y, -.9999, .9999));
                 // Belts and zones: a periodic jet structure whose boundaries are
                 // displaced by the sheared turbulence, plus a seeded tone per band.
-                float phase = warpedLatitude * _BandCount * 1.25 + (shear - .5) * _CloudTurbulence * 4.6 + (broad - .5) * 1.1;
+                float phase = warpedLatitude * _BandCount * 1.25 + (shear - .5) * _CloudTurbulence * 3.4 + (broad - .5) * .55;
+                // Festoons and eddies concentrate where neighbouring jets shear past each other: on
+                // the belt/zone boundaries (|cos| = 1 on the sine profile), not inside the bands.
+                float eddy = CelestialFbm(float3(warped.x * 18, warped.y * 44, warped.z * 18) + offset + 5.1, warpedFootprint * 44, 3);
+                phase += (eddy - .5) * 2.4 * _CloudTurbulence * abs(cos(phase));
                 // Jets give belts fairly sharp edges; steepen the profile without aliasing it.
                 float belt = smoothstep(.12, .88, .5 + .5 * CelestialFilteredSin(phase));
                 float subJet = CelestialFilteredSin(phase * 2.71 + shear * 5);
@@ -166,7 +170,12 @@ Shader "SpaceEngine/GasGiant"
                 float polar = smoothstep(.72, .97, abs(p.y));
                 float pattern = .54 + (belt - .5) * _BandContrast * lerp(.95, .2, polar) * 1.15;
                 pattern += (bandTone - .5) * .42 * (1 - polar * .6);
-                pattern += (streaks - .5) * .44 + (cells - .5) * (.16 + polar * .45) + subJet * .05;
+                // Orbit-scale zonal streaks: resolvable from a few hundred pixels across, where the
+                // finer streak field has already averaged out.
+                float midStreaks = CelestialFbm(float3(warped.x * 9, warped.y * 85, warped.z * 9) + offset + 23.7, warpedFootprint * 85, 3);
+                pattern += (midStreaks - .5) * .42 * (1 - polar * .5);
+                // Thin sub-bands inside each belt and zone, as on Jupiter and Saturn.
+                pattern += (streaks - .5) * .44 + (cells - .5) * (.16 + polar * .45) + subJet * .15;
                 pattern += (broad - .5) * .12 - stormEye * .20;
                 // Bridge synoptic belts and kilometre cells with unresolved-to-
                 // mean mesoscale cloud structure. Near views should reveal a

@@ -162,7 +162,10 @@ Shader "SpaceEngine/Terrain"
                 float3 lightDirection = normalize(_SunDirection.xyz);
                 float3 viewDirection = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 float3 halfDirection = SafeNormalize(viewDirection + lightDirection);
-                float nDotL = saturate(dot(normal, lightDirection));
+                // Beyond the terminator the planet itself blocks the sun; a perturbed slope may face
+                // the light there but cannot see it. Elevated relief keeps a sliver of sunlight.
+                float horizon = smoothstep(-.035, .015, dot(normalize(input.planetPosition), lightDirection));
+                float nDotL = saturate(dot(normal, lightDirection)) * horizon;
                 float nDotV = saturate(dot(normal, viewDirection));
                 float nDotH = saturate(dot(normal, halfDirection));
                 float lDotH = saturate(dot(lightDirection, halfDirection));

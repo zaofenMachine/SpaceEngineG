@@ -17,7 +17,8 @@ namespace SpaceEngine.Rendering
         [Range(12, 384)] public int LatitudeSegments = 192;
         [Range(32, 1024)] public int RingAngularSegments = 512;
         [Range(1, 64)] public int RingRadialSegments = 8;
-        [Range(.25f, 3f)] public float BandFrequencyMultiplier = 1;
+        // Seeded band counts (9-17) read as a few thick, cartoon belts; real giants show many thin ones.
+        [Range(.25f, 3f)] public float BandFrequencyMultiplier = 1.4f;
         [Range(0, 1)] public float BandContrast = .72f;
         [Range(0, 1)] public float CloudTurbulence = .65f;
         [Range(0, 1)] public float StormStrength = .85f;

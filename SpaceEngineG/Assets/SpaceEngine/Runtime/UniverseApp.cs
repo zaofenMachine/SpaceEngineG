@@ -549,7 +549,11 @@ namespace SpaceEngine.Runtime
             if(atmosphere.enabled)
             {
                 atmosphere.Settings.SunIntensity=Settings.Atmosphere.SunIntensity*SolarExposure(SelectedPlanet);
-                atmosphere.UpdateAtmosphere(selectedCenter,(float)(Planet.Radius*RenderScale),(float)((Planet.Radius+Planet.AtmosphereHeight)*RenderScale),sunDirection,Settings.AtmosphereExposure);
+                // Inside the atmosphere the sky keeps its full exposure; climbing out of it the haze over the
+                // surface eases to the orbital factor, so planets keep their colours from space.
+                float climb=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.5f,3f,(float)((selectedRelative.Length-Planet.Radius)/Planet.AtmosphereHeight)));
+                float atmosphereExposure=Settings.AtmosphereExposure*Mathf.Lerp(1,Settings.AtmosphereOrbitalFactor,climb);
+                atmosphere.UpdateAtmosphere(selectedCenter,(float)(Planet.Radius*RenderScale),(float)((Planet.Radius+Planet.AtmosphereHeight)*RenderScale),sunDirection,atmosphereExposure);
             }
             Double3 starFrom=System.Position.RelativeTo(Observer);
             starObject.SetActive(detailed);

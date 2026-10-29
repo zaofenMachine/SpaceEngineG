@@ -65,6 +65,53 @@ float4 SurfaceFilteredNoiseGradient(float3 metres, float scale, float footprint,
     float4 noiseSample = SurfaceNoiseGradient(metres / scale,seed,mask);
     return noiseSample * float4(amplitude,amplitude/scale,amplitude/scale,amplitude/scale);
 }
+// Cubic B-spline reconstruction of a map level from four bilinear taps. Thresholds of a bilinear
+// level kink at every texel edge; B-spline iso-contours stay smooth curves. Within two texels of
+// a face edge it hands back to bilinear, whose shared edge texels keep neighbouring faces continuous.
+float SurfaceHeightSmooth(float3 coordinates, float lod)
+{
+    lod = ceil(lod);
+    float size = max(2, _MaterialMapResolution / exp2(lod));
+    float2 t = coordinates.xy * size - .5;
+    float2 i = floor(t), f = t - i;
+    float2 f2 = f * f, f3 = f2 * f;
+    float2 w0 = (1 - 3 * f + 3 * f2 - f3) / 6, w1 = (4 - 6 * f2 + 3 * f3) / 6;
+    float2 w2 = (1 + 3 * f + 3 * f2 - 3 * f3) / 6, w3 = f3 / 6;
+    float2 g0 = w0 + w1, g1 = w2 + w3;
+    float2 p0 = (i - .5 + w1 / g0) / size, p1 = (i + 1.5 + w3 / g1) / size;
+    float cubic = g0.y * (g0.x * SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, p0, coordinates.z, lod).r
+                        + g1.x * SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, float2(p1.x, p0.y), coordinates.z, lod).r)
+                + g1.y * (g0.x * SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, float2(p0.x, p1.y), coordinates.z, lod).r
+                        + g1.x * SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, p1, coordinates.z, lod).r);
+    float bilinear = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, coordinates.xy, coordinates.z, lod).r;
+    float2 edge = min(coordinates.xy, 1 - coordinates.xy) * size;
+    return lerp(bilinear, cubic, smoothstep(1, 2.5, min(edge.x, edge.y)));
+}
+
+// Map relief normal from central differences of the filtered map along the planet tangents.
+// Screen derivatives are constant across each 2x2 pixel quad and differentiate a near-Nyquist
+// map at orbit; under grazing light (terminator, limb) that prints as speckle. Differences one
+// filtered texel apart are smooth per pixel and do not depend on the view.
+float3 SurfaceMapNormal(float3 direction, float lod, float texelMetres, float floorHeight)
+{
+    float3 up = abs(direction.y) < .99 ? float3(0, 1, 0) : float3(1, 0, 0);
+    float3 east = normalize(cross(up, direction)), north = cross(direction, east);
+    float stepMetres = texelMetres * exp2(lod);
+    float angle = stepMetres / max(1, _TerrainRadius);
+    float3 c;
+    c = TerrainMapCoordinates(normalize(direction + east * angle));
+    float hE = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, c.xy, c.z, lod).r;
+    c = TerrainMapCoordinates(normalize(direction - east * angle));
+    float hW = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, c.xy, c.z, lod).r;
+    c = TerrainMapCoordinates(normalize(direction + north * angle));
+    float hN = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, c.xy, c.z, lod).r;
+    c = TerrainMapCoordinates(normalize(direction - north * angle));
+    float hS = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, c.xy, c.z, lod).r;
+    float gradientEast = (max(floorHeight, hE) - max(floorHeight, hW)) / (2 * stepMetres);
+    float gradientNorth = (max(floorHeight, hN) - max(floorHeight, hS)) / (2 * stepMetres);
+    return normalize(direction - east * gradientEast - north * gradientNorth);
+}
+
 float3 SurfaceHeightNormal(float3 direction, float height, float3 fallback, float3 dxMetres, float3 dyMetres)
 {
     // Tangent steps come from the precise camera-relative metre gradients. Differentiating
@@ -84,7 +131,7 @@ float GeologyUnit(uint h) { return (h >> 8) * (1.0 / 16777216.0); }
 // (d height / d horizontal distance, both in cell units, so dimensionless); accumulates fresh
 // ejecta brightness and the dark fill of old, flooded floors.
 float3 CraterScale(float3 direction, float cells, uint seed, float density, float depthRatio, float footprintDirection,
-    inout float ejecta, inout float floorFill)
+    float3 wind, inout float ejecta, inout float floorFill, inout float streak)
 {
     float pixel = footprintDirection * cells;
     float visible = 1 - smoothstep(.05, .2, pixel);
@@ -108,8 +155,17 @@ float3 CraterScale(float3 direction, float cells, uint seed, float density, floa
         float3 offset = p - centre;
         float distance = length(offset);
         float d = distance / radius;
-        if (d > 2.4) continue;
         float age = ((h3 >> 16) & 0xffffu) / 65535.0;
+        // Wind-swept tails: the rim shelters a lee of differently coloured sand. A tail fades out
+        // before the 1.15-cell reach of the neighbour search, so it never ends at a cell wall.
+        [branch] if (dot(wind, wind) > 0)
+        {
+            float along = dot(offset, wind);
+            float across = length(offset - wind * along) / (radius * (.85 + .3 * along / radius));
+            streak += (1 - smoothstep(.55, 1.1, along)) * smoothstep(radius * .7, radius * 1.3, along)
+                * exp(-across * across * 1.6) * exp(-along / (radius * 4)) * visible;
+        }
+        if (d > 2.4) continue;
         float depth = depthRatio * radius * lerp(1, .3, age);
         // Parabolic bowl and a raised rim; slopes are analytic so no derivatives are differenced.
         float bowlSlope = d < 1 ? 2 * depth * d : 0;
@@ -126,31 +182,33 @@ float3 CraterScale(float3 direction, float cells, uint seed, float density, floa
 // Crater populations from ~6% of the radius down to ~0.1%, each fading once its craters are
 // smaller than a few pixels. density scales every population (0 disables cratering).
 float3 CraterField(float3 direction, uint seed, float density, float depthRatio, float footprintDirection,
-    out float ejecta, out float floorFill)
+    float3 wind, out float ejecta, out float floorFill, out float streak)
 {
-    ejecta = 0; floorFill = 0;
+    ejecta = 0; floorFill = 0; streak = 0;
     float3 slope = 0;
-    slope += CraterScale(direction, 6, seed ^ 0x2f1a3c5du, .45 * density, depthRatio, footprintDirection, ejecta, floorFill);
-    slope += CraterScale(direction, 17, seed ^ 0x7b3e9a11u, .6 * density, depthRatio, footprintDirection, ejecta, floorFill);
-    slope += CraterScale(direction, 47, seed ^ 0x4c8d2e73u, .7 * density, depthRatio, footprintDirection, ejecta, floorFill);
-    slope += CraterScale(direction, 131, seed ^ 0x19f0b6a5u, .78 * density, depthRatio, footprintDirection, ejecta, floorFill);
-    slope += CraterScale(direction, 367, seed ^ 0x6a2d4f97u, .82 * density, depthRatio, footprintDirection, ejecta, floorFill);
+    slope += CraterScale(direction, 6, seed ^ 0x2f1a3c5du, .45 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    slope += CraterScale(direction, 17, seed ^ 0x7b3e9a11u, .6 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    slope += CraterScale(direction, 47, seed ^ 0x4c8d2e73u, .7 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    slope += CraterScale(direction, 131, seed ^ 0x19f0b6a5u, .78 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    slope += CraterScale(direction, 367, seed ^ 0x6a2d4f97u, .82 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
     return slope;
 }
 
-// Sharp-edged low plains (maria, basaltic sand seas): a warped threshold of the actual height.
-// smoothHeight comes from a coarse map level, so its texels never print as stair-steps;
-// the outline itself is drawn by the warped noise octaves.
-float LowPlains(float3 direction, float smoothHeight, uint seed, float level)
+// Low plains (maria, basaltic sand seas) flood the actual lowlands: a warped threshold of a
+// B-spline-smoothed coarse height. Outline octaves stop at ~1/60 of the radius and fade before
+// they reach a pixel, so margins read as lobate flow fronts rather than a pixel-scale fringe.
+// depth: 0 at the shore to 1 well inside, for the darker, thicker interior fill.
+float LowPlains(float3 direction, float smoothHeight, uint seed, float level, float margin, float footprintDirection, out float depth)
 {
     float warp = SurfaceNoise(direction * 2.7, seed ^ 0x3c6ef372u, 0xffffffffu);
     float3 warped = direction + float3(warp, SurfaceNoise(direction * 3.9, seed ^ 0x1f83d9abu, 0xffffffffu), -warp) * .05;
+    float fine = 1 - smoothstep(.08, .3, footprintDirection * 61);
     float field = -smoothHeight + .3 * SurfaceNoise(warped * 5.3, seed ^ 0xa54ff53au, 0xffffffffu)
         + .13 * SurfaceNoise(warped * 19, seed ^ 0x510e527fu, 0xffffffffu)
-        + .07 * SurfaceNoise(warped * 61, seed ^ 0x9b05688cu, 0xffffffffu)
-        + .035 * SurfaceNoise(warped * 197, seed ^ 0x5be0cd19u, 0xffffffffu);
-    float aa = max(.003, fwidth(field));
-    return smoothstep(level - aa, level + aa, field);
+        + .055 * fine * SurfaceNoise(warped * 61, seed ^ 0x9b05688cu, 0xffffffffu);
+    float aa = max(.002, fwidth(field));
+    depth = saturate((field - level) / .22);
+    return smoothstep(level - aa, level + aa + margin, field);
 }
 
 // Europa-like lineae: segmented, slightly wandering arcs along random great circles.
@@ -182,7 +240,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
     out float3 albedo, out float3 surfaceNormal, out float water, out float3 layersA, out float3 layersB)
 {
     layersA = float3(0, 0, 1); layersB = 0;
-    float geologyCraters = 0, geologyDepth = 0;
+    float geologyCraters = 0, geologyDepth = 0, geologyWind = 0;
     float3 coordinates = TerrainMapCoordinates(direction);
     float texelMetres = 2 * _TerrainRadius / max(1, _MaterialMapResolution);
     // Camera-relative positions retain centimetres at the ground. A unit planet
@@ -203,8 +261,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         * (1 - smoothstep(texelMetres * .125, texelMetres * .75, _TerrainSampleMetres));
     float height = lerp(mapHeight, rawVertexHeight, closeGeometry);
     float normalizedHeight = height / max(1, _TerrainAmplitude);
-    float plainsHeight = SAMPLE_TEXTURE2D_ARRAY_LOD(_SurfaceHeightMap, sampler_SurfaceHeightMap, coordinates.xy, coordinates.z,
-        max(mapLod, log2(max(1, _MaterialMapResolution / 128)))).r / max(1, _TerrainAmplitude);
+    float plainsHeight = SurfaceHeightSmooth(coordinates, max(mapLod, log2(max(1, _MaterialMapResolution / 128)))) / max(1, _TerrainAmplitude);
     float latitude = abs(direction.y);
     uint seed = (uint)_LavaSeed.x | ((uint)_LavaSeed.y << 16);
     float regional = SurfaceNoise(direction * 41, seed ^ 0x1d872b41u, 0xffffffffu);
@@ -213,7 +270,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         + SurfaceFilteredNoiseGradient(detailPosition,8,footprint,seed ^ 0xb5297a4du)*.30
         + SurfaceFilteredNoiseGradient(detailPosition,.5,footprint,seed ^ 0x1b56c4e9u)*.20;
     float material=materialField.x;
-    float3 mapNormal=SurfaceHeightNormal(direction,max(_HasOcean>.5?0:-1e20,mapHeight),direction,dxMetres,dyMetres);
+    float3 mapNormal=SurfaceMapNormal(direction,mapLod,texelMetres,_HasOcean>.5?0:-1e20);
     // Far below one map texel the map slope is unresolved and its screen derivatives only
     // carry sampling quantization; geometry shading takes over there (closeGeometry).
     float mapResolved = saturate(footprint / texelMetres * 8);
@@ -284,10 +341,23 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         albedo = lerp(float3(.38,.20,.09), float3(.73,.49,.25),
             saturate(broadGeology + filteredStrata * strataContrast));
         albedo *= 1 + regional * .12 + material * _MaterialDetailStrength * .26;
-        // Dark basaltic sand seas in the lowlands, with crisp windblown margins.
-        float sea = LowPlains(direction, plainsHeight, seed, .16) * _PlanetDetailStrength;
-        albedo = lerp(albedo, float3(.16, .14, .11) * (.9 + regional * .25), sea * .85);
+        // Dark basaltic sand seas in the lowlands, thinning out downwind into streaky margins.
+        float footprintDirection = footprint / max(1, _TerrainRadius);
+        float seaDepth;
+        // Zonal wind streaks: noise stretched ~5x along latitude circles (east-west).
+        float streakFade = 1 - smoothstep(.1, .35, footprintDirection * 160);
+        float zonal = SurfaceNoise(direction * float3(32, 160, 32), seed ^ 0x2b7e1516u, 0xffffffffu) * .65
+            + SurfaceNoise(direction * float3(70, 330, 70), seed ^ 0x28aed2a6u, 0xffffffffu) * .35 * streakFade;
+        // Sand seas thin out over a wide, wind-combed margin instead of ending at a shoreline.
+        float sea = LowPlains(direction, plainsHeight + zonal * .025, seed, .16, .06, footprintDirection, seaDepth) * _PlanetDetailStrength;
+        float3 darkSand = float3(.17, .135, .1) * (.85 + regional * .25) * lerp(1.15, .85, seaDepth);
+        albedo = lerp(albedo, darkSand, sea * (.62 + .25 * seaDepth) * (1 + zonal * .25));
+        albedo *= 1 + zonal * .07 * _PlanetDetailStrength;
+        // Bright dust settles on the flats; slopes shed it and show darker rock.
+        float shed = smoothstep(.015, .09, 1 - dot(coarseNormal, direction)) * (1 - closeGeometry);
+        albedo *= 1 - shed * .3 * _PlanetDetailStrength;
         geologyCraters = .35 * (1 - sea * .7); geologyDepth = .09;
+        geologyWind = .6;
         float outcrop = smoothstep(.62, .85, broadGeology + filteredStrata * .25);
         layersA = float3(0, .25 * (1 - outcrop), outcrop); layersB = float3(.75 * (1 - outcrop), 0, 0);
     }
@@ -308,19 +378,27 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         albedo = lerp(_SurfaceTint.rgb * .62, float3(.43,.41,.38), highland);
         albedo *= 1 + regional * .12 + material * _MaterialDetailStrength * .25;
         // Bright, heavily cratered highlands and dark, younger flooded maria.
-        float mare = (_PlanetKind > 3.5 ? 0 : LowPlains(direction, plainsHeight, seed, .05)) * _PlanetDetailStrength;
-        albedo = lerp(albedo * 1.12, albedo * float3(.42, .43, .46), mare);
+        float footprintDirection = footprint / max(1, _TerrainRadius), mareDepth = 0;
+        float mare = (_PlanetKind > 3.5 ? 0 : LowPlains(direction, plainsHeight, seed, .05, .014, footprintDirection, mareDepth)) * _PlanetDetailStrength;
+        // Successive flows differ in composition: bluish titanium-rich and browner units, darkest in the basin centre.
+        float flows = SurfaceNoise(direction * 13, seed ^ 0x6d2b79f5u, 0xffffffffu) * .65
+            + SurfaceNoise(direction * 41, seed ^ 0x3243f6a8u, 0xffffffffu) * .35 * (1 - smoothstep(.1, .35, footprintDirection * 41));
+        float3 mareTone = lerp(float3(.45, .44, .45), float3(.53, .48, .42), saturate(.5 + flows)) * lerp(1.08, .8, mareDepth);
+        albedo = lerp(albedo * 1.12, albedo * mareTone, mare);
         geologyCraters = _PlanetKind > 3.5 ? 0 : 1 - mare * .65; geologyDepth = .16;
         layersA = float3(0, 0, highland * .45); layersB = float3(0, 0, 1 - highland * .45);
     }
     // Craters below the map resolution, in shading only; real geometry takes over near the ground.
     [branch] if (_PlanetDetailStrength > .001 && geologyCraters > .001)
     {
-        float ejecta, floorFill;
-        float3 slope = CraterField(direction, seed, geologyCraters, geologyDepth, footprint / max(1, _TerrainRadius), ejecta, floorFill);
+        float ejecta, floorFill, streak;
+        // Prevailing winds blow along latitude circles, turned a little by regional weather.
+        float3 east = normalize(float3(direction.z, 0, -direction.x) + float3(1e-5, 0, 0));
+        float3 wind = geologyWind > 0 ? normalize(east + cross(direction, east) * regional * .5) : 0;
+        float3 slope = CraterField(direction, seed, geologyCraters, geologyDepth, footprint / max(1, _TerrainRadius), wind, ejecta, floorFill, streak);
         slope -= direction * dot(direction, slope);
         surfaceNormal = normalize(surfaceNormal - slope * _PlanetDetailStrength * (1 - closeGeometry));
-        albedo *= 1 + (saturate(ejecta) * .55 - saturate(floorFill) * .22) * _PlanetDetailStrength;
+        albedo *= 1 + (saturate(ejecta) * .55 - saturate(floorFill) * .22 - saturate(streak) * geologyWind * .5) * _PlanetDetailStrength;
     }
 }
 

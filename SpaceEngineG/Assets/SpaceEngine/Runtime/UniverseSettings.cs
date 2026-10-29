@@ -65,6 +65,9 @@ namespace SpaceEngine.Runtime
         [Range(0, 1)] public float AmbientLight = .006f;
         [Range(0,8)] public float SunLightingExposure = 1.5f;
         [Range(.1f, 8)] public float AtmosphereExposure = 3f;
+        /// <summary>Scattering exposure seen from well above the atmosphere, relative to AtmosphereExposure.
+        /// The ground sky needs the brighter value; from orbit it washes out the surface colours.</summary>
+        [Range(.1f, 1)] public float AtmosphereOrbitalFactor = .4f;
         public AtmosphereSettings Atmosphere = new AtmosphereSettings();
         [Range(.25f, 3)] public float StarBrightness = 1.2f;
         [Range(0, 3)] public float StarfieldBrightness = 1;
