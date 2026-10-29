@@ -74,10 +74,10 @@ Shader "SpaceEngine/PlanetRing"
                 float reflected = .23 + .77 * lightElevation;
                 // Dusty, darker inner ringlets; brighter icy outer sheets; dense bands reflect more.
                 float u = saturate((radius - _RingInnerRatio) / max(.001, _RingOuterRatio - _RingInnerRatio));
-                float3 tint = lerp(float3(.86, .8, .74), float3(1.18, 1.12, 1.02), smoothstep(.12, .75, u));
-                tint *= lerp(.82, 1.2, saturate(density * 1.4));
+                // Dusty grey inner ring, cream-white icy B/A rings; dense regions scatter more.
+                float3 tint = lerp(float3(.78, .76, .72), float3(1.2, 1.15, 1.02), smoothstep(.1, .32, u));
+                tint *= lerp(.75, 1.25, saturate(density * 1.2));
                 float3 color = _RingColor.rgb * tint * (_AmbientFloor + _SunColor.rgb * _SunIntensity * shadow * (reflected + forward));
-                color *= .82 + .18 * CelestialFilteredSin(radius * 167 + _Seed);
                 return half4(max(0, color), saturate(opacity));
             }
             ENDHLSL

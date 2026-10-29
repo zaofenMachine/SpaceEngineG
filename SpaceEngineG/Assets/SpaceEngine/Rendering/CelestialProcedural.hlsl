@@ -57,17 +57,35 @@ float CelestialFilteredSin(float phase)
     return sin(phase) * box * limit;
 }
 
+float CelestialRingBand(float u, float start, float finish, float footprint)
+{
+    float soft = max(.004, footprint);
+    return smoothstep(start - soft, start + soft, u) * (1 - smoothstep(finish - soft, finish + soft, u));
+}
+
+// Saturn-like system: a faint inner C ring, a dense B ring, a Cassini-like division, an A ring
+// with a narrow gap, and a thin outer ringlet. Boundaries and densities shift with the seed;
+// fine ringlets are band-limited so they average out instead of aliasing.
 float CelestialRingDensity(float radius, float innerRatio, float outerRatio, float seed)
 {
     float u = (radius - innerRatio) / max(.001, outerRatio - innerRatio);
     float footprint = max(.00001, fwidth(u));
-    float edge = smoothstep(0, max(.018, footprint), u) * (1 - smoothstep(1 - max(.02, footprint), 1, u));
-    float bands = .45 + .12 * CelestialFilteredSin(u * 31 + seed * .31);
-    bands += .22 * CelestialFilteredSin(u * 173 + seed) + .13 * CelestialFilteredSin(u * 519 + seed * 2.31);
-    float fine = .72 + .28 * CelestialFilteredSin(u * 1247 + seed * .71);
-    float gapCenter = .53 + .09 * sin(seed);
-    float gap = smoothstep(max(0, .012 - footprint * .5), .027 + footprint * .5, abs(u - gapCenter));
-    return saturate(bands * fine) * gap * edge * step(0, u) * step(u, 1);
+    float jitter = sin(seed * 1.37) * .035, jitter2 = sin(seed * 2.91) * .025;
+    float cEnd = .2 + jitter, bEnd = .56 + jitter2, gapEnd = bEnd + .05 + .015 * sin(seed * .7);
+    float aEnd = .9 + .02 * sin(seed * 3.3);
+    float gapA = aEnd - .07 + .02 * sin(seed * 5.1);
+    float density = .22 * CelestialRingBand(u, 0, cEnd, footprint);
+    // B ring: densest, brightening outward with broad internal structure.
+    density += (.7 + .22 * smoothstep(cEnd, bEnd, u) + .08 * CelestialFilteredSin(u * 41 + seed)) * CelestialRingBand(u, cEnd, bEnd, footprint);
+    density += .045 * CelestialRingBand(u, bEnd, gapEnd, footprint);
+    density += (.55 - .12 * smoothstep(gapEnd, aEnd, u)) * CelestialRingBand(u, gapEnd, aEnd, footprint)
+        * (1 - .92 * CelestialRingBand(u, gapA, gapA + .012, footprint));
+    density += .5 * CelestialRingBand(u, .955, .968, footprint);
+    // Unresolved ringlets: several octaves of filtered radial structure.
+    float ringlets = .5 + .22 * CelestialFilteredSin(u * 173 + seed) + .14 * CelestialFilteredSin(u * 519 + seed * 2.31)
+        + .09 * CelestialFilteredSin(u * 1247 + seed * .71) + .05 * CelestialFilteredSin(u * 3011 + seed * 1.9);
+    density *= .72 + .56 * ringlets;
+    return saturate(density) * step(0, u) * step(u, 1);
 }
 
 #endif
