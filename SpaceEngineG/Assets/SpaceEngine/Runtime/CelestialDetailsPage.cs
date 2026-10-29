@@ -177,7 +177,7 @@ namespace SpaceEngine.Runtime
             orbit.Add("恒星自转与日长","未建模",DataOrigin.NotModeled);
             var environment=document.Pages[2].Add("恒星环境");
             environment.Add("行星气候参数","不适用；请选择行星或卫星查看。",DataOrigin.NotModeled);
-            environment.Add("恒星光球 / 视界",star.IsNonAccretingBlackHole?"仅几何视界；没有吸积盘、喷流与相对论透镜。":"温度与光度为恒星生成模型参数；未求解恒星大气结构。",DataOrigin.Assumed);
+            environment.Add("恒星光球 / 视界",star.IsNonAccretingBlackHole?"几何视界；画面以史瓦西测地线偏折显示背景透镜。没有吸积盘与喷流。":"温度与光度为恒星生成模型参数；未求解恒星大气结构。",DataOrigin.Assumed);
             environment.Add("成分、气压与磁场","恒星内部组成、气压剖面和磁场未建模。",DataOrigin.NotModeled);
         }
         static void AddPlanetOverview(Document document,CelestialTarget target,PlanetScienceReport science)
@@ -311,11 +311,7 @@ namespace SpaceEngine.Runtime
         }
         static void Fill(Rect rect,Color color)
         {Color previous=GUI.color;GUI.color=color;GUI.DrawTexture(rect,Texture2D.whiteTexture);GUI.color=previous;}
-        bool Button(Rect rect,string text,bool active=false)
-        {
-            Color previous=GUI.backgroundColor;GUI.backgroundColor=active?new Color(.12f,.30f,.36f):new Color(.07f,.14f,.19f,.98f);
-            bool clicked=GUI.Button(rect,text,button);GUI.backgroundColor=previous;return clicked;
-        }
+        bool Button(Rect rect,string text,bool active=false)=>HudSkin.Button(rect,text,active);
         float RowHeight(Datum row,float width)
         {
             float valueWidth=width-312;
@@ -332,7 +328,7 @@ namespace SpaceEngine.Runtime
                 cached=CreateDocument(target,simulationTime);cachedId=target.Id;cachedSystem=target.System;nextRefresh=Time.unscaledTimeAsDouble+.25;
                 if(targetChanged)ScrollPosition=Vector2.zero;
             }
-            Fill(area,new Color(.018f,.043f,.059f,.98f));
+            HudSkin.Panel(area,.93f);
             GUI.Label(new Rect(area.x+18,area.y+12,area.width-145,32),cached.Title,title);
             if(Button(new Rect(area.xMax-112,area.y+13,94,29),"关闭 Esc")){close?.Invoke();return;}
             GUI.Label(new Rect(area.x+18,area.y+48,area.width-190,30),cached.Subtitle,small);

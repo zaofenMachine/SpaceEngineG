@@ -19,7 +19,8 @@ namespace SpaceEngine.Rendering.Editor
             "SpaceEngine/Terrain", "SpaceEngine/Atmosphere",
             "SpaceEngine/StarBillboard", "SpaceEngine/Star",
             "SpaceEngine/GasGiant", "SpaceEngine/PlanetRing", "SpaceEngine/GalaxyField",
-            "SpaceEngine/GalaxyVolume", "SpaceEngine/GalaxyVolumeComposite", "SpaceEngine/PlanetCloud", "SpaceEngine/OrbitOverlay"
+            "SpaceEngine/GalaxyVolume", "SpaceEngine/GalaxyVolumeComposite", "SpaceEngine/PlanetCloud", "SpaceEngine/OrbitOverlay",
+            "SpaceEngine/Starfield", "SpaceEngine/StarGlow", "SpaceEngine/BlackHoleLens"
         };
 
         public static string ReportPath => Path.GetFullPath(Path.Combine(

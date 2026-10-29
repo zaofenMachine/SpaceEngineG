@@ -121,14 +121,23 @@ Shader "SpaceEngine/Terrain"
                 return lerp(lerp(x00, x10, w.y), lerp(x01, x11, w.y), w.z) * 2.0 - 1.0;
             }
 
-            float LavaFissures(float3 direction)
+            // x: molten flow, y: hottest core, z: heat glow on the surrounding crust.
+            float3 LavaFissures(float3 direction)
             {
                 // Integer seed words preserve all 32 CPU seed bits through float material uniforms.
                 uint seed = (uint)_LavaSeed.x | ((uint)_LavaSeed.y << 16);
                 float field = LavaNoise(direction * _LavaFrequency, seed)
                     + 0.16 * LavaNoise(direction * (_LavaFrequency * 2.2916667), seed ^ 0x9e3779b9u);
+                // Activity varies regionally: broad lava lakes and flows in hot provinces,
+                // hairline cracks across older crust elsewhere.
+                float activity = smoothstep(-.25, .65, LavaNoise(direction * (_LavaFrequency * .21), seed ^ 0x51ed2701u));
+                float width = _LavaFissureWidth * lerp(.3, 2.6, activity);
+                float distanceToFlow = abs(field);
                 float aa = max(0.0005, fwidth(field));
-                return 1.0 - smoothstep(max(0.0, _LavaFissureWidth - aa), _LavaFissureWidth + aa, abs(field));
+                float flow = 1.0 - smoothstep(max(0.0, width - aa), width + aa, distanceToFlow);
+                float core = 1.0 - smoothstep(max(0.0, width * .4 - aa), width * .4 + aa, distanceToFlow);
+                float glow = exp(-max(0.0, distanceToFlow - width) / max(.002, width * 1.6)) * (1 - flow) * (.25 + .75 * activity);
+                return float3(flow, core * activity, glow);
             }
             half4 Frag(Varyings input) : SV_Target
             {
@@ -162,18 +171,23 @@ Shader "SpaceEngine/Terrain"
                 geometry *= nDotV / max(0.001, nDotV * (1.0 - k) + k);
                 float fresnel = 0.04 + 0.96 * pow(1.0 - lDotH, 5.0);
                 float specular = distribution * geometry * fresnel / max(0.001, 4.0 * nDotL * nDotV);
-                float fissure = 0;
+                float fissure = 0, lavaCore = 0, lavaGlow = 0;
                 if (_IsLava > 0.5)
                 {
-                    fissure = LavaFissures(normalize(input.planetPosition));
+                    float3 lava = LavaFissures(normalize(input.planetPosition));
+                    fissure = lava.x;
+                    lavaCore = lava.y; lavaGlow = lava.z;
                     // CPU colors remain useful diagnostic data, while visible lava is evaluated per
                     // fragment so plate boundaries do not inherit the terrain vertex grid or LOD.
                     albedo = lerp(float3(0.045,0.028,0.023), float3(0.58,0.085,0.008), fissure) * _PlanetTint.rgb;
+                    albedo *= 1 - lavaGlow * .35;
                 }
                 float3 irradiance = _SunColor.rgb * _SunIntensity;
                 float3 color = albedo * (_AmbientFloor + irradiance * nDotL);
                 color += irradiance * nDotL * specular * lerp(_SpecularStrength, _OceanSpecularStrength, water);
-                color += float3(1.0, 0.08, 0.005) * fissure * _EmissionStrength;
+                // Blackbody-like ramp: deep red edges, orange-yellow cores, dim glow on hot crust.
+                float3 molten = lerp(float3(1.0, 0.08, 0.005), float3(1.0, 0.42, 0.06), lavaCore);
+                color += (molten * fissure + float3(.55, .05, .004) * lavaGlow * .45) * _EmissionStrength;
                 float distanceToCamera = distance(input.positionWS, _WorldSpaceCameraPos);
                 float fog = (1.0 - exp(-distanceToCamera * max(0.0, _FogDensity))) * _FogStrength;
                 color = lerp(color, _FogColor.rgb, saturate(fog));

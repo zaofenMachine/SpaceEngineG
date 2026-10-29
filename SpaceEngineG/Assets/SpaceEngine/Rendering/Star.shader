@@ -7,6 +7,7 @@ Shader "SpaceEngine/Star"
         _NoiseScale ("Granulation frequency", Float) = 35
         _GranulationStrength ("Granulation contrast", Range(0,1)) = 0.35
         _LimbDarkening ("Limb darkening", Range(0,1)) = 0.5
+        _SpotCoverage ("Starspot coverage", Range(0,1)) = 0.35
         _Seed ("Deterministic pattern seed", Float) = 1
         _StarTime ("Simulation time for plasma motion", Float) = 0
     }
@@ -25,7 +26,7 @@ Shader "SpaceEngine/Star"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColor;
-                float _Intensity, _NoiseScale, _GranulationStrength, _LimbDarkening, _Seed, _StarTime;
+                float _Intensity, _NoiseScale, _GranulationStrength, _LimbDarkening, _SpotCoverage, _Seed, _StarTime;
             CBUFFER_END
             struct Attributes { float4 positionOS : POSITION; float3 normalOS : NORMAL; };
             struct Varyings
@@ -44,12 +45,13 @@ Shader "SpaceEngine/Star"
                 output.directionOS = normalize(input.positionOS.xyz);
                 return output;
             }
-            float Hash(float3 p)
+            float3 Hash3(float3 p)
             {
-                p = frac(p * 0.1031 + frac(_Seed * 0.012345));
-                p += dot(p, p.yzx + 33.33);
-                return frac((p.x + p.y) * p.z);
+                p = frac(p * float3(.1031, .1030, .0973) + frac(_Seed * .012345));
+                p += dot(p, p.yxz + 33.33);
+                return frac((p.xxy + p.yxx) * p.zyx);
             }
+            float Hash(float3 p) { return Hash3(p).x; }
             float Noise(float3 p)
             {
                 float3 cell = floor(p);
@@ -61,19 +63,63 @@ Shader "SpaceEngine/Star"
                 float d = lerp(Hash(cell + float3(0,1,1)), Hash(cell + float3(1,1,1)), f.x);
                 return lerp(lerp(a,b,f.y), lerp(c,d,f.y), f.z);
             }
+            // Convection cells: bright upwelling centres separated by dark intergranular lanes.
+            float Granules(float3 p, float time)
+            {
+                float3 cell = floor(p), f = frac(p);
+                float first = 8, second = 8;
+                [unroll] for (int z = -1; z <= 1; z++)
+                [unroll] for (int y = -1; y <= 1; y++)
+                [unroll] for (int x = -1; x <= 1; x++)
+                {
+                    float3 offset = float3(x, y, z);
+                    float3 h = Hash3(cell + offset);
+                    float3 centre = offset + .5 + .38 * sin(time + 6.2831 * h);
+                    float distanceSquared = dot(centre - f, centre - f);
+                    if (distanceSquared < first) { second = first; first = distanceSquared; }
+                    else if (distanceSquared < second) second = distanceSquared;
+                }
+                return saturate((sqrt(second) - sqrt(first)) * 1.6);
+            }
             half4 Frag(Varyings input) : SV_Target
             {
-                float3 p = normalize(input.directionOS) * _NoiseScale;
-                p += float3(_StarTime * 0.015, _StarTime * 0.008, 0.0);
-                float granulation = Noise(p) * 0.7 + Noise(p * 2.3) * 0.3;
-                float modulation = lerp(1.0, 0.4 + granulation, _GranulationStrength);
-                float mu = saturate(dot(normalize(input.normalWS), GetWorldSpaceNormalizeViewDir(input.positionWS)));
-                float limb = 1.0 - _LimbDarkening * (1.0 - mu);
-                float3 color = _BaseColor.rgb * _Intensity * modulation * limb;
-                // Preserve chromaticity and photospheric detail in the display target.
-                // Physical luminosity remains in the SI model; output has a bounded display exposure.
-                color /= 1.0 + max(color.r, max(color.g, color.b));
-                return half4(color, 1.0);
+                float3 direction = normalize(input.directionOS);
+                float3 normal = normalize(input.normalWS);
+                float mu = saturate(dot(normal, GetWorldSpaceNormalizeViewDir(input.positionWS)));
+                float pixelFootprint = max(length(ddx(direction)), length(ddy(direction)));
+                float time = _StarTime * .002;
+
+                // Granulation fades to its mean when cells shrink below a few pixels.
+                float frequency = _NoiseScale * 4;
+                float granuleVisibility = 1 - smoothstep(.12, .45, pixelFootprint * frequency);
+                float granules = lerp(.55, Granules(direction * frequency, time), granuleVisibility);
+                float super = Noise(direction * _NoiseScale * .45 + time * .3);
+                float granulation = (granules - .55) * .55 + (super - .5) * .35;
+                float surface = 1 + granulation * _GranulationStrength * 1.6;
+
+                // Cool, convective photospheres carry spots in activity belts.
+                float latitude = abs(direction.y);
+                float belt = smoothstep(.06, .2, latitude) * (1 - smoothstep(.42, .62, latitude));
+                float spotField = Noise(direction * 7 + _Seed * .37) * .65 + Noise(direction * 19 + 11.3) * .35;
+                float threshold = 1 - .32 * _SpotCoverage * belt;
+                float penumbra = smoothstep(threshold - .05, threshold, spotField);
+                float umbra = smoothstep(threshold + .015, threshold + .045, spotField);
+                surface *= 1 - .45 * penumbra - .4 * umbra;
+                // Faculae: bright magnetic network that shows best near the limb.
+                float faculae = smoothstep(.62, .82, Noise(direction * _NoiseScale * .9 + 5.7)) * pow(1 - mu, 1.5);
+                surface += faculae * .35 * _GranulationStrength;
+
+                // Quadratic limb-darkening law with a redder, cooler limb.
+                float edge = 1 - mu;
+                float a = .47 * _LimbDarkening * 2, b = .23 * _LimbDarkening * 2;
+                float limb = max(.28, 1 - a * edge - b * edge * edge);
+                float3 limbTint = lerp(float3(1, .78, .6), 1, sqrt(mu));
+                // Soft highlight roll-off: the disk keeps limb colour and granulation while
+                // its core still exceeds display white and blooms. Chromaticity is preserved.
+                float radiance = _Intensity * surface * limb;
+                float display = radiance / (1 + .42 * radiance);
+                float3 color = _BaseColor.rgb * display * limbTint;
+                return half4(max(0, color), 1.0);
             }
             ENDHLSL
         }
@@ -89,7 +135,7 @@ Shader "SpaceEngine/Star"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseColor;
-                float _Intensity, _NoiseScale, _GranulationStrength, _LimbDarkening, _Seed, _StarTime;
+                float _Intensity, _NoiseScale, _GranulationStrength, _LimbDarkening, _SpotCoverage, _Seed, _StarTime;
             CBUFFER_END
             float4 DepthVert(float4 positionOS : POSITION) : SV_POSITION { return TransformObjectToHClip(positionOS.xyz); }
             half DepthFrag() : SV_Target { return 0; }

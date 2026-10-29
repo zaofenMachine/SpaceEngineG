@@ -7,6 +7,7 @@ using SpaceEngine.Terrain;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace SpaceEngine.Runtime
 {
@@ -35,6 +36,9 @@ namespace SpaceEngine.Runtime
         public StarCatalogueRenderer Stars { get; private set; }
         public GalaxyField Galaxy { get; private set; }
         public GalaxyVolume GalacticLight {get;private set;}
+        public StarfieldRenderer Starfield {get;private set;}
+        /// <summary>0 in space or at night; approaches 1 inside a sunlit atmosphere.</summary>
+        public float Daylight {get;private set;}
         public PlanetCloudRenderer[] Clouds {get;private set;}
         public CelestialBodyRenderer[] Celestials {get;private set;}
         public bool GalaxyOverview {get;private set;}
@@ -49,6 +53,7 @@ namespace SpaceEngine.Runtime
         public double FrameMilliseconds { get; private set; }
         public bool VerificationOwnsFlight;
         public bool ShowHud=true;
+        public bool ShowDeveloperOverlay;
         public string Notice="RMB look  /  WASD fly  /  scroll speed";
         public PlanetDefinition Planet => System.Planets[SelectedPlanet];
         public Double3 CameraFromPlanet => Observer.RelativeTo(PlanetPosition(SelectedPlanet));
@@ -61,6 +66,11 @@ namespace SpaceEngine.Runtime
         Material terrainMaterial,starMaterial,starBillboard,atmosphereMaterial,galaxyMaterial,gasMaterial,ringMaterial,nucleusMaterial;
         Material galaxyVolumeMaterial,galaxyCompositeMaterial,cloudMaterial;
         GameObject nucleusObject;
+        StarGlow starGlow;
+        Bloom bloom;
+        BlackHoleLens systemLens,nucleusLens;
+        static readonly int SkyDaylight=Shader.PropertyToID("_SkyDaylight");
+        static readonly int GalaxySkyMap=Shader.PropertyToID("_GalaxySkyMap");
         GameObject starObject;
         Mesh starMesh;
         Quaternion orientation;
@@ -97,6 +107,15 @@ namespace SpaceEngine.Runtime
             ViewCamera=cameraObject.AddComponent<Camera>(); ViewCamera.clearFlags=CameraClearFlags.SolidColor;
             ViewCamera.backgroundColor=new Color(.0002f,.0003f,.0008f); ViewCamera.nearClipPlane=.1f; ViewCamera.farClipPlane=16000000;
             ViewCamera.fieldOfView=Settings.FieldOfView; ViewCamera.allowHDR=true;
+            // HDR emitters (photospheres, bright stars, specular glints) bloom; everything else is unchanged.
+            var profile=Resources.Load<VolumeProfile>("SpacePostProcess");
+            if(profile!=null)
+            {
+                var volume=cameraObject.AddComponent<Volume>();volume.isGlobal=true;volume.priority=10;volume.sharedProfile=profile;
+                // Volume.profile is a per-instance copy; the Resources asset is never modified.
+                volume.profile.TryGet(out bloom);
+            }
+            ApplyPostProcessing();
             atmosphere=cameraObject.AddComponent<AtmosphereRenderer>();
             atmosphere.Settings=JsonUtility.FromJson<AtmosphereSettings>(JsonUtility.ToJson(Settings.Atmosphere));atmosphere.Configure(ViewCamera,atmosphereMaterial);
             Stars=new GameObject("Streamed star catalogue").AddComponent<StarCatalogueRenderer>();
@@ -104,6 +123,11 @@ namespace SpaceEngine.Runtime
             Galaxy.Configure(Settings.Galaxy,Settings.GalaxyParticleCount,galaxyMaterial);
             GalacticLight=new GameObject("Finite galactic emission and dust volume").AddComponent<GalaxyVolume>();
             GalacticLight.Configure(Settings.Galaxy,galaxyVolumeMaterial,galaxyCompositeMaterial);
+            Starfield=new GameObject("Unresolved background starfield").AddComponent<StarfieldRenderer>();
+            Starfield.Configure(Settings.Galaxy,Resources.Load<Material>("Starfield"));
+            starGlow=new GameObject("Stellar corona and glare").AddComponent<StarGlow>();starGlow.Configure(Resources.Load<Material>("StarGlow"));
+            systemLens=new GameObject("Stellar black hole lens").AddComponent<BlackHoleLens>();systemLens.Configure(Resources.Load<Material>("BlackHoleLens"));
+            nucleusLens=new GameObject("Central black hole lens").AddComponent<BlackHoleLens>();nucleusLens.Configure(Resources.Load<Material>("BlackHoleLens"));
             starObject=new GameObject("Procedural stellar photosphere");
             starMesh=CreateStarMesh(); starObject.AddComponent<MeshFilter>().sharedMesh=starMesh;
             starObject.AddComponent<MeshRenderer>().sharedMaterial=starMaterial;
@@ -118,6 +142,13 @@ namespace SpaceEngine.Runtime
             gameObject.AddComponent<GalaxyVerification>();
             gameObject.AddComponent<ExplorerVerification>();
             gameObject.AddComponent<DetailsVerification>();
+            gameObject.AddComponent<ShowcaseCapture>();
+        }
+
+        public void ApplyPostProcessing()
+        {
+            ViewCamera.GetUniversalAdditionalCameraData().renderPostProcessing=Settings.PostProcessing;
+            if(bloom!=null)bloom.intensity.value=Settings.BloomIntensity;
         }
 
         Material Resolve(Material source,string shaderName)
@@ -138,6 +169,7 @@ namespace SpaceEngine.Runtime
                 Galaxy.Configure(Settings.Galaxy,Settings.GalaxyParticleCount,galaxyMaterial);
             if(GalacticLight!=null&&!ReferenceEquals(GalacticLight.Definition,Settings.Galaxy))
                 GalacticLight.Configure(Settings.Galaxy,galaxyVolumeMaterial,galaxyCompositeMaterial);
+            Starfield?.Configure(Settings.Galaxy,null);
             CellX=x;CellY=y;CellZ=z;
             System=UniverseGenerator.GenerateSystem(Settings.UniverseSeed,x,y,z,Settings.Galaxy,Settings.WorldGenerationVersion);
             SelectedPlanet=0; radialNavigation=false;
@@ -170,6 +202,8 @@ namespace SpaceEngine.Runtime
             Stars.Generate(Settings.UniverseSeed,x,y,z,Settings.StarCellRadius,starBillboard,Settings.Galaxy,Settings.WorldGenerationVersion);
             starMaterial.SetColor("_BaseColor",System.Kind==StellarKind.BlackHole?Color.black:StarCatalogueRenderer.TemperatureColor(System.StarTemperature));
             starMaterial.SetFloat("_Seed",System.Seed);
+            starMaterial.SetFloat("_Intensity",Settings.StarSurfaceRadiance);
+            starMaterial.SetFloat("_SpotCoverage",System.StarTemperature<6500?.35f:0);
         }
 
         public Double3 BodyOffset(int index)
@@ -322,6 +356,7 @@ namespace SpaceEngine.Runtime
             var hud=GetComponent<ExplorerHud>();
             if(key.escapeKey.wasPressedThisFrame){StopNavigation();Tools?.StopTargetFlight();Tools?.ClosePanels();hud?.CloseTransientPanels();Cursor.lockState=CursorLockMode.None;}
             if(key.f1Key.wasPressedThisFrame)ShowHud=!ShowHud;
+            if(key.f10Key.wasPressedThisFrame)ShowDeveloperOverlay=!ShowDeveloperOverlay;
             if(key.f3Key.wasPressedThisFrame)Tools?.ToggleSearch();
             if(key.f6Key.wasPressedThisFrame)Tools?.ToggleBookmarks();
             if(key.f7Key.wasPressedThisFrame)Tools?.CaptureScreenshot();
@@ -450,7 +485,7 @@ namespace SpaceEngine.Runtime
             Double3 offset=new Double3(0,.3,1).Normalized*(System.StarRadius*6);
             SetObserver(System.Position.Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));
             Tools?.Select(new CelestialTarget{X=CellX,Y=CellY,Z=CellZ,System=System});
-            Notice="STELLAR REFERENCE / "+System.Kind+" / no relativistic lensing";
+            Notice="STELLAR REFERENCE / "+System.Kind;
         }
         public void FrameGalaxy(bool edgeOn=false)
         {
@@ -473,7 +508,7 @@ namespace SpaceEngine.Runtime
             StopNavigation();GalaxyOverview=false;NucleusView=true;StellarView=false;
             Double3 offset=new Double3(0,5,20)*NucleusRadius;
             SetObserver(GalaxyModel.Center(Settings.Galaxy).Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));
-            StreamNearestSystem();Notice="CENTRAL BLACK HOLE / geometric horizon; no relativistic lensing";
+            StreamNearestSystem();Notice="CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk";
         }
 
         void UpdateTelemetry()
@@ -521,8 +556,16 @@ namespace SpaceEngine.Runtime
             starObject.transform.position=(starFrom*sunScale).ToVector3();
             starObject.transform.localScale=Vector3.one*(float)(System.StarRadius*sunScale);
             starMaterial.SetFloat("_StarTime",(float)(SimulationTime%100000));
+            bool blackHole=System.Kind==StellarKind.BlackHole;
+            Color photosphere=StarCatalogueRenderer.TemperatureColor(System.StarTemperature).linear*starMaterial.GetFloat("_Intensity");
+            starGlow.Tick(detailed&&!blackHole&&System.StarLuminosity>0,starObject.transform.position,starObject.transform.localScale.x,photosphere,ViewCamera,System.Seed);
+            bool systemLensVisible=detailed&&blackHole;
+            systemLens.Tick(systemLensVisible,starObject.transform.position,starObject.transform.localScale.x,ViewCamera);
+            Daylight=atmosphere.enabled?AtmosphericDaylight():0;
+            Shader.SetGlobalFloat(SkyDaylight,Daylight*.97f);
+            Stars.Visibility=1-Daylight*.97f;
             Stars.Tick(Observer,ViewCamera,Settings.StarBrightness,Settings.StarMinimumAngularRadius);
-            Galaxy.Exposure=Settings.GalaxyExposure;Galaxy.KernelScale=Settings.GalaxyKernelScale;Galaxy.DustStrength=Settings.GalaxyDustStrength;
+            Galaxy.Exposure=Settings.GalaxyExposure*(1-Daylight*.97f);Galaxy.KernelScale=Settings.GalaxyKernelScale;Galaxy.DustStrength=Settings.GalaxyDustStrength;
             Galaxy.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;Galaxy.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
             Galaxy.LocalFadeLy=Settings.GalaxyLocalFadeLy;Galaxy.Tick(Observer);
             GalacticLight.Exposure=Settings.GalaxyVolumeExposure;GalacticLight.ResolutionScale=Settings.GalaxyResolutionScale;
@@ -532,10 +575,29 @@ namespace SpaceEngine.Runtime
             GalacticLight.InteriorExposureMultiplier=Settings.GalaxyInteriorExposure;GalacticLight.ExteriorExposureMultiplier=Settings.GalaxyExteriorExposure;
             GalacticLight.Contrast=Settings.GalaxyContrast;
             GalacticLight.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;GalacticLight.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
-            GalacticLight.Tick(Observer,ViewCamera);
             Double3 coreFrom=GalaxyModel.Center(Settings.Galaxy).RelativeTo(Observer);
+            // The lens is only drawn when its image displacement can reach a few pixels.
+            float lensPixel=2*Mathf.Tan(ViewCamera.fieldOfView*Mathf.Deg2Rad*.5f)/Mathf.Max(1,ViewCamera.pixelHeight);
+            bool nucleusLensVisible=NucleusRadius/Math.Max(1,coreFrom.Length)>lensPixel*lensPixel*.2;
+            GalacticLight.RenderSkyMap=systemLensVisible||nucleusLensVisible;
+            GalacticLight.Tick(Observer,ViewCamera);
+            if(GalacticLight.SkyMap!=null)Shader.SetGlobalTexture(GalaxySkyMap,GalacticLight.SkyMap);
+            Starfield.Brightness=Settings.StarfieldBrightness;Starfield.Visibility=1-Daylight*.97f;
+            Starfield.Tick(Observer,ViewCamera,GalacticLight.RadianceTexture);
             double coreScale=RenderScale*ProxyScale(coreFrom.Length*RenderScale);
             nucleusObject.transform.position=(coreFrom*coreScale).ToVector3();nucleusObject.transform.localScale=Vector3.one*(float)(NucleusRadius*coreScale);
+            nucleusLens.Tick(nucleusLensVisible,nucleusObject.transform.position,nucleusObject.transform.localScale.x,ViewCamera);
+        }
+
+        /// <summary>How strongly a sunlit sky washes out the stars, from altitude in the atmosphere and solar elevation.</summary>
+        float AtmosphericDaylight()
+        {
+            if(Planet.AtmosphereHeight<=0)return 0;
+            Double3 relative=CameraFromPlanet;
+            double height=relative.Length-Planet.Radius;
+            float immersion=1-(float)Math.Clamp(height/Planet.AtmosphereHeight,0,1);
+            float elevation=Vector3.Dot(relative.Normalized.ToVector3(),DirectionToSun(SelectedPlanet));
+            return Mathf.SmoothStep(0,1,Mathf.InverseLerp(-.14f,.1f,elevation))*immersion*immersion;
         }
 
         static double ProxyScale(double renderDistance)
@@ -633,6 +695,8 @@ namespace SpaceEngine.Runtime
             if(Celestials!=null)foreach(var celestial in Celestials)if(celestial!=null)Destroy(celestial.gameObject);
             if(Clouds!=null)foreach(var cloud in Clouds)if(cloud!=null)Destroy(cloud.gameObject);
             if(GalacticLight!=null)Destroy(GalacticLight.gameObject);
+            if(Starfield!=null)Destroy(Starfield.gameObject);if(starGlow!=null)Destroy(starGlow.gameObject);
+            if(systemLens!=null)Destroy(systemLens.gameObject);if(nucleusLens!=null)Destroy(nucleusLens.gameObject);
             if(Galaxy!=null)Destroy(Galaxy.gameObject);if(nucleusObject!=null)Destroy(nucleusObject);
             if(Stars!=null)Destroy(Stars.gameObject);if(starObject!=null)Destroy(starObject);if(starMesh!=null)Destroy(starMesh);
             if(ViewCamera!=null)Destroy(ViewCamera.gameObject);

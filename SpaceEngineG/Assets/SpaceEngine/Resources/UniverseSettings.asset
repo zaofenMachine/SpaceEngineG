@@ -82,9 +82,9 @@ MonoBehaviour:
   SkirtDepthFactor: 0.08
   MinimumSkirtDepth: 4
   NormalSampleDistance: 0.25
-  AmbientLight: 0.035
+  AmbientLight: 0.006
   SunLightingExposure: 1.5
-  AtmosphereExposure: 1.6
+  AtmosphereExposure: 3
   Atmosphere:
     Rayleigh: {x: 37, y: 86, z: 211}
     Mie: {x: 25.5, y: 25.5, z: 25.5}

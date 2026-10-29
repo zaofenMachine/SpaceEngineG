@@ -65,10 +65,12 @@ float4 SurfaceFilteredNoiseGradient(float3 metres, float scale, float footprint,
     float4 noiseSample = SurfaceNoiseGradient(metres / scale,seed,mask);
     return noiseSample * float4(amplitude,amplitude/scale,amplitude/scale,amplitude/scale);
 }
-float3 SurfaceHeightNormal(float3 direction, float height, float3 fallback)
+float3 SurfaceHeightNormal(float3 direction, float height, float3 fallback, float3 dxMetres, float3 dyMetres)
 {
-    float3 dx = ddx(direction) * _TerrainRadius;
-    float3 dy = ddy(direction) * _TerrainRadius;
+    // Tangent steps come from the precise camera-relative metre gradients. Differentiating
+    // the float unit direction quantizes to ~0.5 m near the ground and turns into pixel noise.
+    float3 dx = dxMetres - direction * dot(direction, dxMetres);
+    float3 dy = dyMetres - direction * dot(direction, dyMetres);
     float3 n = cross(dx + direction * ddx(height), dy + direction * ddy(height));
     n *= dot(n, direction) >= 0 ? 1 : -1;
     return dot(n,n) > 1e-12 ? normalize(n) : fallback;
@@ -104,8 +106,11 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         + SurfaceFilteredNoiseGradient(detailPosition,8,footprint,seed ^ 0xb5297a4du)*.30
         + SurfaceFilteredNoiseGradient(detailPosition,.5,footprint,seed ^ 0x1b56c4e9u)*.20;
     float material=materialField.x;
-    float3 mapNormal=SurfaceHeightNormal(direction,max(_HasOcean>.5?0:-1e20,mapHeight),direction);
-    float3 coarseNormal = normalize(lerp(direction, mapNormal, _SurfaceNormalStrength));
+    float3 mapNormal=SurfaceHeightNormal(direction,max(_HasOcean>.5?0:-1e20,mapHeight),direction,dxMetres,dyMetres);
+    // Far below one map texel the map slope is unresolved and its screen derivatives only
+    // carry sampling quantization; geometry shading takes over there (closeGeometry).
+    float mapResolved = saturate(footprint / texelMetres * 8);
+    float3 coarseNormal = normalize(lerp(direction, mapNormal, _SurfaceNormalStrength * mapResolved));
     surfaceNormal = normalize(lerp(coarseNormal, meshNormal, closeGeometry));
     // Analytic material gradients avoid differencing quantized unit directions
     // or large float chart values. Solid terrain transforms preserve planet axes.
@@ -125,8 +130,13 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         float aridity = saturate((latitude - .1) * .8 + .45 - humidity * .55 + regional * .2);
         float3 vegetation = lerp(float3(.07,.19,.055), float3(.32,.27,.11), aridity);
         vegetation *= .90 + regional * .18;
+        // Forest and meadow patches on a ~0.5 km scale. The footprint filter takes them
+        // to their mean from orbit, so they only appear on approach.
+        float stands = SurfaceFilteredNoiseGradient(detailPosition, 512, footprint, seed ^ 0x2545f491u).x
+            + .5 * SurfaceFilteredNoiseGradient(detailPosition, 64, footprint, seed ^ 0x6c8e9cf5u).x;
+        vegetation *= 1 + clamp(stands, -1, 1) * float3(.34, .2, .26) * (1 - aridity * .6);
         float3 beach = float3(.56,.46,.28);
-        float3 land = lerp(beach, vegetation, smoothstep(5, max(80, _TerrainAmplitude * .025), height));
+        float3 land = lerp(beach, vegetation, smoothstep(1.5, max(18, _TerrainAmplitude * .004), height));
         // Climate/large biome regions should not trace every ridge as a thin
         // white contour from orbit. Filter the same geological field for those
         // masks, while keeping the full-resolution zero contour for the coast.
@@ -138,6 +148,10 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         land = lerp(land, float3(.30,.285,.26), rock);
         float snow = smoothstep(.78, .95, latitude + biomeHeight * .30 + regional * .035);
         land = lerp(land, float3(.83,.90,.94), snow);
+        // Steep relief exposes bedrock. The slope comes from the seed-exact height map, so
+        // it does not change with mesh density or LOD.
+        float cliff = smoothstep(.22, .5, 1 - dot(coarseNormal, direction)) * (1 - snow * .7);
+        land = lerp(land, float3(.36,.33,.3) * (.85 + regional * .2), cliff * smoothstep(2, 30, height));
         albedo = lerp(land * (1 + material * _MaterialDetailStrength * .22), ocean, water);
         surfaceNormal = normalize(lerp(surfaceNormal, direction, water));
     }

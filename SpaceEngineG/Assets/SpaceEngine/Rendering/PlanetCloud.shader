@@ -56,21 +56,46 @@ Shader "SpaceEngine/PlanetCloud"
                 output.normalWS = TransformObjectToWorldNormal(input.normalOS);
                 return output;
             }
+            float3 RotateAbout(float3 v, float3 axis, float angle)
+            {
+                float c = cos(angle), s = sin(angle);
+                return v * c + cross(axis, v) * s + axis * dot(axis, v) * (1 - c);
+            }
             float CloudDensity(float3 direction, float footprint)
             {
                 float sineWind = sin(_WindPhase), cosineWind = cos(_WindPhase);
                 float3 p = float3(direction.x * cosineWind - direction.z * sineWind,
                     direction.y, direction.x * sineWind + direction.z * cosineWind);
                 float3 seed = float3(.17, .31, .73) * _Seed;
+                // Seeded mid-latitude cyclones wind the weather field, counter-rotating
+                // between hemispheres. Appearance model only; no fluid dynamics.
+                [unroll] for (int k = 0; k < 4; k++)
+                {
+                    float s = _Seed * .37 + k * 57.3;
+                    float latitude = (.6 + .2 * sin(s * 1.7)) * (k % 2 == 0 ? 1 : -1);
+                    float longitude = s * 2.13;
+                    float horizontal = sqrt(1 - latitude * latitude);
+                    float3 centre = float3(horizontal * cos(longitude), latitude, horizontal * sin(longitude));
+                    float3 offset = p - centre;
+                    float size = .15 + .05 * sin(s * 3.1);
+                    float swirl = exp(-dot(offset, offset) / (size * size)) * 4.2 * sign(latitude);
+                    p = RotateAbout(p, centre, swirl);
+                }
                 float3 synoptic = p * max(1, _WeatherScale);
-                float front = CelestialFbm(synoptic + seed, footprint * _WeatherScale, 4);
+                float front = CelestialFbm(synoptic + seed, footprint * _WeatherScale, 5);
                 float curl = CelestialNoise(synoptic * 1.9 + seed + 43.1);
-                float3 warped = p + (float3(front, curl, 1 - front) - .5) * .13;
+                float3 warped = p + (float3(front, curl, 1 - front) - .5) * .08;
                 float cells = CelestialFbm(warped * 72 + seed, footprint * 72, 4);
+                // Billowed convective tops: rounded edges instead of smeared gradients.
+                float billow = 1 - abs(2 * CelestialFbm(warped * 31 + seed + 5.1, footprint * 31, 3) - 1);
                 float wisps = CelestialFbm(warped * 217 + seed + 9.3, footprint * 217, 3);
-                float field = front + (cells - .5) * .24 + (wisps - .5) * _DetailStrength * .13;
+                float field = front + (cells - .5) * .26 + (billow - .78) * .18 + (wisps - .5) * _DetailStrength * .15;
+                // Zonal climate: wet equatorial convergence, dry subtropics, stormy higher latitudes.
+                float y = abs(p.y);
+                field += .1 * exp(-y * y / .012) - .12 * exp(-(y - .45) * (y - .45) / .02) + .06 * exp(-(y - .75) * (y - .75) / .03) - .025;
                 float threshold = lerp(.79, .23, _Coverage);
-                return smoothstep(threshold - .055, threshold + .095, field);
+                float density = smoothstep(threshold - .03, threshold + .09, field);
+                return _Coverage > 0 ? density : 0;
             }
             half4 Frag(Varyings input) : SV_Target
             {

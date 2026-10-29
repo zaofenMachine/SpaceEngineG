@@ -32,7 +32,7 @@ namespace SpaceEngine.Runtime
             {
                 if(app==null||!app.ShowHud||Mouse.current==null)return false;
                 Vector2 p=Mouse.current.position.ReadValue();p=new Vector2(p.x*1600/Screen.width,(Screen.height-p.y)*900/Screen.height);
-                return (ShowTargetControls&&new Rect(330,96,900,90).Contains(p))||((SearchOpen||BookmarksOpen||ShowDetails)&&new Rect(330,198,900,600).Contains(p));
+                return (ShowTargetControls&&TargetBar.Contains(p))||((SearchOpen||BookmarksOpen||ShowDetails)&&new Rect(330,198,900,600).Contains(p));
             }
         }
         [Serializable] public sealed class ViewBookmark {public string Name,State,Utc;}
@@ -40,10 +40,13 @@ namespace SpaceEngine.Runtime
         UniverseApp app;OrbitOverlay orbits;Material orbitTemplate;
         readonly List<CelestialTarget> catalogue=new List<CelestialTarget>();readonly List<ViewBookmark> bookmarks=new List<ViewBookmark>();
         int catalogueSeed;long catalogueX,catalogueY,catalogueZ;StarSystemDefinition orbitSystem;
-        GUIStyle label,small,button,field,toggle;Vector2 searchScroll,bookmarkScroll;string addressText="",bookmarkName="";
+        GUIStyle label,small,field,toggle,labelText;Vector2 searchScroll,bookmarkScroll;string addressText="",bookmarkName="";
         public OrbitOverlay Orbits=>orbits;
         bool ShowTargetControls=>Target!=null&&!app.GalaxyOverview&&!app.NucleusView;
         readonly List<Rect> occupiedLabels=new List<Rect>();
+        static readonly Rect TargetBar=new Rect(440,58,720,68);
+        // Free view between the HUD groups, where body labels may be placed.
+        const float LabelLeft=268,LabelRight=1308,LabelTop=134,LabelBottom=824;
         void Awake()
         {
             app=GetComponent<UniverseApp>();
@@ -239,16 +242,14 @@ namespace SpaceEngine.Runtime
         }
         void Styles()
         {
-            if(label!=null)return;label=new GUIStyle(GUI.skin.label){font=ChineseText.Font,fontSize=15};label.normal.textColor=new Color(.76f,.86f,.9f);
-            small=new GUIStyle(label){fontSize=12};button=new GUIStyle(GUI.skin.button){font=ChineseText.Font,fontSize=14,alignment=TextAnchor.MiddleCenter,padding=new RectOffset(8,8,3,3)};
-            button.normal.background=button.hover.background=button.active.background=Texture2D.whiteTexture;
-            button.normal.textColor=label.normal.textColor;button.hover.textColor=Color.cyan;button.active.textColor=Color.white;
-            field=new GUIStyle(GUI.skin.textField){font=ChineseText.Font,fontSize=15,padding=new RectOffset(8,8,3,3)};
-            toggle=new GUIStyle(GUI.skin.toggle){font=ChineseText.Font,fontSize=15};toggle.normal.textColor=label.normal.textColor;toggle.onNormal.textColor=Color.cyan;
+            if(label!=null)return;label=new GUIStyle(HudSkin.Label){fontSize=15};
+            small=HudSkin.Small;field=HudSkin.Input;
+            labelText=new GUIStyle(HudSkin.Small);labelText.normal.textColor=HudSkin.Ink;
+            toggle=new GUIStyle(GUI.skin.toggle){font=ChineseText.Font,fontSize=14};toggle.normal.textColor=HudSkin.Ink;toggle.onNormal.textColor=HudSkin.Accent;
+            toggle.hover.textColor=Color.white;toggle.onHover.textColor=HudSkin.Accent;
         }
-        static void Panel(Rect rect){Color c=GUI.color;GUI.color=new Color(.025f,.055f,.075f,.96f);GUI.DrawTexture(rect,Texture2D.whiteTexture);GUI.color=c;}
-        bool Button(float x,float y,float w,string text)
-        {Color previous=GUI.backgroundColor;GUI.backgroundColor=new Color(.07f,.14f,.19f,.98f);bool clicked=GUI.Button(new Rect(x,y,w,29),text,button);GUI.backgroundColor=previous;return clicked;}
+        static void Panel(Rect rect)=>HudSkin.Panel(rect,.92f);
+        bool Button(float x,float y,float w,string text,bool on=false,bool left=false)=>HudSkin.Button(new Rect(x,y,w,29),text,on,left);
         void Text(float x,float y,float w,string text,bool tiny=false)=>GUI.Label(new Rect(x,y,w,29),text,tiny?small:label);
         void OnGUI()
         {
@@ -256,9 +257,17 @@ namespace SpaceEngine.Runtime
             if(ShowLabels)DrawLabels();
             if(ShowTargetControls)
             {
-                Panel(new Rect(330,96,900,90));Text(345,104,850,"目标："+Target.Name+"  /  "+(Target.IsStar?CatalogueFilter.StellarName(Target.System.Kind):CatalogueFilter.PlanetName(Target.Body.Kind))+"  /  距离 "+ExplorerHud.Distance(Target.Position(app.SimulationTime).RelativeTo(app.Observer).Length));
-                if(Button(345,143,105,"居中 C"))CenterOnTarget();if(Button(460,143,140,"连续飞往 G"))StartTargetFlight();if(Button(610,143,130,"跳转观察 F"))FrameTarget();
-                if(Button(750,143,130,TrackingTarget?"停止跟踪 Y":"跟踪目标 Y"))ToggleTracking();if(Button(890,143,125,ShowDetails?"关闭详情 F2":"天体详情 F2"))ToggleDetails();if(Button(1025,143,185,"恒星系总览 V"))FrameSystem();
+                var bar=TargetBar;HudSkin.Panel(bar,.6f);
+                HudSkin.Fill(new Rect(bar.x+14,bar.y+14,6,6),HudSkin.Accent);
+                GUI.Label(new Rect(bar.x+28,bar.y+5,bar.width-44,24),Target.Name+"   "+(Target.IsStar?CatalogueFilter.StellarName(Target.System.Kind):CatalogueFilter.PlanetName(Target.Body.Kind)),label);
+                GUI.Label(new Rect(bar.x+bar.width-260,bar.y+8,244,22),"距离 "+ExplorerHud.Distance(Target.Position(app.SimulationTime).RelativeTo(app.Observer).Length),new GUIStyle(small){alignment=TextAnchor.UpperRight});
+                float x=bar.x+20,y=bar.y+34;const float w=108,gap=6;
+                if(HudSkin.Button(new Rect(x,y,w,26),"居中 C"))CenterOnTarget();x+=w+gap;
+                if(HudSkin.Button(new Rect(x,y,w,26),"连续飞往 G",IsFlyingToTarget))StartTargetFlight();x+=w+gap;
+                if(HudSkin.Button(new Rect(x,y,w,26),"跳转观察 F"))FrameTarget();x+=w+gap;
+                if(HudSkin.Button(new Rect(x,y,w,26),TrackingTarget?"停止跟踪 Y":"跟踪目标 Y",TrackingTarget))ToggleTracking();x+=w+gap;
+                if(HudSkin.Button(new Rect(x,y,w,26),ShowDetails?"关闭详情 F2":"天体详情 F2",ShowDetails))ToggleDetails();x+=w+gap;
+                if(HudSkin.Button(new Rect(x,y,w,26),"恒星系总览 V"))FrameSystem();
             }
             if(SearchOpen)DrawSearch();else if(BookmarksOpen)DrawBookmarks();else if(ShowDetails&&Target!=null)DrawDetails();
         }
@@ -276,21 +285,21 @@ namespace SpaceEngine.Runtime
             if(IsLabelOccluded(i,pos))return;
             Vector3 point=app.ViewCamera.WorldToScreenPoint(OrbitOverlay.Project(pos,app.Observer,app.RenderScale));
             if(point.z<=0)return;float x=point.x*1600/Screen.width,y=(Screen.height-point.y)*900/Screen.height;
-            if(x<330||x>1220||y<205||y>786)return;
+            if(x<LabelLeft||x>LabelRight||y<LabelTop||y>LabelBottom)return;
             string text=(i<0?app.System.Name:app.System.Planets[i].Name)+(i>=0?" · "+CatalogueFilter.PlanetName(app.System.Planets[i].Kind):"");
             float width=Math.Min(300,small.CalcSize(new GUIContent(text)).x+14);
             for(int attempt=0;attempt<13;attempt++)
             {
                 float offset=attempt==0?0:((attempt+1)/2)*24*(attempt%2==1?1:-1);
-                var rect=new Rect(Math.Min(x+13,1228-width),y-10+offset,width,22);
-                if(rect.y<200||rect.yMax>796)continue;
+                var rect=new Rect(Math.Min(x+13,LabelRight-width),y-10+offset,width,22);
+                if(rect.y<LabelTop-4||rect.yMax>LabelBottom+4)continue;
                 bool overlaps=false;foreach(var used in occupiedLabels)if(used.Overlaps(rect)){overlaps=true;break;}if(overlaps)continue;
                 occupiedLabels.Add(new Rect(rect.x-3,rect.y-2,rect.width+6,rect.height+4));
-                Color color=GUI.color;GUI.color=new Color(.32f,.65f,.75f,.65f);
+                Color color=GUI.color;GUI.color=new Color(.5f,.8f,.88f,.5f);
                 var from=new Vector2(x,y);var end=new Vector2(rect.x+3,rect.center.y);var delta=end-from;var matrix=GUI.matrix;
                 GUI.matrix=matrix*Matrix4x4.TRS(new Vector3(x,y,0),Quaternion.Euler(0,0,Mathf.Atan2(delta.y,delta.x)*Mathf.Rad2Deg),Vector3.one);
                 GUI.DrawTexture(new Rect(0,0,delta.magnitude,1),Texture2D.whiteTexture);GUI.matrix=matrix;
-                GUI.color=color;Panel(rect);GUI.Label(new Rect(rect.x+6,rect.y+2,rect.width-10,20),text,small);return;
+                GUI.color=color;HudSkin.Panel(rect,.72f);GUI.Label(new Rect(rect.x+7,rect.y+2,rect.width-10,20),text,labelText);return;
             }
         }
         bool IsLabelOccluded(int body,UniversalPosition position)
@@ -314,7 +323,7 @@ namespace SpaceEngine.Runtime
             GUI.SetNextControlName("celestial-query");string query=GUI.TextField(new Rect(348,248,665,30),Filter.Query,field);
             if(query!=Filter.Query){Filter.Query=query;RefreshResults();}if(Button(1025,248,185,"刷新邻域目录"))RefreshCatalogue();
             string[] kinds={"全部","岩石","海洋","沙漠","冰冻","熔岩","气巨星","冰巨星"};
-            for(int i=0;i<kinds.Length;i++)if(Button(348+i*108,289,100,(Filter.PlanetKind==i-1?"● ":"")+kinds[i])){Filter.PlanetKind=i-1;RefreshResults();}
+            for(int i=0;i<kinds.Length;i++)if(Button(348+i*108,289,100,kinds[i],Filter.PlanetKind==i-1)){Filter.PlanetKind=i-1;RefreshResults();}
             bool land=GUI.Toggle(new Rect(348,332,170,26),Filter.LandableOnly,"只看可降落",toggle);
             bool ocean=GUI.Toggle(new Rect(530,332,150,26),Filter.OceanOnly,"具有海洋",toggle);
             bool atmosphere=GUI.Toggle(new Rect(698,332,150,26),Filter.AtmosphereOnly,"具有大气",toggle);
@@ -329,7 +338,7 @@ namespace SpaceEngine.Runtime
             for(int i=first;i<last;i++)
             {
                 var target=Results[i];float y=i*34;
-                if(Button(2,y,520,target.Name+" / "+(target.IsStar?CatalogueFilter.StellarName(target.System.Kind):CatalogueFilter.PlanetName(target.Body.Kind)))){Select(target);SearchOpen=false;GUI.FocusControl(null);}
+                if(Button(2,y,520,target.Name+"   "+(target.IsStar?CatalogueFilter.StellarName(target.System.Kind):CatalogueFilter.PlanetName(target.Body.Kind)),false,true)){Select(target);SearchOpen=false;GUI.FocusControl(null);}
                 Text(535,y+3,295,ExplorerHud.Distance(target.Position(app.SimulationTime).RelativeTo(app.Observer).Length),true);
             }
             GUI.EndScrollView();Text(348,710,500,"按单元地址添加（x,y,z）：",true);

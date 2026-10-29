@@ -142,28 +142,38 @@ Shader "SpaceEngine/GasGiant"
                 }
 
                 pixelFootprint = max(length(ddx(advected)), length(ddy(advected)));
-                float broad = CelestialFbm(advected * 6 + offset, pixelFootprint * 6, 3);
-                float shear = CelestialFbm(advected * 22 + offset + 61.2, pixelFootprint * 22, 4);
+                // Zonal flow shears turbulence into streaks: sample the domain stretched
+                // across latitude so structures are long in longitude and thin in latitude.
+                float3 zonal = float3(advected.x, advected.y * 4, advected.z);
+                float zonalFootprint = pixelFootprint * 4;
+                float broad = CelestialFbm(zonal * 3 + offset, zonalFootprint * 3, 3);
+                float shear = CelestialFbm(zonal * 9 + offset + 61.2, zonalFootprint * 9, 4);
                 float3 warped = normalize(advected + (float3(broad, shear,
-                    CelestialNoise(advected * 11 + offset + 31)) - .5) * _CloudTurbulence * .10);
+                    CelestialNoise(advected * 11 + offset + 31)) - .5) * _CloudTurbulence * .06);
                 float warpedFootprint = max(length(ddx(warped)), length(ddy(warped)));
                 float warpedLatitude = asin(clamp(warped.y, -.9999, .9999));
-                // Broad irregular belts contain feathered turbulent cells. Their
-                // contrast weakens toward the poles, where vortices dominate.
-                float phase = warpedLatitude * _BandCount * 1.25 + (shear - .5) * _CloudTurbulence * 8;
-                float belt = .5 + .5 * CelestialFilteredSin(phase);
+                // Belts and zones: a periodic jet structure whose boundaries are
+                // displaced by the sheared turbulence, plus a seeded tone per band.
+                float phase = warpedLatitude * _BandCount * 1.25 + (shear - .5) * _CloudTurbulence * 4.6 + (broad - .5) * 1.1;
+                // Jets give belts fairly sharp edges; steepen the profile without aliasing it.
+                float belt = smoothstep(.12, .88, .5 + .5 * CelestialFilteredSin(phase));
                 float subJet = CelestialFilteredSin(phase * 2.71 + shear * 5);
-                float cells = CelestialFbm(warped * 95 + offset, warpedFootprint * 95, 4);
+                float bandTone = CelestialNoise(float3(warpedLatitude * _BandCount * .55, _Seed * .13, 3.7));
+                float bandHue = CelestialNoise(float3(warpedLatitude * _BandCount * .38, _Seed * .29, 9.1));
+                float3 streakDomain = float3(warped.x * 28, warped.y * 240, warped.z * 28) + offset;
+                float streaks = CelestialFbm(streakDomain, warpedFootprint * 240, 4);
+                float cells = CelestialFbm(warped * 95 + offset, warpedFootprint * 95, 3);
                 float polar = smoothstep(.72, .97, abs(p.y));
-                float pattern = .56 + (belt - .5) * _BandContrast * lerp(.68, .16, polar);
-                pattern += (cells - .5) * (.75 + polar * .5) + subJet * .035;
-                pattern += (broad - .5) * .32 - stormEye * .20;
+                float pattern = .54 + (belt - .5) * _BandContrast * lerp(.95, .2, polar) * 1.15;
+                pattern += (bandTone - .5) * .42 * (1 - polar * .6);
+                pattern += (streaks - .5) * .44 + (cells - .5) * (.16 + polar * .45) + subJet * .05;
+                pattern += (broad - .5) * .12 - stormEye * .20;
                 // Bridge synoptic belts and kilometre cells with unresolved-to-
                 // mean mesoscale cloud structure. Near views should reveal a
                 // hierarchy, rather than a smooth brown plane between scales.
                 float meso = CelestialFbm(warped * 512 + offset + 73.1, warpedFootprint * 512, 3);
-                pattern += (meso - .5) * .6 * _DetailStrength;
-                pattern = lerp(pattern, .66 + (pattern - .5) * .38, _IceFraction);
+                pattern += (meso - .5) * .45 * _DetailStrength;
+                pattern = lerp(pattern, .64 + (pattern - .5) * .34, _IceFraction);
                 // Small cells continue down to a kilometre scale on approach;
                 // footprint filtering suppresses unresolved orbital detail.
                 float frequency = max(512, _DetailFrequency);
@@ -178,7 +188,8 @@ Shader "SpaceEngine/GasGiant"
                     frequency *= 2;
                     amplitude *= .62;
                 }
-                return float3(saturate(pattern + detail * _DetailStrength), stormMask, cells);
+                // z: seeded hue of the band (rusty belts versus pale zones), and polar haze in sign.
+                return float3(saturate(pattern + detail * _DetailStrength), stormMask, bandHue * (1 - belt * .55) - polar * .5);
             }
 
             float RingTransmission(float3 positionWS, float3 sun)
@@ -208,8 +219,14 @@ Shader "SpaceEngine/GasGiant"
                 float transmission = RingTransmission(hitWS, sun);
                 float3 directionOS = normalize(mul((float3x3)GetWorldToObjectMatrix(), normal));
                 float3 pattern = CloudPattern(directionOS);
-                float3 albedo = lerp(_DarkCloudColor.rgb, _LightCloudColor.rgb, smoothstep(.12, .88, pattern.x));
-                float3 warmVortex = lerp(albedo, float3(.67, .30, .16), .26 * (1 - _IceFraction));
+                float3 albedo = lerp(_DarkCloudColor.rgb, _LightCloudColor.rgb, smoothstep(.08, .92, pattern.x));
+                // Chromophore variation between bands (stronger in warm giants) and grey-blue polar haze.
+                float hue = saturate(pattern.z) * (1 - _IceFraction * .7);
+                // Colour concentrates in the darker belts; bright zones stay cream.
+                float beltWeight = 1 - smoothstep(.35, .75, pattern.x);
+                albedo = lerp(albedo, albedo * float3(1.25, .86, .6), hue * (.35 + .65 * beltWeight));
+                albedo = lerp(albedo, dot(albedo, float3(.3, .5, .2)) * float3(.86, .92, 1.02), saturate(-pattern.z) * .7);
+                float3 warmVortex = lerp(albedo, float3(.67, .30, .16), .3 * (1 - _IceFraction));
                 albedo = lerp(albedo, warmVortex, pattern.y);
                 float limb = pow(1 - saturate(dot(normal, view)), 3);
                 float softCloud = pow(saturate(dot(normal, SafeNormalize(sun + view))), lerp(48, 4, _Roughness));

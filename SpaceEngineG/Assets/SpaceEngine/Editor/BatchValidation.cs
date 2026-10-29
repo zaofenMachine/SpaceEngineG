@@ -28,5 +28,18 @@ namespace SpaceEngine.Editor
                 Debug.Log("V050_GRAPHICS_PASS "+checks[i,1]);
             }
         }
+        /// <summary>Runs every graphics check without stopping at the first failure, for local iteration.</summary>
+        public static void SurveyGraphics()
+        {
+            string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../../Artifacts/V050"));Directory.CreateDirectory(root);
+            string[] menus={"Validate Shaders","Validate Atmosphere Pixels","Validate Celestial Pixels","Validate Terrain Pixels","Validate Ground Terrain Pixels",
+                "Validate Ground Atmosphere Pixels","Validate Planet Cloud Pixels","Validate Gas Horizon Pixels","Validate Galaxy Pixels","Validate Galaxy Clarity",
+                "Validate Terrain LOD Pixels","Validate Chinese Glyph Pixels","Validate Terrain Loading Pixels"};
+            foreach(string menu in menus)
+            {
+                try{Debug.Log("GRAPHICS_SURVEY "+menu+" "+(EditorApplication.ExecuteMenuItem("Space Engine/"+menu)?"ran":"missing"));}
+                catch(Exception ex){Debug.Log("GRAPHICS_SURVEY "+menu+" threw "+ex.Message);}
+            }
+        }
     }
 }

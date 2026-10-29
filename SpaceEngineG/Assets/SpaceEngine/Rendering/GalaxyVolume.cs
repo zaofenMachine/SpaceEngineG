@@ -32,11 +32,16 @@ namespace SpaceEngine.Rendering
         public int RenderedHeight => radiance == null ? 0 : radiance.height;
         public int RenderRevision { get; private set; }
         public RenderTexture RadianceTexture => radiance;
+        /// <summary>When set, also integrate the whole sky (equirectangular, longitude in x) for off-screen lookups.</summary>
+        public bool RenderSkyMap;
+        public RenderTexture SkyMap => skyMap;
         public float LastSubmissionMilliseconds { get; private set; }
         public int EffectiveSampleCount { get; private set; }
 
         Material integration, composite;
-        RenderTexture radiance;
+        RenderTexture radiance, skyMap;
+        Vector3 previousSkyObserver;
+        int previousSkyParameters;
         Mesh mesh;
         MeshRenderer rendererComponent;
         Vector3 previousObserver;
@@ -107,6 +112,7 @@ namespace SpaceEngine.Rendering
             int samples = Mathf.Clamp(embedded ? Math.Max(SampleCount, InteriorSampleCount) : SampleCount, 32, 512);
             EffectiveSampleCount = samples;
             int definitionHash = DefinitionFingerprint(Definition);
+            if (RenderSkyMap) TickSkyMap(galacticObserver, samples, definitionHash);
             // Quaternion.operator== deliberately treats rotations within about 0.16 degrees
             // as equal. That is several display pixels and stalls a slowly moving sky.
             // Cache only an identical quaternion; true stationary views still reuse it.
@@ -153,6 +159,42 @@ namespace SpaceEngine.Rendering
             dirty = false;
         }
 
+        // The sky map depends on position only, so turning the camera never invalidates it.
+        void TickSkyMap(Vector3 galacticObserver, int samples, int definitionHash)
+        {
+            int parameters = HashCode.Combine(definitionHash, samples, Exposure, DustStrength, Contrast,
+                HashCode.Combine(InteriorExposureMultiplier, ExteriorExposureMultiplier, DetailStrength, DetailScaleLy, DustScaleHeightLy, DustAttenuationLengthLy));
+            if (skyMap != null && galacticObserver == previousSkyObserver && parameters == previousSkyParameters) return;
+            if (skyMap == null)
+            {
+                skyMap = new RenderTexture(512, 256, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear)
+                    { name = "Galactic emitted radiance (whole sky)", filterMode = FilterMode.Bilinear, wrapModeU = TextureWrapMode.Repeat, wrapModeV = TextureWrapMode.Clamp, useMipMap = false };
+                skyMap.Create();
+            }
+            SetDefinition(integration, Definition);
+            integration.SetVector("_ObserverLy", galacticObserver);
+            integration.SetVector("_ViewShape", new Vector4(Mathf.PI * .5f, 2, skyMap.width, skyMap.height));
+            integration.SetFloat("_Equirect", 1);
+            integration.SetFloat("_Exposure", Mathf.Max(0, Exposure));
+            integration.SetFloat("_InteriorExposure", Mathf.Clamp(InteriorExposureMultiplier, .01f, 2));
+            integration.SetFloat("_ExteriorExposure", Mathf.Clamp(ExteriorExposureMultiplier, .1f, 4));
+            integration.SetFloat("_Contrast", Mathf.Clamp(Contrast, 1, 3));
+            integration.SetFloat("_DustStrength", Mathf.Max(0, DustStrength));
+            integration.SetFloat("_DustScaleHeightLy", Mathf.Max(10, DustScaleHeightLy));
+            integration.SetFloat("_DustAttenuationLengthLy", Mathf.Max(1, DustAttenuationLengthLy));
+            integration.SetInt("_SampleCount", samples);
+            integration.SetFloat("_DetailStrength", Mathf.Clamp(DetailStrength, 0, 2));
+            integration.SetFloat("_DetailScaleLy", Mathf.Max(80, DetailScaleLy));
+            integration.SetFloat("_NearDetailDistanceLy", Mathf.Max(1000, NearDetailDistanceLy));
+            RenderTexture previousTarget = RenderTexture.active;
+            Graphics.Blit(Texture2D.blackTexture, skyMap, integration, 0);
+            RenderTexture.active = previousTarget;
+            integration.SetFloat("_Equirect", 0);
+            previousSkyObserver = galacticObserver; previousSkyParameters = parameters;
+            // The perspective pass shares this material; force it to restore its own view next.
+            dirty = true;
+        }
+
         static int DefinitionFingerprint(GalaxyDefinition galaxy)
         {
             var hash = new HashCode();
@@ -184,6 +226,7 @@ namespace SpaceEngine.Rendering
         {
             if (radiance == null) return;
             radiance.Release(); DestroyOwned(radiance); radiance = null;
+            if (skyMap != null) { skyMap.Release(); DestroyOwned(skyMap); skyMap = null; }
         }
         static void DestroyOwned(UnityEngine.Object value)
         {

@@ -62,11 +62,15 @@ namespace SpaceEngine.Runtime
         [Range(.005f,.2f)] public float SkirtDepthFactor = .08f;
         [Range(.25f,100)] public float MinimumSkirtDepth = 4;
         [Range(.01f,2)] public float NormalSampleDistance = .25f;
-        [Range(.01f, 1)] public float AmbientLight = .035f;
+        [Range(0, 1)] public float AmbientLight = .006f;
         [Range(0,8)] public float SunLightingExposure = 1.5f;
-        [Range(.1f, 8)] public float AtmosphereExposure = 1.6f;
+        [Range(.1f, 8)] public float AtmosphereExposure = 3f;
         public AtmosphereSettings Atmosphere = new AtmosphereSettings();
         [Range(.25f, 3)] public float StarBrightness = 1.2f;
+        [Range(0, 3)] public float StarfieldBrightness = 1;
+        [Range(.5f, 8)] public float StarSurfaceRadiance = 2.8f;
+        public bool PostProcessing = true;
+        [Range(0, 2)] public float BloomIntensity = .6f;
         [Range(.0001f,.002f)] public float StarMinimumAngularRadius = .00065f;
         [Range(.05f,.6f)] public float StarCoreRadius = .30f;
         [Range(40, 100)] public float FieldOfView = 60;

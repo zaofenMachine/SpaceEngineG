@@ -16,6 +16,8 @@ Shader "SpaceEngine/GalaxyVolumeComposite"
             #pragma fragment Frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             TEXTURE2D(_MainTex); SAMPLER(sampler_MainTex);
+            // Global, 0 unless an observer sits in a sunlit atmosphere.
+            float _SkyDaylight;
             struct Attributes { float3 positionOS:POSITION; float2 uv:TEXCOORD0; };
             struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
             Varyings Vert(Attributes input)
@@ -34,7 +36,7 @@ Shader "SpaceEngine/GalaxyVolumeComposite"
                 #endif
                 return output;
             }
-            half4 Frag(Varyings input):SV_Target { return half4(SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,input.uv).rgb,0); }
+            half4 Frag(Varyings input):SV_Target { return half4(SAMPLE_TEXTURE2D(_MainTex,sampler_MainTex,input.uv).rgb*(1-_SkyDaylight),0); }
             ENDHLSL
         }
     }

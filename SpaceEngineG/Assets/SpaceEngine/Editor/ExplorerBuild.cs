@@ -78,6 +78,16 @@ namespace SpaceEngine.Editor
             EditorSceneManager.OpenScene(ScenePath);EditorApplication.ExecuteMenuItem("Window/General/Game");
             SessionState.SetBool("SpaceEngine.VerifyExplorer",true);EditorApplication.isPlaying=true;
         }
+        /// <summary>Fast local build for art review (Builds/Dev). Leaves release evidence untouched.</summary>
+        [MenuItem("Space Engine/Build Dev Preview")]
+        public static void BuildDevPreview()
+        {
+            string root=Path.GetFullPath(Path.Combine(Application.dataPath,"../.."));
+            string output=Path.Combine(root,"Builds/Dev/SpaceEngineG.exe");Directory.CreateDirectory(Path.GetDirectoryName(output));
+            var result=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{ScenePath},locationPathName=output,target=BuildTarget.StandaloneWindows64,options=BuildOptions.None});
+            Debug.Log("SPACE_ENGINE_DEV_BUILD "+result.summary.result+" "+result.summary.totalTime.TotalSeconds.ToString("F1")+"s errors="+result.summary.totalErrors);
+            if(result.summary.result!=BuildResult.Succeeded)throw new InvalidOperationException("Dev preview build failed");
+        }
         [MenuItem("Space Engine/Build Windows Explorer")]
         public static void BuildWindows()
         {

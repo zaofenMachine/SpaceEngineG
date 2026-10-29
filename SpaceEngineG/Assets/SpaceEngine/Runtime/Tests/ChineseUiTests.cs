@@ -45,7 +45,7 @@ namespace SpaceEngine.Runtime.Tests
         [TestCase("HOLDING ABOVE CLOUDS / NON-LANDABLE")]
         [TestCase("LANDED / TERRAIN FOLLOW")]
         [TestCase("Flight saved / F9 restore")]
-        [TestCase("CENTRAL BLACK HOLE / geometric horizon; no relativistic lensing")]
+        [TestCase("CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk")]
         public void SimulationStatusIsLocalizedAtTheDisplayBoundary(string original)
         {
             string translated=ChineseText.Display(original);
@@ -56,7 +56,8 @@ namespace SpaceEngine.Runtime.Tests
         public void DynamicNoticesKeepAddressesButTranslateTheUserFacingMessage()
         {
             Assert.That(ChineseText.Display("Streamed SEG-TEST; observer position retained"),Is.EqualTo("已载入恒星系 SEG-TEST，观察者坐标保持不变"));
-            Assert.That(ChineseText.Display("STELLAR REFERENCE / BlueMainSequence / no relativistic lensing"),Does.Contain("蓝色主序星"));
+            Assert.That(ChineseText.Display("STELLAR REFERENCE / BlueMainSequence"),Does.Contain("蓝色主序星"));
+            Assert.That(ChineseText.Display("STELLAR REFERENCE / BlackHole"),Does.Contain("引力透镜"));
             Assert.That(ChineseText.Display("PARENT-RELATIVE MOON / Lava"),Is.EqualTo("母星相对卫星 / 熔岩天体"));
             Assert.That(ChineseText.Display("Restore failed: Invalid orientation"),Does.StartWith("恢复失败："));
             Assert.That(ChineseText.Display("已选中目标"),Is.EqualTo("已选中目标"));

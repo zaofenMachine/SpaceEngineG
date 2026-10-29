@@ -37,6 +37,7 @@ Shader "SpaceEngine/GalaxyVolume"
                 float _InteriorExposure,_ExteriorExposure,_Contrast;
                 float _YoungArmStartBarFraction,_YoungArmFullBarFraction;
                 float _DetailStrength,_DetailScaleLy,_NearDetailDistanceLy;
+                float _Equirect;
                 int _SampleCount;
             CBUFFER_END
             struct Attributes { float3 positionOS:POSITION; float2 uv:TEXCOORD0; };
@@ -60,7 +61,8 @@ Shader "SpaceEngine/GalaxyVolume"
             }
             float Clumps(float3 p)
             {
-                p=p/1300+_SeedOffset.xyz;
+                // Clouds in a thin disc are sheets: flattened vertically, extended in the plane.
+                p=float3(p.x,p.y*2.2,p.z)/1300+_SeedOffset.xyz;
                 return .57*Noise(p)+.29*Noise(p*2.13+17.4)+.14*Noise(p*4.37+39.1);
             }
             float Wrapped(float phase) { return phase-6.28318530718*floor((phase+3.14159265359)/6.28318530718); }
@@ -115,13 +117,13 @@ Shader "SpaceEngine/GalaxyVolume"
                     float resolved=saturate((detailScale-footprintLy)/(detailScale*.75))*_DetailStrength;
                     if(resolved>.001)
                     {
-                        float3 detailPoint=p/detailScale+_SeedOffset.xyz*2.17;
+                        float3 detailPoint=float3(p.x,p.y*2.8,p.z)/detailScale+_SeedOffset.xyz*2.17;
                         detailPoint+=float3(.71,-.39,.93)*(clump-.5)*2.4;
                         float fine=Noise(detailPoint);
                         float filamentWidth=.025+min(.2,footprintLy/(detailScale*4));
                         float filament=1-smoothstep(filamentWidth,filamentWidth+.075,abs(fine-.5));
                         float association=smoothstep(.43,.78,Noise(detailPoint*.71+23.17));
-                        float fineDust=.3+2.65*filament*filament;
+                        float fineDust=.4+2.1*filament*filament;
                         float compactLight=.24+2.7*association*association;
                         dust*=max(.05,lerp(1,fineDust,resolved));
                         arm*=max(.05,lerp(1,compactLight,resolved));
@@ -197,8 +199,17 @@ Shader "SpaceEngine/GalaxyVolume"
             }
             half4 Frag(Varyings input):SV_Target
             {
-                float2 plane=(input.uv*2-1)*float2(_ViewShape.x*_ViewShape.y,_ViewShape.x);
-                float3 direction=normalize(_ViewForward.xyz+plane.x*_ViewRight.xyz+plane.y*_ViewUp.xyz);
+                float3 direction;
+                if(_Equirect>.5)
+                {
+                    float longitude=(input.uv.x*2-1)*PI,latitude=(input.uv.y-.5)*PI;
+                    direction=float3(cos(latitude)*cos(longitude),sin(latitude),cos(latitude)*sin(longitude));
+                }
+                else
+                {
+                    float2 plane=(input.uv*2-1)*float2(_ViewShape.x*_ViewShape.y,_ViewShape.x);
+                    direction=normalize(_ViewForward.xyz+plane.x*_ViewRight.xyz+plane.y*_ViewUp.xyz);
+                }
                 float3 origin=_ObserverLy.xyz;
                 float3 result=0,transmittance=1;
                 float start,end;

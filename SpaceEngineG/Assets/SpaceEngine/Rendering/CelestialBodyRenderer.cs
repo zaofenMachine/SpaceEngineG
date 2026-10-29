@@ -25,7 +25,7 @@ namespace SpaceEngine.Rendering
         [Range(0, 2)] public float DifferentialWindRate = .12f;
         [Range(0, 3)] public float RingOpticalDepth = .8f;
         [Range(0, 8)] public float SunIntensity = 1.5f;
-        [Range(0, .3f)] public float AmbientFloor = .025f;
+        [Range(0, .3f)] public float AmbientFloor = .005f;
         public Color SunColor = new Color(1, .96f, .88f);
         public bool ShowRenderer = true;
 
