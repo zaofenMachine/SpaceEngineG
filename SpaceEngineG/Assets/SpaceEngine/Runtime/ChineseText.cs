@@ -75,6 +75,7 @@ namespace SpaceEngine.Runtime
             {"GALACTIC EDGE / spatial disk thickness","银河侧视 / 观察盘面厚度"},
             {"GALAXY OVERVIEW / M to frame / Home to return","银河总览 / M 重新定位 / Home 返回起点"},
             {"CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk","中央黑洞 / 史瓦西引力透镜，无吸积盘"},
+            {"CENTRAL BLACK HOLE / Schwarzschild lensing and accretion disk","中央黑洞 / 史瓦西引力透镜与吸积盘"},
             {"Flight saved / F9 restore","飞行状态已保存 / F9 恢复"},{"Flight restored","飞行状态已恢复"},
             {"No generation v2 saved flight","尚无第 2 代生成器的飞行存档"},
             {"Generation v1 save retained; open it with the 0.1.0 build.","第 1 代存档已保留，请使用 0.1.0 版本读取。"},

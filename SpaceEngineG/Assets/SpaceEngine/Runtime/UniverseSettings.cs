@@ -71,6 +71,9 @@ namespace SpaceEngine.Runtime
         [Range(.5f, 8)] public float StarSurfaceRadiance = 2.8f;
         public bool PostProcessing = true;
         [Range(0, 2)] public float BloomIntensity = .6f;
+        public bool CentralAccretionDisk = true;
+        [Range(0, 20)] public float AccretionDiskRadiance = 2.5f;
+        [Range(6, 40)] public float AccretionDiskOuterRadius = 14;
         [Range(.0001f,.002f)] public float StarMinimumAngularRadius = .00065f;
         [Range(.05f,.6f)] public float StarCoreRadius = .30f;
         [Range(40, 100)] public float FieldOfView = 60;

@@ -46,6 +46,7 @@ namespace SpaceEngine.Runtime.Tests
         [TestCase("LANDED / TERRAIN FOLLOW")]
         [TestCase("Flight saved / F9 restore")]
         [TestCase("CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk")]
+        [TestCase("CENTRAL BLACK HOLE / Schwarzschild lensing and accretion disk")]
         public void SimulationStatusIsLocalizedAtTheDisplayBoundary(string original)
         {
             string translated=ChineseText.Display(original);

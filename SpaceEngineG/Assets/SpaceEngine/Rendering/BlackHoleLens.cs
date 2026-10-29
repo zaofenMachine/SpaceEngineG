@@ -37,6 +37,21 @@ namespace SpaceEngine.Rendering
 
         /// <param name="centre">Camera-relative render-space position of the hole.</param>
         /// <param name="schwarzschildRadius">Horizon radius in the same render units.</param>
+        public bool Visible => rendererComponent != null && rendererComponent.enabled;
+
+        /// <summary>
+        /// Optional thin accretion disk, traced through the lens. Radii are in Schwarzschild radii;
+        /// the normal also sets the prograde rotation sense. This is an appearance model of a
+        /// Shakura-Sunyaev disk (temperature profile, Doppler and gravitational shifts), not MHD.
+        /// </summary>
+        public void SetDisk(bool enabled, Vector3 normal, float innerRadius, float outerRadius, float radiance, float time)
+        {
+            if (material == null) return;
+            Vector3 n = normal.sqrMagnitude > 0 ? normal.normalized : Vector3.up;
+            material.SetVector("_DiskNormal", new Vector4(n.x, n.y, n.z, enabled ? 1 : 0));
+            material.SetVector("_DiskShape", new Vector4(Mathf.Max(1.5f, innerRadius), Mathf.Max(innerRadius + .5f, outerRadius), Mathf.Max(0, radiance), time));
+        }
+
         public void Tick(bool visible, Vector3 centre, float schwarzschildRadius, Camera camera)
         {
             if (material == null) return;

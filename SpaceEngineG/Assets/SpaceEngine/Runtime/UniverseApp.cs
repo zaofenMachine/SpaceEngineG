@@ -67,6 +67,7 @@ namespace SpaceEngine.Runtime
         Material galaxyVolumeMaterial,galaxyCompositeMaterial,cloudMaterial;
         GameObject nucleusObject;
         StarGlow starGlow;
+        MeshRenderer starRenderer,nucleusRenderer;
         Bloom bloom;
         BlackHoleLens systemLens,nucleusLens;
         static readonly int SkyDaylight=Shader.PropertyToID("_SkyDaylight");
@@ -130,10 +131,10 @@ namespace SpaceEngine.Runtime
             nucleusLens=new GameObject("Central black hole lens").AddComponent<BlackHoleLens>();nucleusLens.Configure(Resources.Load<Material>("BlackHoleLens"));
             starObject=new GameObject("Procedural stellar photosphere");
             starMesh=CreateStarMesh(); starObject.AddComponent<MeshFilter>().sharedMesh=starMesh;
-            starObject.AddComponent<MeshRenderer>().sharedMaterial=starMaterial;
+            starRenderer=starObject.AddComponent<MeshRenderer>();starRenderer.sharedMaterial=starMaterial;
             nucleusMaterial=new Material(starMaterial);nucleusMaterial.SetColor("_BaseColor",Color.black);nucleusMaterial.SetFloat("_Intensity",0);
             nucleusObject=new GameObject("Central black hole - Schwarzschild reference horizon");
-            nucleusObject.AddComponent<MeshFilter>().sharedMesh=starMesh;nucleusObject.AddComponent<MeshRenderer>().sharedMaterial=nucleusMaterial;
+            nucleusObject.AddComponent<MeshFilter>().sharedMesh=starMesh;nucleusRenderer=nucleusObject.AddComponent<MeshRenderer>();nucleusRenderer.sharedMaterial=nucleusMaterial;
             LoadSystem(0,0,0);
             FramePlanet(0,Settings.InitialAltitude);
             Tools=gameObject.AddComponent<ExplorerTools>();
@@ -508,7 +509,7 @@ namespace SpaceEngine.Runtime
             StopNavigation();GalaxyOverview=false;NucleusView=true;StellarView=false;
             Double3 offset=new Double3(0,5,20)*NucleusRadius;
             SetObserver(GalaxyModel.Center(Settings.Galaxy).Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));
-            StreamNearestSystem();Notice="CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk";
+            StreamNearestSystem();Notice=Settings.CentralAccretionDisk?"CENTRAL BLACK HOLE / Schwarzschild lensing and accretion disk":"CENTRAL BLACK HOLE / Schwarzschild lensing, no accretion disk";
         }
 
         void UpdateTelemetry()
@@ -561,6 +562,8 @@ namespace SpaceEngine.Runtime
             starGlow.Tick(detailed&&!blackHole&&System.StarLuminosity>0,starObject.transform.position,starObject.transform.localScale.x,photosphere,ViewCamera,System.Seed);
             bool systemLensVisible=detailed&&blackHole;
             systemLens.Tick(systemLensVisible,starObject.transform.position,starObject.transform.localScale.x,ViewCamera);
+            // The lens draws the shadow itself; an opaque horizon sphere would hide the disk in front of it.
+            starRenderer.enabled=!systemLens.Visible;
             Daylight=atmosphere.enabled?AtmosphericDaylight():0;
             Shader.SetGlobalFloat(SkyDaylight,Daylight*.97f);
             Stars.Visibility=1-Daylight*.97f;
@@ -572,7 +575,10 @@ namespace SpaceEngine.Runtime
             GalacticLight.SampleCount=Settings.GalaxyVolumeSamples;GalacticLight.DustStrength=Settings.GalaxyDustStrength;
             GalacticLight.InteriorSampleCount=Settings.GalaxyInteriorSamples;GalacticLight.DetailStrength=Settings.GalaxyDetailStrength;
             GalacticLight.DetailScaleLy=Settings.GalaxyDetailScaleLy;GalacticLight.NearDetailDistanceLy=Settings.GalaxyNearDetailDistanceLy;
-            GalacticLight.InteriorExposureMultiplier=Settings.GalaxyInteriorExposure;GalacticLight.ExteriorExposureMultiplier=Settings.GalaxyExteriorExposure;
+            // Eye adaptation to the local stellar density: the bulge and nucleus are tens of times
+            // denser than the solar neighbourhood and would otherwise saturate into a uniform glow.
+            float densityRatio=(float)(LocalStellarDensity/Math.Max(1e-12,Settings.Galaxy.LocalNumberDensityPerCubicParsec));
+            GalacticLight.InteriorExposureMultiplier=Settings.GalaxyInteriorExposure/Mathf.Pow(Mathf.Max(1,densityRatio),.6f);GalacticLight.ExteriorExposureMultiplier=Settings.GalaxyExteriorExposure;
             GalacticLight.Contrast=Settings.GalaxyContrast;
             GalacticLight.DustScaleHeightLy=Settings.GalaxyDustScaleHeightLy;GalacticLight.DustAttenuationLengthLy=Settings.GalaxyDustAttenuationLengthLy;
             Double3 coreFrom=GalaxyModel.Center(Settings.Galaxy).RelativeTo(Observer);
@@ -586,7 +592,11 @@ namespace SpaceEngine.Runtime
             Starfield.Tick(Observer,ViewCamera,GalacticLight.RadianceTexture);
             double coreScale=RenderScale*ProxyScale(coreFrom.Length*RenderScale);
             nucleusObject.transform.position=(coreFrom*coreScale).ToVector3();nucleusObject.transform.localScale=Vector3.one*(float)(NucleusRadius*coreScale);
+            // Sgr A*-like central hole: a thin disk, tilted slightly from the galactic plane.
+            double lightCrossing=NucleusRadius/PhysicalConstants.SpeedOfLight;
+            nucleusLens.SetDisk(Settings.CentralAccretionDisk,new Vector3(.12f,1,.06f),3,Settings.AccretionDiskOuterRadius,Settings.AccretionDiskRadiance,(float)(SimulationTime/lightCrossing%20000));
             nucleusLens.Tick(nucleusLensVisible,nucleusObject.transform.position,nucleusObject.transform.localScale.x,ViewCamera);
+            nucleusRenderer.enabled=!nucleusLens.Visible;
         }
 
         /// <summary>How strongly a sunlit sky washes out the stars, from altitude in the atmosphere and solar elevation.</summary>
