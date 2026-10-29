@@ -214,21 +214,37 @@ Shader "SpaceEngine/GalaxyVolume"
                 // Nearby dust dominates foreground extinction for an embedded
                 // observer. Resolve that finite physical region instead of wasting
                 // uniform samples over the entire far side of a 100 kly disk.
+                // Sample counts and spacing must vary continuously with the ray direction: any
+                // branch that switches allocation at some elevation changes the step size, hence the
+                // footprint filter, and prints a straight seam along the band. A segment that ends
+                // before the split simply leaves its far samples on an empty interval.
                 float split=clamp(_NearDetailDistanceLy,start,end);
-                if(count>=24&&start<_NearDetailDistanceLy&&split>start+1&&end>split+1)
+                if(count>=24&&start<_NearDetailDistanceLy)
                 {
                     int nearCount=max(16,(int)(count*.65));
                     nearCount=min(count-8,nearCount);
                     March(origin,direction,start,split,nearCount,start<1?4.5:0,result,transmittance);
                     March(origin,direction,split,end,count-nearCount,0,result,transmittance);
                 }
-                else March(origin,direction,start,end,count,0,result,transmittance);
+                else March(origin,direction,start,end,count,start<1?4.5:0,result,transmittance);
             }
             float HaloDensity(float3 p)
             {
                 float sphere=length(p);
                 return .002*pow((_CentralScales.w+_CentralScales.x)/(sphere+_CentralScales.x),3)*
                     (1-smoothstep(_HaloRadiusLy*.8,_HaloRadiusLy,sphere));
+            }
+            // Halo emission over [a, b], spaced geometrically from a (the density falls as r^-3).
+            float HaloSegment(float3 origin,float3 direction,float a,float b,int count)
+            {
+                if(b<=a)return 0;
+                float span=b-a,sum=0,scale=1/(exp(3.0)-1);
+                [loop]for(int j=0;j<count;j++)
+                {
+                    float t0=(exp(3.0*j/count)-1)*scale,t1=(exp(3.0*(j+1)/count)-1)*scale;
+                    sum+=HaloDensity(origin+direction*(a+span*(t0+t1)*.5))*span*(t1-t0);
+                }
+                return sum;
             }
             half4 Frag(Varyings input):SV_Target
             {
@@ -248,7 +264,8 @@ Shader "SpaceEngine/GalaxyVolume"
                 float start,end;
                 float height=max(_DiskScales.w*5,max(_CentralScales.x*.65,_CentralScales.y*.3));
                 float3 extent=float3(_DiskScales.x,height,_DiskScales.x);
-                if(BoxInterval(origin,direction,extent,start,end))
+                bool inBox=BoxInterval(origin,direction,extent,start,end);
+                if(inBox)
                 {
                     float splitStart=start,splitEnd=end;
                     // Explicitly allocate most samples to the thin dust slab. Uniform steps
@@ -260,7 +277,19 @@ Shader "SpaceEngine/GalaxyVolume"
                         splitStart=clamp(min(a,b),start,end);splitEnd=clamp(max(a,b),start,end);
                     }
                     int outer=max(8,_SampleCount/5),inner=max(16,_SampleCount-outer*2);
-                    if(splitEnd-splitStart<.001||(splitStart==start&&splitEnd==end))MarchRange(origin,direction,start,end,_SampleCount,result,transmittance);
+                    if(abs(origin.y)<_DustScaleHeightLy*5)
+                    {
+                        // Embedded observer: every ray starts inside the slab. Fixed budgets keep the
+                        // allocation continuous in direction; switching to a single march for rays that
+                        // never leave the slab changed the step size at one elevation and printed a
+                        // straight seam along the band.
+                        MarchRange(origin,direction,start,splitEnd,inner+outer,result,transmittance);
+                        // The tail starts where the ray leaves the slab, which varies with elevation;
+                        // MarchRange would switch its near/far split as that start crosses the near
+                        // distance, so the tail is marched uniformly.
+                        March(origin,direction,splitEnd,end,outer,0,result,transmittance);
+                    }
+                    else if(splitEnd-splitStart<.001||(splitStart==start&&splitEnd==end))MarchRange(origin,direction,start,end,_SampleCount,result,transmittance);
                     else
                     {
                         MarchRange(origin,direction,start,splitStart,outer,result,transmittance);
@@ -271,18 +300,16 @@ Shader "SpaceEngine/GalaxyVolume"
                 // The very faint, optically thin outer stellar halo has a separate 16-step
                 // integral, avoiding 300 kly empty spans in the high-quality thin-disk budget.
                 float projection=dot(origin,direction),disc=projection*projection-dot(origin,origin)+_HaloRadiusLy*_HaloRadiusLy;
+                // Only the intervals outside the box are integrated here (inside it the halo is part of
+                // Population). Testing each fixed sample against the box instead made whole samples
+                // switch on at particular elevations: straight seams along the band.
                 if(disc>0)
                 {
                     float root=sqrt(disc),nearHalo=max(0,-projection-root),farHalo=-projection+root;
-                    if(farHalo>nearHalo)
-                    {
-                        float haloStep=(farHalo-nearHalo)/16;
-                        [unroll]for(int j=0;j<16;j++)
-                        {
-                            float3 p=origin+direction*(nearHalo+(j+.5)*haloStep);
-                            if(any(abs(p)>extent))result+=HaloDensity(p)*float3(.65,.72,1)*haloStep*_PopulationScale/15000;
-                        }
-                    }
+                    float halo=inBox?HaloSegment(origin,direction,nearHalo,min(start,farHalo),4)+
+                        HaloSegment(origin,direction,max(end,nearHalo),farHalo,12):
+                        HaloSegment(origin,direction,nearHalo,farHalo,16);
+                    result+=halo*float3(.65,.72,1)*_PopulationScale/15000;
                 }
                 // An observer embedded in the stellar disk has a much brighter local
                 // integrated foreground than an exterior view. A continuous display
