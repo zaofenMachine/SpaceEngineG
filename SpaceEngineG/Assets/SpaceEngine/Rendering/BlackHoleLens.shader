@@ -77,7 +77,7 @@ Shader "SpaceEngine/BlackHoleLens"
                 float3 screen=SAMPLE_TEXTURE2D_LOD(_GalaxyRadiance,sampler_GalaxyRadiance,saturate(uv),0).rgb;
                 float3 galaxy=lerp(SkyMap(direction),screen,onScreen);
                 float luminance=dot(galaxy,float3(.2126,.7152,.0722));
-                return galaxy*(1-_SkyDaylight)+Starfield(direction,luminance);
+                return galaxy*(1-_SkyDaylight)+Starfield(direction,luminance)+DistantGalaxies(direction,luminance)*_StarfieldOptics.y;
             }
 
             float DiskHash(float3 p)

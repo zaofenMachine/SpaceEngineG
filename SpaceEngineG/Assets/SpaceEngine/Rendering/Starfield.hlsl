@@ -102,6 +102,69 @@ float3 StarfieldSeeded(float3 d, uint seed, float density)
     return c;
 }
 
+
+// ---- Distant galaxies: a sparse visual backdrop. The simulation models only the home galaxy;
+// these sprites have directions and shapes but no positions, catalogue entries or physics. ----
+float3 GalaxySprite(float3 d, float3 centre, float angularRadius, float axisRatio, float positionAngle,
+    float spiral, float brightness, float pixel)
+{
+    float cosine = dot(d, centre);
+    if (cosine < .9) return 0;
+    // Keep tiny galaxies at least a couple of pixels wide, conserving their flux.
+    float radius = max(angularRadius, pixel * 1.6);
+    brightness *= (angularRadius / radius) * (angularRadius / radius);
+    float3 up = abs(centre.y) < .95 ? float3(0, 1, 0) : float3(1, 0, 0);
+    float3 east = normalize(cross(up, centre)), north = cross(centre, east);
+    float2 xy = float2(dot(d, east), dot(d, north)) / radius;
+    float c = cos(positionAngle), s = sin(positionAngle);
+    xy = float2(c * xy.x - s * xy.y, s * xy.x + c * xy.y);
+    xy.y /= max(.12, axisRatio);
+    float r = length(xy);
+    if (r > 3.5) return 0;
+    float disk = exp(-r * 3);
+    float core = exp(-r * r * 40) * 1.6;
+    float arms = 1;
+    if (spiral > .5)
+    {
+        float theta = atan2(xy.y, xy.x);
+        float wave = .5 + .5 * sin(2 * theta - 7 * log(max(.04, r)) + spiral * 3.1);
+        arms = .45 + .9 * wave * wave;
+    }
+    float3 diskColor = spiral > .5 ? float3(.78, .84, 1) : float3(1, .86, .7);
+    return (diskColor * disk * arms + float3(1, .88, .7) * core) * brightness;
+}
+
+float3 DistantGalaxies(float3 d, float bandLuminance)
+{
+    float pixel = _StarfieldOptics.x;
+    float3 color = 0;
+    uint face; float2 uv;
+    StarfieldFace(d, face, uv);
+    const float cells = 9;
+    float2 grid = (atan(uv) * (4.0 / PI) * .5 + .5) * cells;
+    int2 base = (int2)floor(grid);
+    [loop] for (int y = -1; y <= 1; y++)
+    [loop] for (int x = -1; x <= 1; x++)
+    {
+        int2 cell = base + int2(x, y);
+        if (any(cell < 0) || any(cell >= (int)cells)) continue;
+        uint h = StarfieldHash(uint3(cell, face * 131u + 977u));
+        if (StarfieldUnit(h) > .42) continue;
+        uint h2 = StarfieldHash(uint3(h, cell.y, 3u)), h3 = StarfieldHash(uint3(h2, cell.x, 5u));
+        float2 jitter = float2(StarfieldUnit(h2), StarfieldUnit(h3)) * .7 + .15;
+        float3 centre = StarfieldDirection(face, tan(((cell + jitter) / cells * 2 - 1) * (PI / 4.0)));
+        float size = StarfieldUnit(h3 ^ 0x68e31da4u);
+        float angularRadius = .0004 + .0045 * size * size * size;
+        color += GalaxySprite(d, centre, angularRadius, .2 + .8 * StarfieldUnit(h ^ 0x1b56c4e9u),
+            StarfieldUnit(h2 ^ 0x2545f491u) * 6.283, StarfieldUnit(h3 ^ 0x9e3779b9u) > .35 ? 1 + StarfieldUnit(h) : 0,
+            .05 + .25 * StarfieldUnit(h2 ^ 0x51ed27u), pixel);
+    }
+    // One large, nearby inclined spiral (an Andromeda-like neighbour) away from the band.
+    color += GalaxySprite(d, normalize(float3(.62, -.34, .71)), .026, .3, .55, 1.4, 1.1, pixel);
+    // The home galaxy's dust hides what lies behind its bright band.
+    return color * (1 - saturate(bandLuminance * 2.2));
+}
+
 float3 Starfield(float3 direction, float bandLuminance)
 {
     float density = StarfieldDensity(bandLuminance);

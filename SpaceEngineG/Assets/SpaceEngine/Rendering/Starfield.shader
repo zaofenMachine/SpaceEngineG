@@ -40,7 +40,7 @@ Shader "SpaceEngine/Starfield"
                 float3 direction=normalize(nearWorld-_WorldSpaceCameraPos);
                 float3 band=SAMPLE_TEXTURE2D_LOD(_GalaxyRadiance,sampler_GalaxyRadiance,input.uv,0).rgb;
                 float luminance=dot(band,float3(.2126,.7152,.0722));
-                return half4(Starfield(direction,luminance),0);
+                return half4(Starfield(direction,luminance)+DistantGalaxies(direction,luminance)*_StarfieldOptics.y,0);
             }
             ENDHLSL
         }

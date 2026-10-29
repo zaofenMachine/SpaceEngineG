@@ -48,7 +48,8 @@ namespace SpaceEngine.Rendering
             Double3 galactic = GalaxyModel.ToGalacticLy(observer, definition);
             double ratio = GalaxyModel.SampleDensity(galactic, definition) / homeDensity;
             GlobalDensity = (float)Math.Min(1.6, Math.Pow(Math.Max(0, ratio), .4));
-            rendererComponent.enabled = ShowField && isActiveAndEnabled && GlobalDensity * Visibility > .002f;
+            // Distant galaxies stay visible outside the home galaxy, where local star counts vanish.
+            rendererComponent.enabled = ShowField && isActiveAndEnabled && Visibility > .002f;
 
             // Region seeds: the nearest region border fades into its neighbour over 10% of a region.
             Double3 cell = galactic / RegionSizeLy;
