@@ -3,6 +3,8 @@ using System.Collections;
 using System.IO;
 using SpaceEngine.Core;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace SpaceEngine.Runtime
 {
@@ -21,7 +23,8 @@ namespace SpaceEngine.Runtime
             "10-gas-giant","11-gas-giant-close","12-ice-giant","13-rocky","14-lava",
             "15-sky-galactic-centre","16-sky-along-plane","17-sky-high-latitude","18-star-close","19-star-behind-planet",
             "20-star-redgiant","20-star-bluemainsequence","20-star-whitedwarf","20-star-blackhole",
-            "21-galaxy-oblique","22-galaxy-edge","23-galaxy-near","24-galaxy-hud","25-galactic-nucleus","26-nucleus-disk-edge"};
+            "21-galaxy-oblique","22-galaxy-edge","23-galaxy-near","24-galaxy-hud","25-galactic-nucleus","26-nucleus-disk-edge",
+            "27-ground-closeup","28-rocky-ground","29-ice-ground"};
         /// <summary>Names of the most recent <see cref="Shoot"/> request once it has finished.</summary>
         public static string Completed {get;private set;}
 
@@ -145,6 +148,9 @@ namespace SpaceEngine.Runtime
                     app.SetObserver(GalaxyModel.Center(app.Settings.Galaxy).Add(offset),Quaternion.LookRotation((-offset).ToVector3(),Vector3.up));
                     yield return Settle(100);break;
                 }
+                case "27-ground-closeup":if(ocean<0)yield break;yield return Surface(ocean,40,-24f,.05);yield return SettleTerrain();break;
+                case "28-rocky-ground":{int rocky=Find(PlanetKind.Rocky);if(rocky<0)yield break;yield return Surface(rocky,55,-8f);yield return SettleTerrain();break;}
+                case "29-ice-ground":{int ice=Find(PlanetKind.Ice);if(ice<0)yield break;yield return Surface(ice,60,-6f);yield return SettleTerrain();break;}
                 default:Debug.LogWarning("Unknown showcase shot "+shot);yield break;
             }
             framed();
@@ -240,12 +246,15 @@ namespace SpaceEngine.Runtime
             var previous=RenderTexture.active;
             camera.targetTexture=target;
             // Size-dependent layers (galaxy radiance, starfield pixel scale) follow the target.
-            app.RenderUniverse();camera.Render();
+            app.RenderUniverse();
+            var request=new UniversalRenderPipeline.SingleCameraRequest{destination=target};
+            if(RenderPipeline.SupportsRenderRequest(camera,request))RenderPipeline.SubmitRenderRequest(camera,request);else camera.Render();
             RenderTexture.active=target;
             var image=new Texture2D(1600,900,TextureFormat.RGB24,false,false);
             image.ReadPixels(new Rect(0,0,1600,900),0,0);image.Apply();
             camera.targetTexture=null;RenderTexture.active=previous;
             File.WriteAllBytes(path,image.EncodeToPNG());
+            Debug.Log("SHOWCASE_CAPTURE "+name+" observer="+app.Observer+" forward="+camera.transform.forward.ToString("F3"));
             Destroy(image);target.Release();Destroy(target);
             app.RenderUniverse();
             yield return null;

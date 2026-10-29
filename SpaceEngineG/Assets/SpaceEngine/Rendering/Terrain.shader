@@ -33,6 +33,9 @@ Shader "SpaceEngine/Terrain"
         [HideInInspector] _LavaSeed ("Lava seed low/high words", Vector) = (0,0,0,0)
         [HideInInspector] _PatchAnchor ("Patch anchor / radius, inverse radius", Vector) = (0,0,1,1)
         _PlanetCenter ("Planet center (render units)", Vector) = (0,0,0,0)
+        _GroundDetail ("Close ground detail layers", 2DArray) = "" {}
+        _GroundNormal ("Close ground detail normals", 2DArray) = "" {}
+        _GroundDetailStrength ("Close ground detail strength (0 keeps the procedural-only look)", Range(0,1)) = 0
         _FogStrength ("Optional artistic aerial fog (off with physical atmosphere)", Range(0,1)) = 0
         _FogColor ("Optional aerial fog color", Color) = (0.2,0.4,0.7,1)
         _FogDensity ("Optional aerial fog density per render unit", Float) = 0.0001
@@ -58,7 +61,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
             CBUFFER_END
             #include "TerrainSurface.hlsl"
 
@@ -144,12 +147,16 @@ Shader "SpaceEngine/Terrain"
                 float3 normal = normalize(input.normalWS);
                 float3 albedo = max(0.0, input.color.rgb * _PlanetTint.rgb);
                 float water = 0;
+                float3 layersA = float3(0, 0, 1), layersB = 0;
                 if (_SurfaceMapReady > .5)
                 {
                     EvaluateSurface(normalize(input.planetPosition), input.positionWS, input.detailPosition, input.rawHeight,
-                        normal, albedo, normal, water);
+                        normal, albedo, normal, water, layersA, layersB);
                     albedo *= _PlanetTint.rgb;
                 }
+                float detailStrength = _GroundDetailStrength * (1 - water) * (_SurfaceMapReady > .5 ? 1 : 0);
+                [branch] if (detailStrength > .001)
+                    ApplyGroundDetail(input.detailPosition, input.positionWS, layersA, layersB, detailStrength, albedo, normal);
                 float3 lightDirection = normalize(_SunDirection.xyz);
                 float3 viewDirection = GetWorldSpaceNormalizeViewDir(input.positionWS);
                 float3 halfDirection = SafeNormalize(viewDirection + lightDirection);
@@ -218,7 +225,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
             CBUFFER_END
             struct DepthNormalInput { float4 positionOS:POSITION;float3 normalOS:NORMAL;float4 parentData:TEXCOORD2;float3 parentNormal:TEXCOORD3; };
             struct DepthNormalOutput { float4 positionCS:SV_POSITION;float3 normalWS:TEXCOORD0; };
@@ -270,7 +277,7 @@ Shader "SpaceEngine/Terrain"
                 float _FogStrength, _FogDensity, _LavaFrequency, _LavaFissureWidth, _IsLava;
                 float _MaterialDetailStrength, _SurfaceNormalStrength, _OceanRoughness, _OceanSpecularStrength;
                 float _SurfaceMapReady, _TerrainRadius, _TerrainAmplitude, _PlanetKind, _HasOcean, _MaterialMapResolution, _CameraAltitudeMetres, _RenderUnitsPerMetre;
-                float _LodMorph, _TerrainSampleMetres;
+                float _LodMorph, _TerrainSampleMetres, _GroundDetailStrength;
             CBUFFER_END
             struct DepthInput { float4 positionOS:POSITION;float4 parentData:TEXCOORD2; };
             float4 DepthVert(DepthInput input) : SV_POSITION

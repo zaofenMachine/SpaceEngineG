@@ -22,20 +22,55 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _GroundDetail:
+        m_Texture: {fileID: 18700000, guid: 5e0b19636d0804d4bb5aed7d5bf3c649, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GroundNormal:
+        m_Texture: {fileID: 18700000, guid: b728c1ae504b2c14c81c9d17ae2cd856, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfaceHeightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AmbientFloor: 0.035
+    - _CameraAltitudeMetres: 1000000
+    - _EmissionStrength: 1.5
     - _FogDensity: 0.0001
     - _FogStrength: 0
+    - _GroundDetailStrength: 1
+    - _HasOcean: 0
+    - _IsLava: 0
+    - _LavaFissureWidth: 0.035
+    - _LavaFrequency: 24
+    - _LodMorph: 1
+    - _MaterialDetailStrength: 0.65
+    - _MaterialMapResolution: 1024
+    - _OceanRoughness: 0.12
+    - _OceanSpecularStrength: 0.8
+    - _PlanetKind: 0
+    - _RenderUnitsPerMetre: 1
     - _Roughness: 0.8
     - _SpecularStrength: 0.12
     - _SunIntensity: 1.5
+    - _SurfaceMapReady: 0
+    - _SurfaceNormalStrength: 0.7
+    - _TerrainAmplitude: 12000
+    - _TerrainRadius: 6371000
+    - _TerrainSampleMetres: 0
     m_Colors:
     - _FogColor: {r: 0.19999996, g: 0.39999998, b: 0.7, a: 1}
+    - _LavaSeed: {r: 0, g: 0, b: 0, a: 0}
+    - _PatchAnchor: {r: 0, g: 0, b: 1, a: 1}
+    - _PatchDetailAnchor: {r: 0, g: 0, b: 0, a: 0}
     - _PlanetCenter: {r: 0, g: 0, b: 0, a: 0}
     - _PlanetTint: {r: 1, g: 1, b: 1, a: 1}
     - _SunColor: {r: 1, g: 0.96, b: 0.88, a: 1}
     - _SunDirection: {r: 1, g: 0, b: 0, a: 0}
+    - _SurfaceTint: {r: 0.39999998, g: 0.39999998, b: 0.39999998, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

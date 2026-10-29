@@ -27,6 +27,8 @@ Shader "SpaceEngine/StarGlow"
             CBUFFER_START(UnityPerMaterial)
                 float4 _GlowDirection, _GlowColor, _GlowShape;
             CBUFFER_END
+            // Global, 0 unless an observer sits in a sunlit atmosphere: the sky then hides the corona.
+            float _SkyDaylight;
             struct Attributes { float3 positionOS:POSITION; };
             struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
             Varyings Vert(Attributes input)
@@ -69,7 +71,7 @@ Shader "SpaceEngine/StarGlow"
                 float corona=pow(max(1,x),-2.4)*.06*(.7+.6*streamers);
                 float halo=pow(max(1,x),-1.35)*.01;
                 float core=rho<pixel*1.4?exp(-theta*theta/(2*pixel*pixel*.5))*1.2:0;
-                float amount=(inner+corona+halo)*step(1,x)+core;
+                float amount=(inner+(corona+halo)*(1-_SkyDaylight))*step(1,x)+core;
                 return half4(_GlowColor.rgb*amount*_GlowShape.z,0);
             }
             ENDHLSL
