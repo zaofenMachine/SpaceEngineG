@@ -114,7 +114,7 @@ Shader "SpaceEngine/GalaxyVolume"
                     float lane=exp(-.5*laneDistance*laneDistance/(.22*_ArmScales.z*_ArmScales.z));
                     float2 medium=Turbulence(p,footprintLy);
                     // Expand the fBm's narrow distribution into cloud and void.
-                    float clump=saturate(.5+(medium.x-.5)*3.1);
+                    float clump=saturate(.5+(medium.x-.5)*3.6);
                     float stars=saturate(.5+(medium.y-.5)*2.3);
                     // Molecular clouds are nearly opaque over a few hundred light years and the
                     // voids between them nearly clear; nearby clouds then break up the whole band.
@@ -140,11 +140,15 @@ Shader "SpaceEngine/GalaxyVolume"
                     float resolved=saturate((detailScale-footprintLy)/(detailScale*.75))*_DetailStrength;
                     if(resolved>.001)
                     {
-                        float3 detailPoint=float3(p.x,p.y*2.8,p.z)/detailScale+_SeedOffset.xyz*2.17;
+                        float3 detailPoint=float3(p.x,p.y*1.7,p.z)/detailScale+_SeedOffset.xyz*2.17;
                         detailPoint+=float3(.71,-.39,.93)*(clump-.5)*2.4;
+                        // Ridged two-octave noise: a single octave's iso-contour drew closed loops
+                        // ("smoke rings"); ridges of a sum branch and fade like real filaments.
                         float fine=Noise(detailPoint);
+                        float fine2=Noise(detailPoint*2.31+float3(7.3,1.9,4.1));
                         float filamentWidth=.025+min(.2,footprintLy/(detailScale*4));
-                        float filament=1-smoothstep(filamentWidth,filamentWidth+.075,abs(fine-.5));
+                        float ridge=abs(fine-.5)*.7+abs(fine2-.5)*.3*saturate(1.5-footprintLy*2.31/detailScale);
+                        float filament=1-smoothstep(filamentWidth,filamentWidth+.075,ridge);
                         float association=smoothstep(.43,.78,Noise(detailPoint*.71+23.17));
                         float fineDust=.4+2.1*filament*filament;
                         float compactLight=.24+2.7*association*association;
