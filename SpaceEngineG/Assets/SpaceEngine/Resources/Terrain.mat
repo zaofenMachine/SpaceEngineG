@@ -43,8 +43,6 @@ Material:
     - _FogDensity: 0.0001
     - _FogStrength: 0
     - _GroundDetailStrength: 1
-    - _PlanetDetailStrength: 1
-    - _ReliefExaggeration: 2.5
     - _HasOcean: 0
     - _IsLava: 0
     - _LavaFissureWidth: 0.035
@@ -54,7 +52,9 @@ Material:
     - _MaterialMapResolution: 1024
     - _OceanRoughness: 0.12
     - _OceanSpecularStrength: 0.8
+    - _PlanetDetailStrength: 1
     - _PlanetKind: 0
+    - _ReliefExaggeration: 2.5
     - _RenderUnitsPerMetre: 1
     - _Roughness: 0.8
     - _SpecularStrength: 0.12
@@ -71,6 +71,7 @@ Material:
     - _PatchDetailAnchor: {r: 0, g: 0, b: 0, a: 0}
     - _PlanetCenter: {r: 0, g: 0, b: 0, a: 0}
     - _PlanetTint: {r: 1, g: 1, b: 1, a: 1}
+    - _SkyAmbient: {r: 0, g: 0, b: 0, a: 0}
     - _SunColor: {r: 1, g: 0.96, b: 0.88, a: 1}
     - _SunDirection: {r: 1, g: 0, b: 0, a: 0}
     - _SurfaceTint: {r: 0.39999998, g: 0.39999998, b: 0.39999998, a: 1}

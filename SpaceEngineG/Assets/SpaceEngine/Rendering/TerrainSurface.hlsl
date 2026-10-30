@@ -179,7 +179,7 @@ float3 CraterScale(float3 direction, float cells, uint seed, float density, floa
     return slope;
 }
 
-// Crater populations from ~6% of the radius down to ~0.1%, each fading once its craters are
+// Crater populations from ~6% of the radius down to ~0.01%, each fading once its craters are
 // smaller than a few pixels. density scales every population (0 disables cratering).
 float3 CraterField(float3 direction, uint seed, float density, float depthRatio, float footprintDirection,
     float3 wind, out float ejecta, out float floorFill, out float streak)
@@ -191,6 +191,9 @@ float3 CraterField(float3 direction, uint seed, float density, float depthRatio,
     slope += CraterScale(direction, 47, seed ^ 0x4c8d2e73u, .7 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
     slope += CraterScale(direction, 131, seed ^ 0x19f0b6a5u, .78 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
     slope += CraterScale(direction, 367, seed ^ 0x6a2d4f97u, .82 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    // Two finer populations for low orbit and approach; each returns before its loop until resolvable.
+    slope += CraterScale(direction, 1031, seed ^ 0x3c6ef372u, .85 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
+    slope += CraterScale(direction, 2903, seed ^ 0x1b873593u, .88 * density, depthRatio, footprintDirection, wind, ejecta, floorFill, streak);
     return slope;
 }
 
@@ -235,12 +238,34 @@ float IceLineae(float3 direction, uint seed, float footprintDirection)
     return lines;
 }
 
+// Relief finer than the height map, in shading only: ridged fBm slopes from about two map texels
+// down to the pixel footprint (octaves fade as their cells approach a pixel). Without it, terrain
+// between craters is featureless "clay" from the moment the map resolves until mesh geometry takes
+// over near the ground. Returns a slope vector (dimensionless) in planet space.
+float3 SubMapRelief(float3 direction, float texelAngle, float footprintAngle, uint seed)
+{
+    // Rough provinces (mountain belts, broken terrain) alternate with smooth plains.
+    float province = .35 + .65 * smoothstep(-.15, .45, SurfaceNoise(direction * 5.3, seed ^ 0x5851f42du, 0xffffffffu));
+    float3 slope = 0;
+    float frequency = .5 / max(1e-7, texelAngle), strength = .075;
+    [loop] for (int octave = 0; octave < 6; octave++)
+    {
+        float visible = 1 - smoothstep(.3, .9, footprintAngle * frequency);
+        if (visible <= 0) break;
+        float4 n = SurfaceNoiseGradient(direction * frequency + octave * 17.31, seed + (uint)octave * 0x9e3779b9u, 0xffffffffu);
+        // The two broad octaves are ridged into crests and valleys; finer ones roughen them smoothly.
+        slope += (octave < 2 ? -sign(n.x) : 1) * n.yzw * strength * visible;
+        frequency *= 2.03; strength *= .82;
+    }
+    return slope * province;
+}
+
 // Close-range ground layers: x grass, y dirt, z rock (layersA); x sand, y snow, z regolith (layersB).
 void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition, float rawVertexHeight, float3 meshNormal,
     out float3 albedo, out float3 surfaceNormal, out float water, out float3 layersA, out float3 layersB)
 {
     layersA = float3(0, 0, 1); layersB = 0;
-    float geologyCraters = 0, geologyDepth = 0, geologyWind = 0;
+    float geologyCraters = 0, geologyDepth = 0, geologyWind = 0, reliefRoughness = 0;
     float3 coordinates = TerrainMapCoordinates(direction);
     float texelMetres = 2 * _TerrainRadius / max(1, _MaterialMapResolution);
     // Camera-relative positions retain centimetres at the ground. A unit planet
@@ -328,6 +353,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         layersA *= 1 - exposed; layersB *= 1 - exposed; layersA.z += exposed;
         albedo = lerp(land * (1 + material * _MaterialDetailStrength * .22), ocean, water);
         surfaceNormal = normalize(lerp(surfaceNormal, direction, water));
+        reliefRoughness = (1 - water) * lerp(.35, 1, saturate(rock + exposed)) * smoothstep(1.5, 40, height);
     }
     else if (_PlanetKind > 1.5 && _PlanetKind < 2.5)
     {
@@ -358,6 +384,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         albedo *= 1 - shed * .3 * _PlanetDetailStrength;
         geologyCraters = .35 * (1 - sea * .7); geologyDepth = .09;
         geologyWind = .6;
+        reliefRoughness = (1 - sea * .8) * lerp(.55, 1, smoothstep(-.2, .5, normalizedHeight));
         float outcrop = smoothstep(.62, .85, broadGeology + filteredStrata * .25);
         layersA = float3(0, .25 * (1 - outcrop), outcrop); layersB = float3(.75 * (1 - outcrop), 0, 0);
     }
@@ -370,6 +397,7 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         float lineae = IceLineae(direction, seed, footprint / max(1, _TerrainRadius)) * _PlanetDetailStrength;
         albedo *= 1 - lineae * float3(.38, .5, .6);
         geologyCraters = .18; geologyDepth = .07;
+        reliefRoughness = .3;
         layersA = float3(0, 0, 1 - ice); layersB = float3(0, ice, 0);
     }
     else
@@ -386,7 +414,17 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
         float3 mareTone = lerp(float3(.45, .44, .45), float3(.53, .48, .42), saturate(.5 + flows)) * lerp(1.08, .8, mareDepth);
         albedo = lerp(albedo * 1.12, albedo * mareTone, mare);
         geologyCraters = _PlanetKind > 3.5 ? 0 : 1 - mare * .65; geologyDepth = .16;
+        reliefRoughness = (1 - mare * .75) * lerp(.5, 1, highland);
         layersA = float3(0, 0, highland * .45); layersB = float3(0, 0, 1 - highland * .45);
+    }
+    [branch] if (_PlanetDetailStrength > .001 && reliefRoughness > .001 && closeGeometry < .999)
+    {
+        float3 relief = SubMapRelief(direction, texelMetres / max(1, _TerrainRadius), footprint / max(1, _TerrainRadius), seed ^ 0x7f4a7c15u);
+        relief -= direction * dot(direction, relief);
+        float reliefWeight = reliefRoughness * _PlanetDetailStrength * (1 - closeGeometry);
+        surfaceNormal = normalize(surfaceNormal - relief * reliefWeight);
+        // Dust drains off steep crests and gathers in hollows.
+        albedo *= 1 - saturate(length(relief) * 2.2) * reliefWeight * geologyWind * .35;
     }
     // Craters below the map resolution, in shading only; real geometry takes over near the ground.
     [branch] if (_PlanetDetailStrength > .001 && geologyCraters > .001)
