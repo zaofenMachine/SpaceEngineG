@@ -185,7 +185,11 @@ namespace SpaceEngine.Runtime
                     app.LoadSystem(x,0,z);yield return Limb(index,120000,68,false);yield return SettleTerrain();break;
                 }
                 case "33-ringed-giant-low":{int gas=Find(PlanetKind.GasGiant);if(gas<0)yield break;yield return Orbit(gas,2.2,.62,.07);yield return Settle(140);break;}
-                default:Debug.LogWarning("Unknown showcase shot "+shot);yield break;
+                default:
+                    // Diagnostic, not in the route: "arrival-f<N>" reloads home and captures N frames later,
+                    // to inspect what is on screen while terrain is still streaming in.
+                    if(shot.StartsWith("arrival-f")&&int.TryParse(shot.Substring(9),out int arrivalFrames)){app.ReturnHome();yield return Settle(arrivalFrames);break;}
+                    Debug.LogWarning("Unknown showcase shot "+shot);yield break;
             }
             framed();
         }

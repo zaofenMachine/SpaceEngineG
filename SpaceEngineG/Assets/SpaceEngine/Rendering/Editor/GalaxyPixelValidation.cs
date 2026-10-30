@@ -36,6 +36,8 @@ namespace SpaceEngine.Rendering.Editor
             try
             {
                 if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null) throw new InvalidOperationException("A real graphics device is required.");
+                // The composite dims with a sunlit sky; a value left over from play mode is not part of this fixture.
+                Shader.SetGlobalFloat("_SkyDaylight", 0);
                 foreach (Renderer renderer in UnityEngine.Object.FindObjectsByType<Renderer>(FindObjectsSortMode.None))
                     if (renderer.gameObject.layer == TestLayer) throw new InvalidOperationException("Galaxy test layer is already in use.");
                 volumeSource = new Material(Shader.Find("SpaceEngine/GalaxyVolume"));

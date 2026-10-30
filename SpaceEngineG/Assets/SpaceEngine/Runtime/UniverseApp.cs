@@ -554,6 +554,7 @@ namespace SpaceEngine.Runtime
                 // surface eases to the orbital factor, so planets keep their colours from space.
                 float climb=Mathf.SmoothStep(0,1,Mathf.InverseLerp(.5f,3f,(float)((selectedRelative.Length-Planet.Radius)/Planet.AtmosphereHeight)));
                 float atmosphereExposure=Settings.AtmosphereExposure*Mathf.Lerp(1,Settings.AtmosphereOrbitalFactor,climb);
+                atmosphere.SurfaceFloorRadius=(float)((Planet.HasOcean?Planet.Radius:Planet.Radius-Math.Max(0,Planet.TerrainHeight)*1.02)*RenderScale);
                 atmosphere.UpdateAtmosphere(selectedCenter,(float)(Planet.Radius*RenderScale),(float)((Planet.Radius+Planet.AtmosphereHeight)*RenderScale),sunDirection,atmosphereExposure);
             }
             Double3 starFrom=System.Position.RelativeTo(Observer);
@@ -708,6 +709,9 @@ namespace SpaceEngine.Runtime
         }
         void OnDestroy()
         {
+            // Shader globals outlive the app (in the editor they survive leaving play mode); a sunlit
+            // sky left behind would keep dimming every galaxy composite drawn afterwards.
+            Shader.SetGlobalFloat(SkyDaylight,0);
             if(Terrains!=null)foreach(var terrain in Terrains)if(terrain!=null)Destroy(terrain.gameObject);
             if(Celestials!=null)foreach(var celestial in Celestials)if(celestial!=null)Destroy(celestial.gameObject);
             if(Clouds!=null)foreach(var cloud in Clouds)if(cloud!=null)Destroy(cloud.gameObject);

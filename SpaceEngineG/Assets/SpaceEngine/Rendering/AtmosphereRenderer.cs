@@ -13,6 +13,8 @@ namespace SpaceEngine.Rendering
     public sealed class AtmosphereRenderer : MonoBehaviour
     {
         public AtmosphereSettings Settings = new AtmosphereSettings();
+        /// <summary>Radius (render units) below which no surface can be visible; 0 trusts scene depth alone.</summary>
+        public float SurfaceFloorRadius;
 
         private Camera targetCamera;
         private Material extinctionMaterial;
@@ -143,6 +145,7 @@ namespace SpaceEngine.Rendering
             material.SetFloat("_MieDensityFalloff", Mathf.Max(0.1f, Settings.MieDensityFalloff));
             material.SetFloat("_SunIntensity", Mathf.Max(0f, Settings.SunIntensity));
             material.SetFloat("_Exposure", exposure);
+            material.SetFloat("_SurfaceFloor", SurfaceFloorRadius > 0 ? SurfaceFloorRadius / planetRadius : 0);
             material.SetInt("_ViewSamples", Mathf.Clamp(Settings.ViewSamples, 4, 48));
             material.SetInt("_LightSamples", Mathf.Clamp(Settings.LightSamples, 2, 16));
         }

@@ -13,6 +13,7 @@ Shader "SpaceEngine/Atmosphere"
         _MieDensityFalloff ("Mie density falloff across shell", Float) = 80
         _SunIntensity ("Relative solar irradiance", Float) = 2
         _Exposure ("Scattering radiance multiplier", Float) = 1
+        _SurfaceFloor ("Lowest visible surface / planet radius (0 = trust depth only)", Float) = 0
         _ViewSamples ("View integration samples", Range(4,48)) = 16
         _LightSamples ("Light integration samples", Range(2,16)) = 6
         [HideInInspector] _SrcBlend ("Source blend", Float) = 1
@@ -45,7 +46,7 @@ Shader "SpaceEngine/Atmosphere"
                 float4 _Rayleigh;
                 float4 _Mie;
                 float _PlanetRadius, _AtmosphereRadius, _MieG, _DensityFalloff;
-                float _MieDensityFalloff, _SunIntensity, _Exposure;
+                float _MieDensityFalloff, _SunIntensity, _Exposure, _SurfaceFloor;
                 int _ViewSamples, _LightSamples;
             CBUFFER_END
 
@@ -124,6 +125,15 @@ Shader "SpaceEngine/Atmosphere"
                 // analytic sphere only when no opaque surface was rasterized.
                 float2 groundHit = SphereIntersection(origin, direction, 1.0);
                 if (!hasDepth && groundHit.x > 0.0) end = min(end, groundHit.x);
+                // Coarse terrain facets sag far below the true surface while patches are still
+                // streaming in (a 7.5 degree chord dips ~0.2% of the radius); marching to their depth
+                // added haze at facet centres and printed the patch grid. No visible surface lies
+                // below the sea (ocean worlds) or the deepest terrain, so the ray stops there.
+                if (_SurfaceFloor > 0.0)
+                {
+                    float2 floorHit = SphereIntersection(origin, direction, _SurfaceFloor);
+                    if (floorHit.x > 0.0) end = min(end, floorHit.x);
+                }
 
                 #if defined(_ATMOSPHERE_EXTINCTION)
                     if (end <= start) return 1.0;
