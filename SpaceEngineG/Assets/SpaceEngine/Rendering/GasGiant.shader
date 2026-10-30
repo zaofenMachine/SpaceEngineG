@@ -233,7 +233,9 @@ Shader "SpaceEngine/GasGiant"
                 float hue = saturate(pattern.z) * (1 - _IceFraction * .7);
                 // Colour concentrates in the darker belts; bright zones stay cream.
                 float beltWeight = 1 - smoothstep(.35, .75, pattern.x);
-                albedo = lerp(albedo, albedo * float3(1.25, .86, .6), hue * (.35 + .65 * beltWeight));
+                // A softer chromophore tint: at full strength it flooded whole belts with one flat rust
+                // colour and hid the finer belt/zone and streak structure beneath it.
+                albedo = lerp(albedo, albedo * float3(1.18, .9, .7), hue * (.22 + .48 * beltWeight));
                 albedo = lerp(albedo, dot(albedo, float3(.3, .5, .2)) * float3(.86, .92, 1.02), saturate(-pattern.z) * .7);
                 float3 warmVortex = lerp(albedo, float3(.67, .30, .16), .3 * (1 - _IceFraction));
                 albedo = lerp(albedo, warmVortex, pattern.y);

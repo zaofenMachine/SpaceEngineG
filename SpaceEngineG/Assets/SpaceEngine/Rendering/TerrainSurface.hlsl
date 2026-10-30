@@ -301,9 +301,12 @@ void EvaluateSurface(float3 direction, float3 positionWS, float3 detailPosition,
     float mapResolved = saturate(footprint / texelMetres * 8);
     float3 coarseNormal = normalize(lerp(direction, mapNormal, _SurfaceNormalStrength * mapResolved));
     // Optional orbital relief exaggeration (1 keeps the physical slope).
-    if (_ReliefExaggeration > 1.001)
+    // Young ice shells are smooth apart from their lineae; full exaggeration turned their gentle
+    // ridged relief into a field of "worms", so ice worlds take half of it.
+    float exaggeration = _PlanetKind > 2.5 && _PlanetKind < 3.5 ? 1 + (_ReliefExaggeration - 1) * .5 : _ReliefExaggeration;
+    if (exaggeration > 1.001)
         coarseNormal = normalize(direction + (mapNormal - direction * dot(direction, mapNormal))
-            * _SurfaceNormalStrength * _ReliefExaggeration * mapResolved);
+            * _SurfaceNormalStrength * exaggeration * mapResolved);
     surfaceNormal = normalize(lerp(coarseNormal, meshNormal, closeGeometry));
     // Analytic material gradients avoid differencing quantized unit directions
     // or large float chart values. Solid terrain transforms preserve planet axes.
